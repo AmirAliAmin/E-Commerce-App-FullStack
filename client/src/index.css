@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+
+*{
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+}
+body{
+  @apply bg-[#fdf7f7]
+}
+@theme{
+  --color-primary: #ff5252;
+}
+.container{
+  @apply w-[90%] m-auto 
+}
+.link:hover{
+  @apply text-primary transition duration-500 cursor-pointer
+}
+.no-scroll::-webkit-scrollbar {
+    display: none;
+}
+::-webkit-scrollbar {
+  width:6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb{
+  background:#ff5252;
+}
+::-webkit-scrollbar-track{
+  background: #ccc ;
+}
+
+
+.no-scroll {
+    scrollbar-width: none;
+}
+
+
+.no-scroll {
+    -ms-overflow-style: none;
+}
+/* slick-slide   */
+.slider .slick-active,.slick-current .info{
+  opacity:1;
+  right:0px !important;
+}
+
+
+.range-slider{
+  height: 4px !important;
+}
+.range-slider .range-slider__thumb{
+  width:14px !important;
+  height:14px !important;
+  background: #ff5252 !important;
+}
+.range-slider .range-slider__range{
+  background: #ff5252 !important;
+}
