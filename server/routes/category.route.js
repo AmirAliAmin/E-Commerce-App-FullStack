@@ -1,8 +1,8 @@
 import {Router} from 'express'
-import { createCategory, deleteCategory, getCategories, getCategory, getCategoryCount, getSubCategoryCount, updateCategory } from '../controllers/category.controllers.js';
+import { createCategory, deleteCategory, getCategories, getCategory, getCategoryCount, getSubCategoryCount, removeImageFromCloudinary, updateCategory } from '../controllers/category.controller.js';
 import auth from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
-import { removeImageFromCloudinary } from '../controllers/user.controllers.js';
+
 
 const categoryRouter = Router()
 categoryRouter.post('/create',auth,upload.array('images') ,createCategory);

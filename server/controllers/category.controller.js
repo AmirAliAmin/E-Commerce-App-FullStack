@@ -299,3 +299,24 @@ export async function updateCategory(req, res) {
     });
   }
 }
+
+
+export async function removeImageFromCloudinary(req, res) {
+  const imgUrl = req.query.img;
+  const urlArr = imgUrl.split("/");
+
+  const image = urlArr[urlArr.length - 1];
+
+  const imageName = image.split(".")[0];
+  if (imageName) {
+    const response = await cloudinary.uploader.destroy(
+      imageName,
+      (error, result) => {
+        // console.log(error,result)
+      }
+    );
+    if (response) {
+      res.status(200).send(response);
+    }
+  }
+}
