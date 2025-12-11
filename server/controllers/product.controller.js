@@ -640,3 +640,94 @@ export async function removeImageFromCloudinary(req, res) {
     }
   }
 }
+
+//update the product by using id
+export async function updateProductbyId(req, res) {
+  try {
+     const {
+      name,
+      description,
+      brand,
+      price,
+      oldprice,
+      catName,
+      catId,
+      subcatName,
+      subcatId,
+      thirdsubcat,
+      thirdsubcatId,
+      category,
+      countInStock,
+      rating,
+      isFeatured,
+      discount,
+      productRam,
+      size,
+      productWeight,
+      dateCreated,
+    } = req.body;
+
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+    };
+    for (let i = 0; i < req?.files?.length; i++) {
+      const img = await cloudinary.uploader.upload(
+        req.files[i].path,
+        options,
+        function (error, result) {
+          console.log(result);
+          imageArr.push(result.secure_url);
+          fs.unlinkSync(`uploads/${req.files[i].filename}`);
+          console.log(req.files[i].filename);
+        }
+      );
+    }
+    const product= await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      {
+      name,
+      description,
+      images: imageArr,
+      brand,
+      price,
+      oldprice,
+      catName,
+      catId,
+      subcatName,
+      subcatId,
+      thirdsubcat,
+      thirdsubcatId,
+      category,
+      countInStock,
+      rating,
+      isFeatured,
+      discount,
+      productRam,
+      size,
+      productWeight,
+    },
+      { new: true }
+    );
+    if (!product) {
+      res.status(400).json({
+        message: "product cannot be updated",
+        success: false,
+        error: true,
+      });
+    }
+    imageArr=[]
+    res.status(200).json({
+      success: true,
+      error: false,
+      message: "product Updated",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

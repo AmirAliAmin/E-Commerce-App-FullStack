@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import auth from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
-import { createProduct, deleteProduct, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary } from '../controllers/product.controller.js';
+import { createProduct, deleteProduct, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary, updateProductbyId } from '../controllers/product.controller.js';
 
 const productRouter = Router();
 
@@ -20,5 +20,6 @@ productRouter.get('/getfeaturedproduct' ,getProductThatisFeatured);
 productRouter.get('/:id' ,getProductById);
 productRouter.delete('/:id' ,deleteProduct);
 productRouter.delete('/deleteImage' ,auth, removeImageFromCloudinary);
+productRouter.put('/:id',auth ,updateProductbyId);
 
 export default productRouter;
