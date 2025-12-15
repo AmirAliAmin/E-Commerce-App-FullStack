@@ -51,7 +51,7 @@ function Sidebar() {
           <NavLink  to={'/product'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product List
         </NavLink >
       
-          <NavLink  to={'/product/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product Upload
+          <NavLink  to={'/products/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product Upload
         </NavLink >
         </ul>
 

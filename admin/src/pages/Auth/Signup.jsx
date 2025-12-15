@@ -47,7 +47,7 @@ function Signup() {
       <img
         src="https://images.unsplash.com/photo-1603484477859-abe6a73f9366?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmFja2dyb3VuZCUyMHRleHR1cmV8ZW58MHx8MHx8fDA%3D"
         alt=""
-        className="w-full fixed top-0 left-0 opacity-15"
+        className="w-full fixed top-0 left-0 opacity-25"
       />
 
       <div className="flex flex-col w-full px-7 md:w-[40%]   items-center justify-center mx-auto my-30 md:my-15">
@@ -75,7 +75,7 @@ function Signup() {
           <div className="w-full flex items-center justify-center gap-3">
             <span className="md:flex items-center  w-25 h-px bg-gray-300/50 hidden"></span>
             <span className="text-[15px] font-medium">
-              Or, Create an account with your email
+               Create an account with your email
             </span>
             <span className="md:flex hidden items-center  w-25 h-px bg-gray-300/50"></span>
           </div>

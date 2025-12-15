@@ -63,7 +63,7 @@ body{
   @apply bg-primary!
 }
 .Mui-selected{
-  @apply bg-primary!
+  @apply bg-primary! text-white!
 }
 .MuiButton-root{
   @apply bg-gray-200! text-black! text-[12px]! 

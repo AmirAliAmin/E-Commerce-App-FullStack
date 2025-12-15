@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DashboardBox from "./DashboardBox";
 import { IoIosGift } from "react-icons/io";
 import { FiGitlab } from "react-icons/fi";
@@ -22,7 +22,7 @@ import { BiExport } from "react-icons/bi";
 import Chast1 from "../../components/charts/Chast1";
 
 function Dashboard() {
-  const [categoryFilter, setCategoryFilter] = React.useState("Category");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   const handleChangeCatFilter = (event) => {
     setCategoryFilter(event.target.value);
@@ -164,12 +164,12 @@ function Dashboard() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={categoryFilter}
-              label="Category"
+              label=""
               onChange={handleChangeCatFilter}
             >
-              <MenuItem value={10}>Men</MenuItem>
-              <MenuItem value={20}>Women</MenuItem>
-              <MenuItem value={30}>Kids</MenuItem>
+              <MenuItem value={"Men"}>Men</MenuItem>
+              <MenuItem value={"Women"}>Women</MenuItem>
+              <MenuItem value={"Kids"}>Kids</MenuItem>
             </Select>
           </div>
 
