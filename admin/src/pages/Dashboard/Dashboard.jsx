@@ -15,9 +15,18 @@ import { FaStar } from "react-icons/fa";
 import { AiOutlineEdit } from "react-icons/ai";
 import { FaEye } from "react-icons/fa6";
 import { FaRegTrashAlt } from "react-icons/fa";
-import Pagination from '@mui/material/Pagination';
+import Pagination from "@mui/material/Pagination";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { BiExport } from "react-icons/bi";
+import Chast1 from "../../components/charts/Chast1";
 
 function Dashboard() {
+  const [categoryFilter, setCategoryFilter] = React.useState("Category");
+
+  const handleChangeCatFilter = (event) => {
+    setCategoryFilter(event.target.value);
+  };
   const orders = [
     {
       orderId: "ORD123456",
@@ -94,7 +103,7 @@ function Dashboard() {
   return (
     <div>
       <div className="w-full p-5 border border-gray-200 flex items-center justify-between gap-8 mb-6 ">
-        <div className="w-[50%]">
+        <div className="md:w-[50%]">
           <h1 className="text-[30px] font-bold leading-9 mb-3">
             Good Morning,
             <br /> Amir
@@ -108,7 +117,7 @@ function Dashboard() {
             Add Product
           </button>
         </div>
-        <div className="w-[30%] min-w-[30%] overflow-hidden">
+        <div className="w-[30%] min-w-[30%] overflow-hidden hidden md:block ">
           <img src={img} alt="" className="object-cover w-full h-full" />
         </div>
       </div>
@@ -146,6 +155,29 @@ function Dashboard() {
       </div>
       <div className="my-4 shadow-md sm:rounded-lg bg-white">
         <h1 className="py-5 px-3 font-bold text-[20px]">Products</h1>
+        <div className="flex items-center w-full flex-wrap justify-start md:justify-between px-5">
+          <div className="col w-[40%] md:w-[20%] fle">
+            <h4 className="font-semibold text-[12px] mb-1">Category By</h4>
+            <Select
+            className="w-full"
+            size="small"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={categoryFilter}
+              label="Category"
+              onChange={handleChangeCatFilter}
+            >
+              <MenuItem value={10}>Men</MenuItem>
+              <MenuItem value={20}>Women</MenuItem>
+              <MenuItem value={30}>Kids</MenuItem>
+            </Select>
+          </div>
+
+          <div className="w-full md:w-[40%] lg:w-[25%] ml-auto flex items-center flex-wrap gap-3">
+            <button className="bg-primary hover:bg-white hover:text-primary hover:border hover:border-primary cursor-pointer text-white py-2 px-5 rounded text-[13px] flex items-center gap-1"><BiExport/>Export</button>
+            <button className="border border-primary hover:bg-primary hover:text-white cursor-pointer text-[13px] text-primary py-2 px-5 rounded whitespace-nowrap">Add Product</button>
+          </div>
+        </div>
         <div className="relative overflow-x-auto mt-5 no-scroll">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -209,25 +241,24 @@ function Dashboard() {
                 <td className="px-6 py-4 whitespace-nowrap">Men</td>
                 <td className="px-6 py-4 whitespace-nowrap">Kashees</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                   <p className='  text-primary'>₹4500.00</p>
-                    <p className='line-through text-gray-500 '>₹2000.00</p>
+                  <p className="  text-primary">₹4500.00</p>
+                  <p className="line-through text-gray-500 ">₹2000.00</p>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                   <div className="flex">
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar/>
+                  <div className="flex">
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar />
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                  <AiOutlineEdit className="text-[18px]"/>
-                  <FaEye className="text-[18px]"/>
-                  <FaRegTrashAlt className="text-[18px]" />
+                    <AiOutlineEdit className="text-[18px]" />
+                    <FaEye className="text-[18px]" />
+                    <FaRegTrashAlt className="text-[18px]" />
                   </div>
-
                 </td>
               </tr>
               <tr className="bg-white border-b border-gray-200">
@@ -257,32 +288,31 @@ function Dashboard() {
                 <td className="px-6 py-4 whitespace-nowrap">Men</td>
                 <td className="px-6 py-4 whitespace-nowrap">Kashees</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                   <p className='  text-primary'>₹4500.00</p>
-                    <p className='line-through text-gray-500 '>₹2000.00</p>
+                  <p className="  text-primary">₹4500.00</p>
+                  <p className="line-through text-gray-500 ">₹2000.00</p>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                   <div className="flex">
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar className="text-orange-500"/>
-                  <FaStar/>
+                  <div className="flex">
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar className="text-orange-500" />
+                    <FaStar />
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                  <AiOutlineEdit className="text-[18px]"/>
-                  <FaEye className="text-[18px]"/>
-                  <FaRegTrashAlt className="text-[18px]" />
+                    <AiOutlineEdit className="text-[18px]" />
+                    <FaEye className="text-[18px]" />
+                    <FaRegTrashAlt className="text-[18px]" />
                   </div>
-
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="flex items-center justify-end mt-4 mb-5 py-5">
-           <Pagination count={10} color="secondary" />
+          <Pagination count={10} color="secondary" />
         </div>
       </div>
       <div className="my-4 shadow-md sm:rounded-lg bg-white">
@@ -371,6 +401,22 @@ function Dashboard() {
           </table>
         </div>
       </div>
+       {/* <div className="my-4 shadow-md sm:rounded-lg bg-white">
+        <h1 className="py-5 px-3 font-bold text-[20px]">Repeat Customer Rate</h1>
+        <div className="relative overflow-x-hidden mt-5 no-scroll px-5">
+        <Chast1/>
+        </div>
+        </div> */}
+         <div className="my-4 shadow-md sm:rounded-lg bg-white">
+        <h1 className="py-5 px-3 font-bold text-[20px]">Total Users and Sales</h1>
+        <div className="flex items-center gap-5 px-5 py-5">
+          <span className="flex items-center gap-1 text-[14px]"><span className="block w-2.5 h-2.5 rounded-full bg-[#82CA9D]"></span>Total User</span>
+           <span className="flex items-center gap-1 text-[14px]"><span className="block w-2.5 h-2.5 rounded-full bg-[#8884D8]"></span>Total Sale</span>
+        </div>
+        <div className="relative overflow-x-hidden mt-5 no-scroll px-5">
+        <Chast1/>
+        </div>
+        </div>
     </div>
   );
 }

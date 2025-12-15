@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import Badge from "@mui/material/Badge";
@@ -11,6 +11,7 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 
 import { MdLogout } from "react-icons/md";
 import Divider from '@mui/material/Divider';
+import { AdminContext } from "../context/AdminContext";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -23,6 +24,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
+  const {sidebarOpen,setSidebarOpen} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
   const handleClickMyAcc = (event) => {
     setAnchorMyAcc(event.currentTarget);
@@ -31,9 +33,9 @@ function Header() {
     setAnchorMyAcc(null);
   };
   return (
-    <header className="w-full h-auto py-2 lg:pl-52 pr-10 bg-[#ffff] shadow-md flex items-center justify-between">
+    <header className={`w-full h-auto py-2 transition-all ${sidebarOpen===true? "lg:pl-45 xl:pl-57" :"pl-2"} pr-10 bg-[#ffff] shadow-md flex items-center justify-between`}>
       <div>
-        <Button className="w-10! h-10! min-w-10! rounded-full! ">
+        <Button className="w-10! h-10! min-w-10! rounded-full! " onClick={()=>setSidebarOpen(!sidebarOpen)}>
           <HiOutlineMenuAlt2 className="text-[22px] text-black" />
         </Button>
       </div>

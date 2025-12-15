@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RxDashboard } from "react-icons/rx";
 import { FaRegImage } from "react-icons/fa";
@@ -8,20 +8,23 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { FaAngleDown } from "react-icons/fa6";
+import { AdminContext } from '../context/AdminContext';
 
 function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(null);
-  return (
-    <div className=' w-[17%] bg-white fixed inset-0 top-0 left-0 border-r border-gray-200 shadow-lg p-2'>
-      <div className='py-2 w-full'>
-        <Link to={'/'} className='flex gap-3 items-center'> <img src='https://plus.unsplash.com/premium_photo-1668051040456-24c63abd95b4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2Vic2l0ZSUyMGxvZ298ZW58MHx8MHx8fDA%3D' className='w-15 h-15 rounded-full'/> 
+   const {sidebarOpen,setSidebarOpen} = useContext(AdminContext)
+  return sidebarOpen && (
+    <div className='w-[60%] md:w-[30%] lg:w-[17%] bg-white fixed z-10 inset-0 top-0 left-0 border-r border-gray-200 shadow-lg p-2 transition-all'>
+      <div className='w-full flex justify-end lg:hidden' onClick={()=>setSidebarOpen(!sidebarOpen)}>X</div>
+      <div className='md:py-2 w-full'>
+        <Link to={'/'} className='flex gap-3 items-center'> <img src='https://plus.unsplash.com/premium_photo-1668051040456-24c63abd95b4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8d2Vic2l0ZSUyMGxvZ298ZW58MHx8MHx8fDA%3D' className='w-15 h-15 rounded-full hidden md:block'/> 
         <div>
           <p className='font-bold text-xl text-primary'>Classy Shop</p>
           <p className='tracking-widest text-xs uppercase font-light'>Big Mega Shop</p>
         </div> 
         </Link>
       </div>
-      <ul className='mt-4'>
+      <ul className='md:mt-4'>
         <Link to={'/'}>
         <li className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea]'><RxDashboard className='text-[16px]'/>Dashboard</li>
         </Link>
