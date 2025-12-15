@@ -24,7 +24,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function Header() {
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
-  const {sidebarOpen,setSidebarOpen} = useContext(AdminContext)
+  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
   const handleClickMyAcc = (event) => {
     setAnchorMyAcc(event.currentTarget);
@@ -45,7 +45,9 @@ function Header() {
             <IoNotifications />
           </StyledBadge>
         </IconButton>
-        <div className="relative">
+        {
+            isLogin === true ?
+            <div className="relative">
           <div
             className="rounded-full w-7.5 h-7.5 min-w-7.5 overflow-hidden cursor-pointer"
             onClick={handleClickMyAcc}
@@ -56,6 +58,7 @@ function Header() {
               className="w-full h-full object-cover"
             />
           </div>
+          
           <Menu
             anchorEl={anchorMyAcc}
             id="account-menu"
@@ -114,11 +117,16 @@ function Header() {
             <MenuItem>
               <IoPersonCircleOutline/>Profile
             </MenuItem>
-            <MenuItem>                   
+            <MenuItem onClick={()=>setIsLogin(false)}>                   
               <MdLogout/>Sign Out
             </MenuItem>
           </Menu>
-        </div>
+        </div>:
+        <button className="text-white bg-primary py-1 px-5 rounded-full hover:text-primary hover:border hover:border-primary hover:bg-white cursor-pointer ">
+          Sign In
+        </button>
+          }
+        
       </div>
     </header>
   );

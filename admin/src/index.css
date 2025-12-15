@@ -65,3 +65,9 @@ body{
 .Mui-selected{
   @apply bg-primary!
 }
+.MuiButton-root{
+  @apply bg-gray-200! text-black! text-[12px]! 
+}
+.nav-link.active {
+  @apply text-primary bg-[#eaeaea];
+}
