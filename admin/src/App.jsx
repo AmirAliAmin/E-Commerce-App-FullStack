@@ -10,6 +10,12 @@ import Product from '../../client/src/pages/products/Product'
 import Products from './pages/Products/Products'
 import AddProduct from './pages/Products/AddProduct'
 import HomeBanner from './pages/Home/HomeBanner'
+import AddCategory from './pages/Category/AddCategory'
+import Category from './pages/Category/Category'
+import SubCategory from './pages/Category/SubCategory'
+import AddSubCategory from './pages/Category/AddSubCategory'
+import Users from './pages/Users/Users'
+import Orders from './pages/Order/Orders'
 
 function App() {
   const {sidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
@@ -23,9 +29,15 @@ function App() {
       <div className={`transition-all ${sidebarOpen===true? "lg:pl-45 xl:pl-55" :"pl-2"}`}>
       <Routes>
         <Route path='/' element={<Dashboard/>}/>
-        <Route path='/product' element={<Products/>} />
-        <Route path='/products/add' element={<AddProduct/>} />
-        <Route path='/home' element={<HomeBanner/>} />
+        <Route path='/product/list' element={<Products/>} />
+        <Route path='/product/add' element={<AddProduct/>} />
+        <Route path='/home/list' element={<HomeBanner/>} />
+        <Route path='/category/add' element={<AddCategory/>} />
+        <Route path='/category/list' element={<Category/>} />
+        <Route path='/category/subcategory/add' element={<AddSubCategory/>} />
+        <Route path='/category/subcategory/list' element={<SubCategory/>} />
+        <Route path='/user' element={<Users/>} />
+        <Route path='/order' element={<Orders/>} />
       </Routes>
       </div>
       </div>:

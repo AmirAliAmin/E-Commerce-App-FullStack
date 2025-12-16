@@ -28,14 +28,14 @@ function Sidebar() {
         
         <NavLink  to={'/'} className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link'><RxDashboard className='text-[16px]'/>Dashboard</NavLink>
         
-        <li className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link' onClick={()=>setMenuOpen(menuOpen==="Home" ? null:"Home")}><FaRegImage className='text-[16px]'/>Home Slides <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Home" ? "rotate-180":""}`}/></li>
+        <NavLink   className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea]' onClick={()=>setMenuOpen(menuOpen==="Home" ? null:"Home")}><FaRegImage className='text-[16px]'/>Home Slides <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Home" ? "rotate-180":""}`}/></NavLink>
         {
           menuOpen === "Home" && (
         <ul className='p-1'>
-          <NavLink  to={'/home'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Home Banner Slide
+          <NavLink  to={'/home/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Home Banner Slide
           </NavLink >
           
-          <NavLink  to={'/slide'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Slide List
+          <NavLink  to={'/home/slide'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Slide List
           </NavLink >
         </ul>
 
@@ -43,33 +43,33 @@ function Sidebar() {
         }
         <NavLink  to={'/user'} className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link'><LuUsers className='text-[16px]'/>Users
         </NavLink >
-        <li className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link' onClick={()=>setMenuOpen(menuOpen==="Product" ? null:"Product")}><RiProductHuntLine className='text-[16px]'/>Products <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Product" ? "rotate-180":""}`}/></li>
+        <NavLink   className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] ' onClick={()=>setMenuOpen(menuOpen==="Product" ? null:"Product")}><RiProductHuntLine className='text-[16px]'/>Products <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Product" ? "rotate-180":""}`}/></NavLink>
         {
           menuOpen === "Product" && (
         <ul className='p-1'>
           
-          <NavLink  to={'/product'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product List
+          <NavLink  to={'/product/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product List
         </NavLink >
       
-          <NavLink  to={'/products/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product Upload
+          <NavLink  to={'/product/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product Upload
         </NavLink >
         </ul>
 
           )
         }
-        <li className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link' onClick={()=>setMenuOpen(menuOpen==="Category" ? null:"Category")}><BiCategoryAlt className='text-[16px]'/>Category <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Category" ? "rotate-180":""}`}/></li>
+        <NavLink   className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] ' onClick={()=>setMenuOpen(menuOpen==="Category" ? null:"Category")}><BiCategoryAlt className='text-[16px]'/>Category <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Category" ? "rotate-180":""}`}/></NavLink>
         {
           menuOpen === "Category" && (
         <ul className='p-1'>
           
-          <NavLink  to={'/category'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Category List
+          <NavLink  to={'/category/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Category List
         </NavLink >
-          <NavLink  to={'/category/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add A Category
+          <NavLink  to={'/category/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Category
         </NavLink >
           <NavLink  to={'/category/subcategory/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Sub Category List
         </NavLink >
-        <NavLink  to={'/category/subcategory/add'}>
-          <li className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add A Sub Category</li>
+        <NavLink  to={'/category/subcategory/add'}
+         className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add A Sub Category
         </NavLink >
         </ul>
           )

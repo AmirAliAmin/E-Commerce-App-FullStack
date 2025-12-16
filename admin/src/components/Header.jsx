@@ -12,6 +12,7 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import Divider from '@mui/material/Divider';
 import { AdminContext } from "../context/AdminContext";
+import { useNavigate } from "react-router-dom";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -22,7 +23,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
+
 function Header() {
+  const navigate = useNavigate()
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
   const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
@@ -117,7 +120,7 @@ function Header() {
             <MenuItem>
               <IoPersonCircleOutline/>Profile
             </MenuItem>
-            <MenuItem onClick={()=>setIsLogin(false)}>                   
+            <MenuItem onClick={()=>{setIsLogin(false), navigate('/')}}>                   
               <MdLogout/>Sign Out
             </MenuItem>
           </Menu>

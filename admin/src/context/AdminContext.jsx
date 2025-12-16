@@ -12,6 +12,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import AddProduct from "../pages/Products/AddProduct";
+import AddHomeBanner from "../pages/Home/AddHomeBanner";
+import AddCategory from "../pages/Category/AddCategory";
+import AddSubCategory from "../pages/Category/AddSubCategory";
 
 export const AdminContext = createContext();
 
@@ -68,6 +71,21 @@ const AdminContextProvider = (props) => {
         {
           openFullScreenPanel?.model === "Add Product"&&(
             <AddProduct/>
+          )
+        }
+        {
+          openFullScreenPanel?.model === "Add Home Banners Slide" && (
+            <AddHomeBanner/>
+          )
+        }
+        {
+          openFullScreenPanel?.model === "Add Category" && (
+            <AddCategory/>
+          )
+        }
+        {
+          openFullScreenPanel?.model === "Add Sub Category" && (
+            <AddSubCategory/>
           )
         }
       </Dialog>
