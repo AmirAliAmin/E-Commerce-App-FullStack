@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DashboardBox from "./DashboardBox";
 import { IoIosGift } from "react-icons/io";
 import { FiGitlab } from "react-icons/fi";
@@ -20,10 +20,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { BiExport } from "react-icons/bi";
 import Chast1 from "../../components/charts/Chast1";
+import { AdminContext } from "../../context/AdminContext";
 
 function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState("");
 
+  const { setOpenFullScreenPanel} = useContext(AdminContext)
   const handleChangeCatFilter = (event) => {
     setCategoryFilter(event.target.value);
   };
@@ -112,7 +114,11 @@ function Dashboard() {
             Here's What happening on your store today. See the statistics at
             once.
           </p>
-          <button className=" py-2 px-4 bg-primary rounded-lg mt-6 text-white flex items-center">
+          <button className=" py-2 px-4 bg-primary rounded-lg mt-6 text-white flex items-center cursor-pointer"
+          onClick={()=>setOpenFullScreenPanel({
+                open:true,
+                model:"Add Product"
+              })}>
             <GoPlus />
             Add Product
           </button>
@@ -175,7 +181,10 @@ function Dashboard() {
 
           <div className="w-full md:w-[40%] lg:w-[25%] ml-auto flex items-center flex-wrap gap-3">
             <button className="bg-primary hover:bg-white hover:text-primary hover:border hover:border-primary cursor-pointer text-white py-2 px-5 rounded text-[13px] flex items-center gap-1"><BiExport/>Export</button>
-            <button className="border border-primary hover:bg-primary hover:text-white cursor-pointer text-[13px] text-primary py-2 px-5 rounded whitespace-nowrap">Add Product</button>
+            <button className="border border-primary hover:bg-primary hover:text-white cursor-pointer text-[13px] text-primary py-2 px-5 rounded whitespace-nowrap" onClick={()=>setOpenFullScreenPanel({
+                open:true,
+                model:"Add Product"
+              })}>Add Product</button>
           </div>
         </div>
         <div className="relative overflow-x-auto mt-5 no-scroll">

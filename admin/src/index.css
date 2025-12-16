@@ -71,3 +71,12 @@ body{
 .nav-link.active {
   @apply text-primary bg-[#eaeaea];
 }
+.MuiToolbar-root{
+    @apply bg-primary! text-white!
+}
+.MuiPaper-root{
+  @apply bg-[#f1f1f1]!
+}
+.MuiPaper-elevation4{
+  @apply bg-primary! text-white!
+}

@@ -9,6 +9,7 @@ import Signup from './pages/Auth/Signup'
 import Product from '../../client/src/pages/products/Product'
 import Products from './pages/Products/Products'
 import AddProduct from './pages/Products/AddProduct'
+import HomeBanner from './pages/Home/HomeBanner'
 
 function App() {
   const {sidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
@@ -24,6 +25,7 @@ function App() {
         <Route path='/' element={<Dashboard/>}/>
         <Route path='/product' element={<Products/>} />
         <Route path='/products/add' element={<AddProduct/>} />
+        <Route path='/home' element={<HomeBanner/>} />
       </Routes>
       </div>
       </div>:

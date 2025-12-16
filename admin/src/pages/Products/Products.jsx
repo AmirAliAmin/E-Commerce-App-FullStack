@@ -13,7 +13,7 @@ import { AdminContext } from "../../context/AdminContext";
 
 function Products() {
      const [categoryFilter, setCategoryFilter] = useState("");
-      const { handleClickOpenFullScreenPanel} = useContext(AdminContext)
+      const {setOpenFullScreenPanel } = useContext(AdminContext)
 
       const handleChangeCatFilter = (event) => {
         setCategoryFilter(event.target.value);
@@ -26,10 +26,11 @@ function Products() {
         <h1 className="py-5 px-3 font-bold text-[20px]">Products</h1>
         <div className="w-full md:w-[40%] lg:w-[25%] ml-auto flex justify-end items-center flex-wrap gap-3 px-2">
             <button className="bg-primary hover:bg-white hover:text-primary hover:border hover:border-primary cursor-pointer text-white py-2 px-5 rounded text-[13px] flex items-center gap-1"><BiExport/>Export</button>
-            <button className="border border-primary hover:bg-primary hover:text-white cursor-pointer text-[13px] text-primary py-2 px-5 rounded whitespace-nowrap flex  items-center" variant="outlined" onClick={handleClickOpenFullScreenPanel}><GoPlus />Add Product</button>
-                 
+            <button className="border border-primary hover:bg-primary hover:text-white cursor-pointer text-[13px] text-primary py-2 px-5 rounded whitespace-nowrap flex  items-center" variant="outlined" onClick={()=>setOpenFullScreenPanel({
+                open:true,
+                model:"Add Product"
+              })}><GoPlus />Add Product</button> 
           </div>
-
             </div>
         <div className="shadow-md rounded-lg bg-white py-2">
         <div className="flex items-center justify-start md:justify-between flex-wrap px-5 gap-1">
