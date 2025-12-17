@@ -16,6 +16,9 @@ import SubCategory from './pages/Category/SubCategory'
 import AddSubCategory from './pages/Category/AddSubCategory'
 import Users from './pages/Users/Users'
 import Orders from './pages/Order/Orders'
+import ForgetPassword from './pages/Auth/ForgetPassword'
+import Verify from './pages/Auth/Verify'
+import ChangePassword from './pages/Auth/ChangePassword'
 
 function App() {
   const {sidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
@@ -45,6 +48,9 @@ function App() {
         <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/Signup' element={<Signup/>} />
+        <Route path='/forget-password' element={<ForgetPassword/>} />
+        <Route path='/change-password' element={<ChangePassword/>} />
+        <Route path='/verify' element={<Verify/>} />
       </Routes>
       </div>
         
