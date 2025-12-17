@@ -15,6 +15,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { FaThList } from "react-icons/fa";
 import { HiOutlineLogout } from "react-icons/hi";
+import { fetchData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
 
 function Header() {
   const [boxOpen, setBoxOpen] = useState(false);
@@ -26,8 +28,21 @@ function Header() {
     isLogin,
     setIsLogin,
     setActiveTab,
+    userData
   } = useContext(AppContext);
   const navigate = useNavigate();
+
+  const logout = ()=>{
+    fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
+      console.log(res);
+      if (res?.success === true) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setIsLogin(false);
+        navigate("/login")
+      }
+    })
+  }
   return (
     <header className="bg-white fixed z-500 w-full">
       <div className="top-strip py-2 border-t border-b border-gray-200 text-[#3E3E3E]">
@@ -81,7 +96,7 @@ function Header() {
             </div>
             <div className="col3 w-[30%] flex items-center justify-end ">
               <ul className="flex items-center gap-5">
-                {isLogin === true ? (
+                {isLogin === false ? (
                   <li className="list-none text-[#3E3E3E] hidden lg:block">
                     <Link to={"/login"} className="link text-[16px] ">
                       Login
@@ -96,9 +111,9 @@ function Header() {
                     <Link className=" text-[22px] flex items-center gap-2 ">
                       <FaRegUserCircle className="link" />{" "}
                       <span className="text-[14px]  flex-col hidden md:flex">
-                        <span>Amir Ali Amin</span>
+                        <span>{userData?.name}</span>
                         <span className="text-[10px]">
-                          aliaminamir@gmail.com
+                          {userData?.email}
                         </span>
                       </span>
                     </Link>
@@ -133,7 +148,7 @@ function Header() {
                           My List
                         </p>
                       </li>
-                      <li className="py-1 border-b border-gray-300 cursor-pointer link flex items-center gap-1">
+                      <li className="py-1 border-b border-gray-300 cursor-pointer link flex items-center gap-1" onClick={logout}>
                         <HiOutlineLogout />
                         <Link>Logout</Link>
                       </li>

@@ -10,7 +10,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import { AppContext } from "../../context/AppContext";
 import Badge from "../../components/badge";
 function MyAccount() {
-  const { activeTab, setActiveTab } = useContext(AppContext);
+  const { activeTab, setActiveTab,userData } = useContext(AppContext);
   // Dummy order data
   const orders = [
     {
@@ -28,6 +28,17 @@ function MyAccount() {
       date: "2024-10-05",
     }
   ];
+  const getInitials = (fullName)=>{
+    if (!fullName) return "";
+    const words = fullName.split(" ");
+    let initials = "";
+
+    for (let i = 0; i < Math.min(words.length, 2); i++) {
+        initials += words[i][0];
+    }
+
+    return initials.toUpperCase();
+}
 
   return (
     <section className="py- w-full">
@@ -36,7 +47,7 @@ function MyAccount() {
           <div className="card bg-white shadow-lg rounded-md hidden md:block ">
             <div className="w-full p-3 flex items-center justify-center flex-col">
               <div className="w-20 h-20 bg-purple-500 rounded-full text-xl font-bold text-white flex items-center justify-center relative group">
-                AA
+                {getInitials(userData?.name || "")}
                 <div className="overlay w-full h-full absolute top-0 left-0 z-50 bg-[#0000006f] overflow-hidden rounded-full opacity-0 group-hover:opacity-100 cursor-pointer items-center justify-center flex ">
                   <IoMdCloudUpload />
                   <input
@@ -45,8 +56,8 @@ function MyAccount() {
                   />
                 </div>
               </div>
-              <h1>Amir Ali Amin</h1>
-              <h6 className="text-gray-600 text-xs">aliaminamir@gmail.com</h6>
+              <h1>{userData?.name}</h1>
+              <h6 className="text-gray-600 text-xs">{userData?.email}</h6>
             </div>
             <ul className="py-3">
               <li
