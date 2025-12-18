@@ -10,6 +10,11 @@ import AddProduct from "../pages/Products/AddProduct";
 import AddHomeBanner from "../pages/Home/AddHomeBanner";
 import AddCategory from "../pages/Category/AddCategory";
 import AddSubCategory from "../pages/Category/AddSubCategory";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { fetchData } from "../../../client/src/utils/api";
+import { API_PATH } from "../../../client/src/utils/apiPath";
+import {useNavigate} from 'react-router-dom'
 
 export const AdminContext = createContext();
 
@@ -18,12 +23,44 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 const AdminContextProvider = (props) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+   const [userData, setUserData] = useState(null)
+   const navigate = useNavigate()
   const [openFullScreenPanel, setOpenFullScreenPanel] = useState({
     open:false,
     model:''
   });
   
+   const alertBox = (msg,type)=>{
+  if (type === "success") {
+    toast.success(msg)
+  }
+  if (type === "error") {
+    toast.error(msg)
+  }
+}
+ const logout = ()=>{
+    fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
+      console.log(res);
+      if (res?.success === true) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setIsLogin(false);
+        navigate("/login")
+      }
+    })
+  }
+ useEffect(() => {
+    const token = localStorage.getItem("accessToken")
+    if (token !== undefined && token !== null && token !== "") {
+    setIsLogin(true);
+    fetchData(API_PATH.AUTH.USER_DETAIL).then((res)=>{
+      setUserData(res.data)
+    })
+  }else{
+    setIsLogin(false)
+  }
+}, [isLogin])
 
   const value = {
     sidebarOpen,
@@ -33,6 +70,8 @@ const AdminContextProvider = (props) => {
     openFullScreenPanel,
     setOpenFullScreenPanel,
     Transition,
+    alertBox,
+    logout
   };
   return (
     <AdminContext.Provider value={value}>

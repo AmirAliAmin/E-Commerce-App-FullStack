@@ -100,7 +100,7 @@ function AddProduct() {
               <input
                 type="number"
                 className="w-full outline-none py-2 px-2 border border-gray-400 rounded-md text-sm
-  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  "
+  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
             <div className="space-y-2">

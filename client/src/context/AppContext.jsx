@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { fetchData } from "../utils/api";
 import { API_PATH } from "../utils/apiPath";
+import { useNavigate } from "react-router-dom";
+
 
 
 export const AppContext = createContext();
@@ -13,6 +15,7 @@ const AppContextProvider = (props) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null)
   const [activeTab, setActiveTab] = useState("account");
+  const navigate = useNavigate()
   const apiUrl = import.meta.env.VITE_API_URL;
 
   // Fixed function names (removed typos)
@@ -38,6 +41,17 @@ const AppContextProvider = (props) => {
     toast.error(msg)
   }
 }
+ const logout = ()=>{
+    fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
+      console.log(res);
+      if (res?.success === true) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setIsLogin(false);
+        navigate("/")
+      }
+    })
+  }
  useEffect(() => {
     const token = localStorage.getItem("accessToken")
     if (token !== undefined && token !== null && token !== "") {
@@ -61,7 +75,8 @@ const AppContextProvider = (props) => {
     openCartPanel,setOpenCartPanel,toggleDrawer,
     isLogin,setIsLogin,
     activeTab, setActiveTab, apiUrl,
-    alertBox,userData, setUserData
+    alertBox,userData, setUserData,
+    logout
   }
 
   return (

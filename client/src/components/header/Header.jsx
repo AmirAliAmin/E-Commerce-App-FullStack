@@ -28,21 +28,22 @@ function Header() {
     isLogin,
     setIsLogin,
     setActiveTab,
-    userData
+    userData,
+    logout
   } = useContext(AppContext);
   const navigate = useNavigate();
 
-  const logout = ()=>{
-    fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
-      console.log(res);
-      if (res?.success === true) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        setIsLogin(false);
-        navigate("/login")
-      }
-    })
-  }
+  // const logout = ()=>{
+  //   fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
+  //     console.log(res);
+  //     if (res?.success === true) {
+  //       localStorage.removeItem("accessToken");
+  //       localStorage.removeItem("refreshToken");
+  //       setIsLogin(false);
+  //       navigate("/login")
+  //     }
+  //   })
+  // }
   return (
     <header className="bg-white fixed z-500 w-full">
       <div className="top-strip py-2 border-t border-b border-gray-200 text-[#3E3E3E]">

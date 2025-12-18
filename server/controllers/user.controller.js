@@ -532,6 +532,71 @@ export async function restPassword(req, res) {
   }
 }
 
+export async function updatePassword(req, res) {
+  try {
+    const { email,oldPassword ,password, confirmPassword } = req.body;
+
+    if (!email || !password || !confirmPassword) {
+      return res.status(400).json({
+        message: "Provide required field email, password and confirmPassword",
+        error: true,
+        success: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not available",
+        error: true,
+        success: false,
+      });
+    }
+    const checkPassword = await bcryptjs.compare(oldPassword, user.password);
+    if (!checkPassword) {
+      return res.status(400).json({
+        message: "Your oldPassword is wrong",
+        error: true,
+        success: false,
+      });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Both passwords are not matched, they must be same",
+        error: true,
+        success: false,
+      });
+    }
+
+    if (user.verify_email !== true) {
+      return res.status(400).json({
+        message: "verify the email by OTP",
+        error: true,
+        success: false,
+      });
+    }
+
+    const salt = await bcryptjs.genSalt(10);
+    const hashPassword = await bcryptjs.hash(password, salt);
+
+    await UserModel.findByIdAndUpdate(user._id, {
+      password: hashPassword,
+    });
+
+    return res.json({
+      message: "Password unpdated successfully",
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+
 export async function refreshToken(req, res) {
   try {
     const refreshToken =

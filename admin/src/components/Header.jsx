@@ -27,7 +27,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 function Header() {
   const navigate = useNavigate()
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
-  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin} = useContext(AdminContext)
+  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin,logout} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
   const handleClickMyAcc = (event) => {
     setAnchorMyAcc(event.currentTarget);
@@ -120,12 +120,12 @@ function Header() {
             <MenuItem>
               <IoPersonCircleOutline/>Profile
             </MenuItem>
-            <MenuItem onClick={()=>{setIsLogin(false), navigate('/')}}>                   
+            <MenuItem onClick={logout}>                   
               <MdLogout/>Sign Out
             </MenuItem>
           </Menu>
         </div>:
-        <button className="text-white bg-primary py-1 px-5 rounded-full hover:text-primary hover:border hover:border-primary hover:bg-white cursor-pointer ">
+        <button onClick={()=>{setIsLogin(false), navigate('/login')}} className="text-white bg-primary py-1 px-5 rounded-full hover:text-primary hover:border hover:border-primary hover:bg-white cursor-pointer ">
           Sign In
         </button>
           }
