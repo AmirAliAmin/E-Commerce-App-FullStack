@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
-import { AiOutlineEdit } from "react-icons/ai";
 import { BiExport } from "react-icons/bi";
-import { FaEye, FaRegTrashAlt } from "react-icons/fa";
 import { AdminContext } from "../../context/AdminContext";
 import { GoPlus } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
@@ -79,7 +77,7 @@ function SubCategory() {
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap flex gap-3 items-center justify-center">
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center justify-center gap-3">
                   {parent.children?.map((child) => (
                     <div
