@@ -12,7 +12,7 @@ export const API_PATH = {
         FORGET_PASSWORD:"/api/forgot-password",
         VERIFY_FORGET_PASSWORD:"/api/verify-forgot-password-otp",
         RESET_PASSWORD:"/api/password/reset",
-        UPDATE_PASSWORD:"/password/update",
+        UPDATE_PASSWORD:"/api/password/update",
         USER_DETAIL:"/api/userdetail"
     },
 }

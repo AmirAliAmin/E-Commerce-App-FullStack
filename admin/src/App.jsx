@@ -20,6 +20,7 @@ import ForgetPassword from "./pages/Auth/ForgetPassword";
 import Verify from "./pages/Auth/Verify";
 import ChangePassword from "./pages/Auth/ChangePassword";
 import { AdminContext } from "./context/AdminContext";
+import AdminProfile from "./pages/Users/AdminProfile";
 
 function App() {
    
@@ -28,14 +29,12 @@ function App() {
       <Toaster />
 
       <Routes>
-        {/* 🔐 AUTH ROUTES (NO HEADER / SIDEBAR) */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/change-password" element={<ChangePassword />} />
 
-        {/* 🧠 MAIN ADMIN ROUTES (WITH HEADER + SIDEBAR) */}
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/product/list" element={<Products />} />
@@ -47,6 +46,7 @@ function App() {
           <Route path="/category/subcategory/list" element={<SubCategory />} />
           <Route path="/user" element={<Users />} />
           <Route path="/order" element={<Orders />} />
+          <Route path="/admin-profile" element={<AdminProfile/>} />
         </Route>
       </Routes>
     </div>

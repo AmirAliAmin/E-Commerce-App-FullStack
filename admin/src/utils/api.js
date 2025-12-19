@@ -55,3 +55,19 @@ export const putData = async (url, formData) => {
     console.log(error);
   }
 };
+
+export const uploadImage = async (url, formData) => {
+  try {
+    const response = await fetch(apiUrl + url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: formData, 
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};

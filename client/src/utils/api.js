@@ -44,17 +44,19 @@ export const putData = async (url, formData) => {
     const response = await fetch(apiUrl + url, {
       method: "PUT",
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
 
-    return await response.json();
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
   } catch (error) {
     console.log(error);
   }
 };
+
 
 export const uploadImage = async (url, formData) => {
   try {

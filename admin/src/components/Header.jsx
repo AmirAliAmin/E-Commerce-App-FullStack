@@ -27,7 +27,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 function Header() {
   const navigate = useNavigate()
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
-  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin,logout} = useContext(AdminContext)
+  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin,logout,userData} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
   const handleClickMyAcc = (event) => {
     setAnchorMyAcc(event.currentTarget);
@@ -56,7 +56,7 @@ function Header() {
             onClick={handleClickMyAcc}
           >
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtu8rhOlf0vyRiP5emcT59RBq-y0hk0eYcA&s"
+              src={userData?.avatar}
               alt=""
               className="w-full h-full object-cover"
             />
@@ -104,20 +104,20 @@ function Header() {
                 <div className="flex items-center gap-1">
                   <div className="rounded-full w-7.5 h-7.5 min-w-7.5 overflow-hidden cursor-pointer">
                     <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtu8rhOlf0vyRiP5emcT59RBq-y0hk0eYcA&s"
+                      src={userData?.avatar}
                       alt=""
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <h1 className="text-xs font-bold">Amir Ali Amin</h1>
-                    <p className="text-[8px] text-gray-400 font-light">aliaminamir77@gmail.com</p>
+                    <h1 className="text-xs font-bold">{userData?.name}</h1>
+                    <p className="text-[8px] text-gray-400 font-light">{userData?.email}</p>
                   </div>
                 </div>
               </div>
             </MenuItem>
              <Divider />
-            <MenuItem>
+            <MenuItem onClick={()=>navigate("/admin-profile")}>
               <IoPersonCircleOutline/>Profile
             </MenuItem>
             <MenuItem onClick={logout}>                   

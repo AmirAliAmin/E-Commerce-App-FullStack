@@ -71,7 +71,8 @@ const AdminContextProvider = (props) => {
     setOpenFullScreenPanel,
     Transition,
     alertBox,
-    logout
+    logout,
+    userData, setUserData
   };
   return (
     <AdminContext.Provider value={value}>

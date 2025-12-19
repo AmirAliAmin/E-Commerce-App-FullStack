@@ -19,6 +19,7 @@ function MyAccount() {
   const [showPass2, setShowPass2] = useState(false);
   const [showPass3, setShowPass3] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showChangePass, setShowChangePass] = useState(false)
   const [formField, setFormField] = useState({
     name: "",
     number: "",
@@ -36,8 +37,6 @@ function MyAccount() {
     userData,
     setUserData,
     logout,
-    isLogin,
-    setIsLogin,
     alertBox,
   } = useContext(AppContext);
   const history = useNavigate();
@@ -309,7 +308,10 @@ function MyAccount() {
             {activeTab === "account" && (
               <div className="">
                 <div className="card bg-white p-5 shadow-lg rounded-md mb-3">
-                  <h2 className="pb-3">MY Profile</h2>
+                  <div className="flex items-center justify-between pb-3">
+                  <h2 className="">MY Profile</h2>
+                  <p className="text-primary cursor-pointer" onClick={()=>setShowChangePass(!showChangePass)}>Change Password</p>
+                  </div>
                   <hr className="text-gray-300" />
 
                   <form className="py-5" onSubmit={handleSubmit}>
@@ -346,9 +348,8 @@ function MyAccount() {
                         <label htmlFor="email">
                           <input
                             type="email"
-                            placeholder="Your Email"
+                            placeholder={userData?.email || "Your Email"}
                             disabled
-                            value={userData?.email}
                             className="border border-gray-500 text-gray-500 outline-0 py-2 px-2 w-full"
                           />
                         </label>
@@ -381,6 +382,8 @@ function MyAccount() {
                     </div>
                   </form>
                 </div>
+                {
+                  showChangePass && (
                 <div className="card bg-white p-5 shadow-lg rounded-md">
                   <h2 className="pb-3">Change Password</h2>
                   <hr className="text-gray-300" />
@@ -474,6 +477,9 @@ function MyAccount() {
                     </div>
                   </form>
                 </div>
+
+                  )
+                }
               </div>
             )}
             {activeTab === "list" && (

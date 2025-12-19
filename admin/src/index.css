@@ -80,3 +80,6 @@ body{
 .MuiPaper-elevation4{
   @apply bg-primary! text-white!
 }
+.react-international-phone-input{
+  @apply border! border-gray-500!  px-2! w-full!
+}

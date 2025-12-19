@@ -534,11 +534,11 @@ export async function restPassword(req, res) {
 
 export async function updatePassword(req, res) {
   try {
-    const { email,oldPassword ,password, confirmPassword } = req.body;
+    const { email, oldPassword, password, confirmPassword } = req.body;
 
-    if (!email || !password || !confirmPassword) {
+    if (!email || !oldPassword || !password || !confirmPassword) {
       return res.status(400).json({
-        message: "Provide required field email, password and confirmPassword",
+        message: "Provide email, oldPassword, password and confirmPassword",
         error: true,
         success: false,
       });
@@ -613,10 +613,10 @@ export async function refreshToken(req, res) {
     );
     if (!verifyToken) {
       return res.status(401).json({
-        message:"token is expired",
-        error:true,
-        success:false,
-      })
+        message: "token is expired",
+        error: true,
+        success: false,
+      });
     }
 
     const userId = verifyToken?.id;
@@ -628,14 +628,14 @@ export async function refreshToken(req, res) {
       sameSite: "None",
     };
 
-    res.cookie('accessToken',cookieOption);
+    res.cookie("accessToken", cookieOption);
     return res.json({
       message: "New access token generated",
       error: false,
       success: true,
-      data:{
-        accessToken:newAccessToken
-      }
+      data: {
+        accessToken: newAccessToken,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -650,13 +650,15 @@ export async function userDetails(req, res) {
   try {
     const userId = req.userId;
 
-    const user = await UserModel.findById(userId).select('-password -refresh_token');
+    const user = await UserModel.findById(userId).select(
+      "-password -refresh_token"
+    );
 
     return res.json({
       message: "user details",
       error: false,
       success: true,
-      data:user
+      data: user,
     });
   } catch (error) {
     return res.status(500).json({
