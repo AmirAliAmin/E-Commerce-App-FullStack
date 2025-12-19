@@ -12,16 +12,16 @@ function ProductCard({ id, name, brand, price, original, discount, category, ima
   const {
     openProductDetailModel,
     selectedProductCard,
-    handleClickOpenProductDetailModel,  // Fixed typo
-    handleCloseOpenProductDetailModel   // Fixed typo
+    handleClickOpenProductDetailModel, 
+    handleCloseOpenProductDetailModel   
   } = useContext(AppContext);
 
-  const [imageData, setImageData] = useState(image[0]); // Added missing state
+  const [imageData, setImageData] = useState(image[0]); 
 
   const handleQuickViewClick = () => {
     setImageData(image[0]);
     const productCardData = { id, name, brand, price, original, discount, category, image };
-    handleClickOpenProductDetailModel(productCardData); // Fixed function name
+    handleClickOpenProductDetailModel(productCardData); 
   }
 
   return (
@@ -81,7 +81,7 @@ function ProductCard({ id, name, brand, price, original, discount, category, ima
         openProductDetailModel && (
           <div 
             className='fixed inset-0 bg-[#0000008c] bg-opacity-20 flex items-center justify-center z-500' 
-            onClick={handleCloseOpenProductDetailModel} // Fixed function name
+            onClick={handleCloseOpenProductDetailModel} 
           >
             <div 
               className='bg-white h-fit  w-full max-w-3xl rounded-lg max-h-screen overflow-y-auto' 

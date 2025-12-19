@@ -58,6 +58,15 @@ const AppContextProvider = (props) => {
     setIsLogin(true);
     fetchData(API_PATH.AUTH.USER_DETAIL).then((res)=>{
       setUserData(res.data)
+      if (res?.res?.data?.error === true) {
+        if (res?.res?.data?.message==="You have not login") {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+
+          alertBox("You are not login", "error");
+          setIsLogin(false)
+        }
+      }
     })
   }else{
     setIsLogin(false)

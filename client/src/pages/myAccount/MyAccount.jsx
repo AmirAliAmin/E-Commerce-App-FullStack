@@ -12,6 +12,10 @@ import Badge from "../../components/badge";
 import { useNavigate } from "react-router-dom";
 import { API_PATH } from "../../utils/apiPath";
 import { putData, uploadImage } from "../../utils/api";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import AddAddress from "./AddAddress";
+
 function MyAccount() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
@@ -19,7 +23,8 @@ function MyAccount() {
   const [showPass2, setShowPass2] = useState(false);
   const [showPass3, setShowPass3] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [showChangePass, setShowChangePass] = useState(false)
+  const [showChangePass, setShowChangePass] = useState(false);
+   const [addressPanel, setAddressPanel] = useState(false)
   const [formField, setFormField] = useState({
     name: "",
     number: "",
@@ -31,14 +36,8 @@ function MyAccount() {
     confirmPassword: "",
   });
 
-  const {
-    activeTab,
-    setActiveTab,
-    userData,
-    setUserData,
-    logout,
-    alertBox,
-  } = useContext(AppContext);
+  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox } =
+    useContext(AppContext);
   const history = useNavigate();
 
   // Dummy order data
@@ -194,7 +193,7 @@ function MyAccount() {
         email: userData.email,
         password: changePassword.newPassword,
         confirmPassword: changePassword.confirmPassword,
-        oldPassword:changePassword.oldPassword
+        oldPassword: changePassword.oldPassword,
       });
 
       if (!res?.error) {
@@ -219,8 +218,8 @@ function MyAccount() {
   useEffect(() => {
     if (userData) {
       setFormField({
-        name: userData.name || "",
-        number: userData.mobile || "",
+        name: userData?.name ?? "",
+        number: userData?.mobile ? String(userData.mobile) : "",
       });
       setChangePassword({
         email: userData.email,
@@ -309,8 +308,13 @@ function MyAccount() {
               <div className="">
                 <div className="card bg-white p-5 shadow-lg rounded-md mb-3">
                   <div className="flex items-center justify-between pb-3">
-                  <h2 className="">MY Profile</h2>
-                  <p className="text-primary cursor-pointer" onClick={()=>setShowChangePass(!showChangePass)}>Change Password</p>
+                    <h2 className="">MY Profile</h2>
+                    <p
+                      className="text-primary cursor-pointer"
+                      onClick={() => setShowChangePass(!showChangePass)}
+                    >
+                      Change Password
+                    </p>
                   </div>
                   <hr className="text-gray-300" />
 
@@ -331,17 +335,18 @@ function MyAccount() {
                           </label>
                         </div>
                         <div className="w-[50%]">
-                          <label htmlFor="phone">
-                            <input
-                              type="number"
-                              name="number"
-                              value={formField.number}
-                              disabled={isLoading === true ? true : false}
-                              onChange={onChangeInput}
-                              placeholder={"Phone"}
-                              className="border border-gray-500 outline-0 py-2 px-2 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            />
-                          </label>
+                          <PhoneInput
+                            defaultCountry="pk"
+                            value={formField.number}
+                            disabled={isLoading}
+                            onChange={(value) =>
+                              setFormField((prev) => ({
+                                ...prev,
+                                number: value || "",
+                              }))
+                            }
+                            className="border border-gray-500 outline-0 py-2 px-2 w-full"
+                          />
                         </div>
                       </div>
                       <div className="w-full">
@@ -381,105 +386,116 @@ function MyAccount() {
                       </button>
                     </div>
                   </form>
-                </div>
-                {
-                  showChangePass && (
-                <div className="card bg-white p-5 shadow-lg rounded-md">
-                  <h2 className="pb-3">Change Password</h2>
-                  <hr className="text-gray-300" />
 
-                  <form className="py-5" onSubmit={handleSubmitPass}>
-                    <div className="flex items-center gap-5 flex-wrap">
-                      <div className="w-full flex items-center flex-wrap gap-5">
-                        <div className="w-[92%] relative">
-                          <label htmlFor="oldPassword">
-                            <input
-                              type={showPass ? "text" : "password"}
-                              name="oldPassword"
-                              value={changePassword.oldPassword}
-                              disabled={isLoading2 === true ? true : false}
-                              onChange={onChangePasswordInput}
-                              placeholder={"Old Password"}
-                              className="border border-gray-500 outline-0 py-2 px-2 w-full"
-                            />
-                          </label>
-                          <div
-                            className="absolute right-2 top-4 cursor-pointer"
-                            onClick={() => setShowPass(!showPass)}
-                          >
-                            {showPass ? <IoMdEye /> : <IoMdEyeOff />}
+                  <div className="flex items-center justify-center p-5 border border-dashed border-gray-500 bg-[#f1faff] hover:bg-[#eee9e9] my-3 cursor-pointer" onClick={()=>setAddressPanel(!addressPanel)}>
+                <span className="text-[14px] font-medium">Add Address</span>
+              </div>
+              {
+                addressPanel && (
+                  
+                    <div className="absolute bg-[#00000080] w-full  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
+                    <AddAddress setAddressPanel={setAddressPanel}/>
+                    </div>
+                 
+                )
+              }
+              
+                </div>
+                {showChangePass && (
+                  <div className="card bg-white p-5 shadow-lg rounded-md">
+                    <h2 className="pb-3">Change Password</h2>
+                    <hr className="text-gray-300" />
+
+                    <form className="py-5" onSubmit={handleSubmitPass}>
+                      <div className="flex items-center gap-5 flex-wrap">
+                        <div className="w-full flex items-center flex-wrap gap-5">
+                          <div className="w-[92%] relative">
+                            <label htmlFor="oldPassword">
+                              <input
+                                type={showPass ? "text" : "password"}
+                                name="oldPassword"
+                                value={changePassword.oldPassword}
+                                disabled={isLoading2 === true ? true : false}
+                                onChange={onChangePasswordInput}
+                                placeholder={"Old Password"}
+                                className="border border-gray-500 outline-0 py-2 px-2 w-full"
+                              />
+                            </label>
+                            <div
+                              className="absolute right-2 top-4 cursor-pointer"
+                              onClick={() => setShowPass(!showPass)}
+                            >
+                              {showPass ? <IoMdEye /> : <IoMdEyeOff />}
+                            </div>
                           </div>
-                        </div>
-                        <div className="w-[45%] relative">
-                          <label htmlFor="newPassword">
-                            <input
-                              type={showPass2 ? "text" : "password"}
-                              name="newPassword"
-                              value={changePassword.newPassword}
-                              disabled={isLoading2 === true ? true : false}
-                              onChange={onChangePasswordInput}
-                              placeholder={"New Password"}
-                              className="border border-gray-500 outline-0 py-2 px-2 w-full"
-                            />
-                          </label>
-                          <div
-                            className="absolute right-2 top-4 cursor-pointer"
-                            onClick={() => setShowPass2(!showPass2)}
-                          >
-                            {showPass2 ? <IoMdEye /> : <IoMdEyeOff />}
+                          <div className="w-[45%] relative">
+                            <label htmlFor="newPassword">
+                              <input
+                                type={showPass2 ? "text" : "password"}
+                                name="newPassword"
+                                value={changePassword.newPassword}
+                                disabled={isLoading2 === true ? true : false}
+                                onChange={onChangePasswordInput}
+                                placeholder={"New Password"}
+                                className="border border-gray-500 outline-0 py-2 px-2 w-full"
+                              />
+                            </label>
+                            <div
+                              className="absolute right-2 top-4 cursor-pointer"
+                              onClick={() => setShowPass2(!showPass2)}
+                            >
+                              {showPass2 ? <IoMdEye /> : <IoMdEyeOff />}
+                            </div>
                           </div>
-                        </div>
-                        <div className="w-[45%] relative">
-                          <label htmlFor="confirmPassword">
-                            <input
-                              type={showPass3 ? "text" : "password"}
-                              name="confirmPassword"
-                              value={changePassword.confirmPassword}
-                              disabled={isLoading2 === true ? true : false}
-                              onChange={onChangePasswordInput}
-                              placeholder={"Confirm Password"}
-                              className="border border-gray-500 outline-0 py-2 px-2 w-full"
-                            />
-                          </label>
-                          <div
-                            className="absolute right-2 top-4 cursor-pointer"
-                            onClick={() => setShowPass3(!showPass3)}
-                          >
-                            {showPass3 ? <IoMdEye /> : <IoMdEyeOff />}
+                          <div className="w-[45%] relative">
+                            <label htmlFor="confirmPassword">
+                              <input
+                                type={showPass3 ? "text" : "password"}
+                                name="confirmPassword"
+                                value={changePassword.confirmPassword}
+                                disabled={isLoading2 === true ? true : false}
+                                onChange={onChangePasswordInput}
+                                placeholder={"Confirm Password"}
+                                className="border border-gray-500 outline-0 py-2 px-2 w-full"
+                              />
+                            </label>
+                            <div
+                              className="absolute right-2 top-4 cursor-pointer"
+                              onClick={() => setShowPass3(!showPass3)}
+                            >
+                              {showPass3 ? <IoMdEye /> : <IoMdEyeOff />}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <br />
-                    <div className="flex items-center gap-5">
-                      <button
-                        type="submit"
-                        className="py-2 px-5 cursor-pointer bg-primary text-white w-[100px]"
-                      >
-                        {isLoading === true ? (
-                          <div className=" animate-spin w-5 h-5 border-3 border-primary border-solid rounded-full border-t-transparent"></div>
-                        ) : (
-                          "Save"
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        className="py-2 px-5 border border-primary text-primary cursor-pointer w-[100px]"
-                        onClick={() =>
-                          setChangePassword({
-                            oldPassword: "",
-                            newPassword: "",
-                          })
-                        }
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-
-                  )
-                }
+                      <br />
+                      <div className="flex items-center gap-5">
+                        <button
+                          type="submit"
+                          className="py-2 px-5 cursor-pointer bg-primary text-white w-[100px]"
+                        >
+                          {isLoading === true ? (
+                            <div className=" animate-spin w-5 h-5 border-3 border-primary border-solid rounded-full border-t-transparent"></div>
+                          ) : (
+                            "Save"
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          className="py-2 px-5 border border-primary text-primary cursor-pointer w-[100px]"
+                          onClick={() =>
+                            setChangePassword({
+                              oldPassword: "",
+                              newPassword: "",
+                            })
+                          }
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
               </div>
             )}
             {activeTab === "list" && (

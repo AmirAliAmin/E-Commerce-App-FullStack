@@ -6,6 +6,7 @@ import { putData, uploadImage } from "../../utils/api";
 import { AdminContext } from "../../context/AdminContext";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
+import AddAddress from "./AddAddress";
 
 function AdminProfile() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +16,7 @@ function AdminProfile() {
   const [showPass3, setShowPass3] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
+  const [addressPanel, setAddressPanel] = useState(false)
   const [formField, setFormField] = useState({
     name: "",
     number: "",
@@ -27,34 +29,12 @@ function AdminProfile() {
   });
 
   const {
-    activeTab,
-    setActiveTab,
     userData,
     setUserData,
-    logout,
-    isLogin,
-    setIsLogin,
     alertBox,
   } = useContext(AdminContext);
   const history = useNavigate();
 
-  // Dummy order data
-  const orders = [
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "pending",
-      date: "2024-10-05",
-    },
-  ];
   const getInitials = (fullName) => {
     if (!fullName) return "";
     const words = fullName.split(" ");
@@ -216,8 +196,8 @@ function AdminProfile() {
   useEffect(() => {
     if (userData) {
       setFormField({
-        name: userData.name || "",
-        number: userData.mobile || "",
+        name: userData?.name ?? "",
+        number: userData?.mobile ? String(userData.mobile) : "",
       });
       setChangePassword({
         email: userData.email,
@@ -290,13 +270,14 @@ function AdminProfile() {
                     <PhoneInput
                       defaultCountry="pk"
                       value={formField.number}
-                      disabled={isLoading === true ? true : false}
+                      disabled={isLoading}
                       onChange={(value) =>
                         setFormField((prev) => ({
                           ...prev,
                           number: value || "",
                         }))
                       }
+                      className="border border-gray-500 outline-0 py-2 px-2 w-full"
                     />
                   </div>
                 </div>
@@ -312,6 +293,7 @@ function AdminProfile() {
                 </div>
               </div>
               <br />
+              
               <div className="flex items-center gap-5">
                 <button
                   type="submit"
@@ -337,6 +319,18 @@ function AdminProfile() {
                 </button>
               </div>
             </form>
+            <div className="flex items-center justify-center p-5 border border-dashed border-gray-500 bg-[#f1faff] hover:bg-[#eee9e9] my-3 cursor-pointer" onClick={()=>setAddressPanel(!addressPanel)}>
+                <span className="text-[14px] font-medium">Add Address</span>
+              </div>
+              {
+                addressPanel && (
+                  
+                    <div className="absolute bg-[#00000080] w-full h-full z-100 inset-0 border py-10 text-white flex items-center justify-center" onClick={()=>setAddressPanel(false)}>
+                    <AddAddress setAddressPanel={setAddressPanel}/>
+                    </div>
+                 
+                )
+              }
           </div>
           {showChangePass && (
             <div className="card bg-white p-5 shadow-lg rounded-md">

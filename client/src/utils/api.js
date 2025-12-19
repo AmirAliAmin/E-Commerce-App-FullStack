@@ -7,7 +7,7 @@ export const postData = async (url,formData) => {
         const response = await fetch(apiUrl + url, {
             method: "POST",
             headers:{
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 'Content-Type': `application/json`
             },
             body:JSON.stringify(formData)
@@ -44,19 +44,17 @@ export const putData = async (url, formData) => {
     const response = await fetch(apiUrl + url, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
 
-    const text = await response.text();
-    return text ? JSON.parse(text) : {};
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
 };
-
 
 export const uploadImage = async (url, formData) => {
   try {
