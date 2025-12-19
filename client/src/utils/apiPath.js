@@ -18,4 +18,7 @@ export const API_PATH = {
   ADDRESS: {
     ADD: "/api/address/add",
   },
+  CATEGORY:{
+    
+  }
 };

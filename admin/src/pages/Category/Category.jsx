@@ -4,8 +4,19 @@ import { BiExport } from "react-icons/bi";
 import { FaEye, FaRegTrashAlt, } from "react-icons/fa";
 import { AdminContext } from "../../context/AdminContext";
 import { GoPlus } from "react-icons/go";
+import { useState } from "react";
+import { useEffect } from "react";
+import { fetchData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
 function Category() {
- const {setOpenFullScreenPanel } = useContext(AdminContext)
+ const {setOpenFullScreenPanel } = useContext(AdminContext);
+ const [categoryData, setCategoryData] = useState(null);
+
+ useEffect(() => {
+  fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res)=>{
+    setCategoryData(res.data)
+  })
+ }, [])
    return (
      <div className="p-5">  
      <div className="flex items-center justify-between flex-wrap">
@@ -34,17 +45,20 @@ function Category() {
                </th>
              </tr>
            </thead>
-           <tbody>
+           {
+            categoryData?.map((item,index)=>(
+
+           <tbody key={index}>
              <tr className="bg-white border-b border-gray-200">
                 <td className="px-6 py-4 whitespace-nowrap">
                  <div className="flex items-center gap-2">
-                   <h1>Fashion</h1>
+                   <h1>{item.name}</h1>
                  </div>
                </td>
                <td className="px-6 py-4">
                  <div className="flex w-20 h-20 min-w-20 items-center gap-4 overflow-y-auto overflow-hidden no-scroll rounded-md cursor-pointer">
                    <img
-                     src="http://localhost:5174/src/assets/Fashion.png"
+                     src={item.images}
                      alt=""
                      className="w-full h-full rounded-md transition-all hover:scale-110 "
                    />
@@ -59,31 +73,10 @@ function Category() {
                  </div>
                </td>
              </tr>
-             <tr className="bg-white border-b border-gray-200">
-                 <td className="px-6 py-4 whitespace-nowrap">
-                 <div className="flex items-center gap-2">
-                   <h1>Fashion</h1>
-                 </div>
-               </td>
-               <td className="px-6 py-4">
-                 <div className="flex w-20 h-20 min-w-20 items-center gap-4 overflow-y-auto overflow-hidden no-scroll rounded-md cursor-pointer">
-                   <img
-                     src="http://localhost:5174/src/assets/Footwear.png"
-                     alt=""
-                     className="w-full h-full rounded-md transition-all hover:scale-110 "
-                   />
-                 </div>
-               </td>
- 
-               <td className="px-6 py-4 whitespace-nowrap">
-                 <div className="flex items-center gap-2">
-                   <AiOutlineEdit className="text-[18px]" />
-                   <FaEye className="text-[18px]" />
-                   <FaRegTrashAlt className="text-[18px]" />
-                 </div>
-               </td>
-             </tr>
+            
            </tbody>
+            ))
+           }
          </table>
        </div>
      </div>

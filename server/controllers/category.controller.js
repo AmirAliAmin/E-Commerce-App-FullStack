@@ -11,60 +11,62 @@ cloudinary.config({
 });
 
 //create category
-var imageArr = [];
+// var imageArr = [];
 export async function createCategory(req, res) {
   try {
-    imageArr = [];
+    const { name, images, parentCatName, parentCatId } = req.body;
 
-    const { name, parentCatName, parentCatId } = req.body;
-    // const image = req.file;
+    const category = new CategoryModel({
+      name,
+      images,
+      parentCatId,
+      parentCatName,
+    });
+
+    await category.save();
+
+    return res.status(201).json({
+      success: true,
+      category,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+
+export async function uploadCategoryImages(req, res) {
+  try {
+    const imageArr = [];
 
     const options = {
       use_filename: true,
       unique_filename: false,
       overwrite: false,
     };
-    for (let i = 0; i < req?.files?.length; i++) {
-      const img = await cloudinary.uploader.upload(
-        req.files[i].path,
-        options,
-        function (error, result) {
-          console.log(result);
-          imageArr.push(result.secure_url);
-          fs.unlinkSync(`uploads/${req.files[i].filename}`);
-          console.log(req.files[i].filename);
-        }
-      );
+
+    for (const file of req.files) {
+      const result = await cloudinary.uploader.upload(file.path, options);
+      imageArr.push(result.secure_url);
+      fs.unlinkSync(file.path);
     }
 
-    let category = new CategoryModel({
-      name,
+    return res.status(200).json({
+      success: true,
       images: imageArr,
-      parentCatId,
-      parentCatName,
-    });
-
-    if (!category) {
-      res.status(400).json({
-        message: "Category not created",
-        error: true,
-        success: false,
-      });
-    }
-
-    category = await category.save();
-    imageArr = [];
-    return res.json({
-      category: category,
     });
   } catch (error) {
     return res.status(500).json({
-      message: error.message || error,
-      error: true,
       success: false,
+      message: error.message,
     });
   }
 }
+
+
 
 //get all category
 export async function getCategories(req, res) {

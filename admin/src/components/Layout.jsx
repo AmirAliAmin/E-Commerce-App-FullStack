@@ -19,7 +19,7 @@ function Layout() {
       <Sidebar />
       <div
         className={`transition-all ${
-          sidebarOpen === true ? "lg:pl-45 xl:pl-55" : "pl-2"
+          sidebarOpen === true  ? "lg:pl-45 xl:pl-55" : "pl-2"
         }`}
       >
         <Outlet />

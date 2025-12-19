@@ -12,9 +12,9 @@ import AddCategory from "../pages/Category/AddCategory";
 import AddSubCategory from "../pages/Category/AddSubCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { fetchData } from "../../../client/src/utils/api";
-import { API_PATH } from "../../../client/src/utils/apiPath";
 import {useNavigate} from 'react-router-dom'
+import { API_PATH } from "../utils/apiPath";
+import { fetchData } from "../utils/api";
 
 export const AdminContext = createContext();
 

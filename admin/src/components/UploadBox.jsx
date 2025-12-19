@@ -1,14 +1,69 @@
-import React from 'react'
+import React, { useState, useContext } from "react";
 import { FaImages } from "react-icons/fa6";
+import { AdminContext } from "../context/AdminContext";
+import { uploadImage } from "../utils/api";
+import { API_PATH } from "../utils/apiPath";
 
-function UploadBox(props) {
+function UploadBox({ multiple = false, setImages }) {
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState([]);
+  const { alertBox } = useContext(AdminContext);
+
+  const onChangeFile = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    for (let file of files) {
+      if (
+        !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+          file.type
+        )
+      ) {
+        alertBox("Only JPG, PNG, WEBP allowed", "error");
+        return;
+      }
+    }
+
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+      files.forEach((file) => formData.append("images", file));
+
+      const res = await uploadImage(
+        API_PATH.CATEGORY.UPLOAD_IMAGES,
+        formData
+      );
+
+      if (res?.success) {
+        setPreview(res.images);
+        setImages(res.images); // send to parent (category form)
+        alertBox("Images uploaded successfully", "success");
+      }
+    } catch (err) {
+      console.log(err);
+      alertBox("Upload failed", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
-    <div className='p-3 my-5 rounded-md overflow-hidden border-2 border-dashed border-gray-400 h-37.5 w-full bg-gray-100 hover:bg-gray-200 cursor-pointer flex flex-col items-center justify-center relative'>
-        <FaImages className='text-[50px] opacity-35 pointer-events-none'/>
-        <h4 className='text-[14px] opacity-35 pointer-events-none'>Image Upload</h4>
-        <input type="file" multiple={props.multiple!==undefined ? props.multiple : false}  className='absolute top-0 left-0 w-full h-full opacity-0' />
-    </div>
-  )
+    <>
+      <div className="p-3 my-5 rounded-md border-2 border-dashed border-gray-400 bg-gray-100 hover:bg-gray-200 cursor-pointer flex flex-col items-center justify-center relative">
+        <FaImages className="text-[50px] opacity-35" />
+        <h4 className="text-[14px] opacity-35">Image Upload</h4>
+
+        <input
+          type="file"
+          multiple={multiple}
+          accept="image/*"
+          onChange={onChangeFile}
+          className="absolute inset-0 opacity-0 cursor-pointer"
+        />
+      </div>
+    </>
+  );
 }
 
-export default UploadBox
+export default UploadBox;

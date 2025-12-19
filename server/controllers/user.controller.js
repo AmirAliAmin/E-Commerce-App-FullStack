@@ -343,7 +343,7 @@ export async function updateUserDetails(req, res) {
         name: name,
         mobile: mobile,
         email: email,
-        verify_email: email !== userExist.email ? false : true,
+        verify_email:  true,
         password: hashPassword,
         otp: verifyCode !== "" ? verifyCode : null,
         otp_expiry: verifyCode !== "" ? Date.now() + 600000 : "",
