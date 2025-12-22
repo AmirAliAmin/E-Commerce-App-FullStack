@@ -11,7 +11,7 @@ cloudinary.config({
 });
 
 //create category
-// var imageArr = [];
+var imageArr = [];
 export async function createCategory(req, res) {
   try {
     const { name, images, parentCatName, parentCatId } = req.body;
@@ -251,7 +251,10 @@ export async function deleteCategory(req, res) {
 
 export async function updateCategory(req, res) {
   try {
-    const { name, images, parentCatName, parentCatId } = req.body;
+   const { name, images = [], parentCatName, parentCatId } = req.body;
+
+   // start with existing images from frontend
+    const imageArr = [...images];
 
     const options = {
       use_filename: true,
@@ -292,6 +295,7 @@ export async function updateCategory(req, res) {
       success: true,
       error: false,
       message: "Category Updated",
+      category
     });
   } catch (error) {
     return res.status(500).json({

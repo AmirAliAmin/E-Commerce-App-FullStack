@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Search from "../search/Search";
 import { FaRegHeart } from "react-icons/fa";
@@ -15,35 +15,22 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { FaThList } from "react-icons/fa";
 import { HiOutlineLogout } from "react-icons/hi";
-import { fetchData } from "../../utils/api";
-import { API_PATH } from "../../utils/apiPath";
 
 function Header() {
   const [boxOpen, setBoxOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null);
+  
   const {
     openCartPanel,
     setOpenCartPanel,
-    toggleDrawer,
     isLogin,
-    setIsLogin,
     setActiveTab,
     userData,
-    logout
+    logout,
+    categoryData
   } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // const logout = ()=>{
-  //   fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
-  //     console.log(res);
-  //     if (res?.success === true) {
-  //       localStorage.removeItem("accessToken");
-  //       localStorage.removeItem("refreshToken");
-  //       setIsLogin(false);
-  //       navigate("/login")
-  //     }
-  //   })
-  // }
   return (
     <header className="bg-white fixed z-500 w-full">
       <div className="top-strip py-2 border-t border-b border-gray-200 text-[#3E3E3E]">
@@ -113,9 +100,7 @@ function Header() {
                       <FaRegUserCircle className="link" />{" "}
                       <span className="text-[14px]  flex-col hidden md:flex">
                         <span>{userData?.name}</span>
-                        <span className="text-[10px]">
-                          {userData?.email}
-                        </span>
+                        <span className="text-[10px]">{userData?.email}</span>
                       </span>
                     </Link>
                     <ul className="absolute bg-white w-[100px] max-w-[100px] shadow-md z-1000 p-2   text-center  border  hidden group-hover:block transition-all duration-500 rounded-md">
@@ -149,7 +134,10 @@ function Header() {
                           My List
                         </p>
                       </li>
-                      <li className="py-1 border-b border-gray-300 cursor-pointer link flex items-center gap-1" onClick={logout}>
+                      <li
+                        className="py-1 border-b border-gray-300 cursor-pointer link flex items-center gap-1"
+                        onClick={logout}
+                      >
                         <HiOutlineLogout />
                         <Link>Logout</Link>
                       </li>
@@ -214,210 +202,41 @@ function Header() {
               </h1>
             </div>
             <div className="flex flex-col justify-between h-fit gap-4 px-10 py-5">
-              <div>
-                <div className="flex justify-between items-center">
-                  <h1 className="link">
-                    <Link to={"/"}>Fashion</Link>
-                  </h1>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setMenuOpen(menuOpen === "Fashion" ? null : "Fashion")
-                    }
-                  >
-                    {" "}
-                    {menuOpen === "Fashion" ? (
-                      <CiSquareMinus className="text-2xl" />
-                    ) : (
-                      <CiSquarePlus className="text-2xl" />
-                    )}
+              {categoryData?.map((parent) => (
+                <div key={parent._id}>
+                  <div className="flex justify-between items-center">
+                    <h1 className="link">
+                      <Link to={"/"}>{parent.name}</Link>
+                    </h1>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() =>
+                        setMenuOpen(menuOpen === parent.name ? null : parent.name)
+                      }
+                    >
+                      {" "}
+                      {menuOpen === parent.name ? (
+                        <CiSquareMinus className="text-2xl" />
+                      ) : (
+                        <CiSquarePlus className="text-2xl" />
+                      )}
+                    </div>
                   </div>
-                </div>
-                {menuOpen === "Fashion" && (
-                  <ul className="pl-3 space-y-2 mt-1 text-gray-700">
-                    <li className="flex justify-between items-center link">
-                      Men{" "}
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Women{" "}
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Girls
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div>
-                <div className="flex justify-between items-center">
-                  <h1 className="link">
-                    <Link>Electronics</Link>
-                  </h1>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setMenuOpen(
-                        menuOpen === "Electronics" ? null : "Electronics"
-                      )
-                    }
-                  >
-                    {" "}
-                    {menuOpen === "Electronics" ? (
-                      <CiSquareMinus className="text-2xl" />
-                    ) : (
-                      <CiSquarePlus className="text-2xl" />
-                    )}
-                  </div>
-                </div>
+                  {menuOpen === parent.name && (
+                    <ul className="pl-3 space-y-2 mt-1 text-gray-700">
+                      {
+                        parent.children?.map((child)=>(
+                      <li className="flex justify-between items-center link">
+                        {child.name}
+                      </li>
 
-                {menuOpen === "Electronics" && (
-                  <ul className="pl-3 space-y-2 mt-1 text-gray-700">
-                    <li className="flex justify-between items-center link">
-                      Smart Watch{" "}
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Laptops{" "}
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Mobiles
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div>
-                <div className="flex justify-between items-center">
-                  <h1 className="link">
-                    <Link>Bags</Link>
-                  </h1>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setMenuOpen(menuOpen === "Bags" ? null : "Bags")
-                    }
-                  >
-                    {" "}
-                    {menuOpen === "Bags" ? (
-                      <CiSquareMinus className="text-2xl" />
-                    ) : (
-                      <CiSquarePlus className="text-2xl" />
-                    )}
-                  </div>
-                </div>
-                {menuOpen === "Bags" && (
-                  <ul className="pl-3 space-y-2 mt-1 text-gray-700">
-                    <li className="flex justify-between items-center link">
-                      Men Bags
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Women Bags
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Girls Bags
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div>
-                <div className="flex justify-between items-center">
-                  <h1 className="link">
-                    <Link>Footwear</Link>
-                  </h1>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                      setMenuOpen(menuOpen === "Footwear" ? null : "Footwear")
-                    }
-                  >
-                    {" "}
-                    {menuOpen === "Footwear" ? (
-                      <CiSquareMinus className="text-2xl" />
-                    ) : (
-                      <CiSquarePlus className="text-2xl" />
-                    )}
-                  </div>
-                </div>
-                {menuOpen === "Footwear" && (
-                  <ul className="pl-3 space-y-2 mt-1 text-gray-700">
-                    <li className="flex justify-between items-center link">
-                      Men Footwear
-                    </li>
-                    <li className="flex justify-between items-center link">
-                      Women Footwear
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div className="flex justify-between items-center">
-                <h1 className="link">
-                  <Link>Groceries</Link>
-                </h1>
-                <div
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setMenuOpen(menuOpen === "Groceries" ? null : "Groceries")
-                  }
-                >
-                  {" "}
-                  {menuOpen === "Groceries" ? (
-                    <CiSquareMinus className="text-2xl" />
-                  ) : (
-                    <CiSquarePlus className="text-2xl" />
+                        ))
+                      }
+                     
+                    </ul>
                   )}
                 </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <h1 className="link">
-                  <Link>Beauty</Link>
-                </h1>
-                <div
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setMenuOpen(menuOpen === "Beauty" ? null : "Beauty")
-                  }
-                >
-                  {" "}
-                  {menuOpen === "Beauty" ? (
-                    <CiSquareMinus className="text-2xl" />
-                  ) : (
-                    <CiSquarePlus className="text-2xl" />
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <h1 className="link">
-                  <Link>Wellness</Link>
-                </h1>
-                <div
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setMenuOpen(menuOpen === "Wellness" ? null : "Wellness")
-                  }
-                >
-                  {" "}
-                  {menuOpen === "Wellness" ? (
-                    <CiSquareMinus className="text-2xl" />
-                  ) : (
-                    <CiSquarePlus className="text-2xl" />
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <h1 className="link">
-                  <Link>Jewellery</Link>
-                </h1>
-                <div
-                  className="cursor-pointer"
-                  onClick={() =>
-                    setMenuOpen(menuOpen === "Jewellery" ? null : "Jewellery")
-                  }
-                >
-                  {" "}
-                  {menuOpen === "Jewellery" ? (
-                    <CiSquareMinus className="text-2xl" />
-                  ) : (
-                    <CiSquarePlus className="text-2xl" />
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}

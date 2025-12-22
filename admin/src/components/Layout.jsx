@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { AdminContext } from "../context/AdminContext";
 
 function Layout() {
-  const { sidebarOpen, isLogin, setIsLogin } = useContext(AdminContext);
+  const {sidebarOpen} = useContext(AdminContext);
   const history = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("accessToken")

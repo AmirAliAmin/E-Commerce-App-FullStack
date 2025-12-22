@@ -5,17 +5,41 @@ import { GoPlus } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
 import { useState } from "react";
 import { useEffect } from "react";
-import { fetchData } from "../../utils/api";
+import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 function SubCategory() {
-  const { setOpenFullScreenPanel } = useContext(AdminContext);
-  const [categoryData, setCategoryData] = useState(null);
+  const { setOpenFullScreenPanel,alertBox,categoryData,setCategoryData } = useContext(AdminContext);
+  // const [categoryData, setCategoryData] = useState(null);
 
-  useEffect(() => {
-    fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
-      setCategoryData(res.data);
-    });
-  }, []);
+ const deleteCategory = async (_id) => {
+  try {
+    const res = await deleteData(API_PATH.CATEGORY.DELETE_CATEGORY(_id));
+
+    if (res?.success) {
+      alertBox("Sub-Category Deleted", "success");
+
+      // update state by removing the deleted child from its parent
+      setCategoryData(prev =>
+        prev.map(parent => ({
+          ...parent,
+          children: parent.children?.filter(child => child._id !== _id) || [],
+        }))
+      );
+    } else {
+      alertBox("Sub-Category not Deleted", "error");
+    }
+  } catch (error) {
+    alertBox("Server Error", "error");
+    console.log(error);
+  }
+};
+
+
+  // useEffect(() => {
+  //   fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
+  //     setCategoryData(res.data);
+  //   });
+  // }, []);
   return (
     <div className="p-5">
       <div className="flex items-center justify-between flex-wrap">
@@ -84,7 +108,7 @@ function SubCategory() {
                       key={child._id}
                       className="bg-primary text-white p-1  gap-3 rounded-md flex items-center justify-center"
                     >
-                      {child.name} <IoIosClose />
+                      {child.name} <IoIosClose className="cursor-pointer" onClick={()=>deleteCategory(child._id)} />
                     </div>
                   ))}
 

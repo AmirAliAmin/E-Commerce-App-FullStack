@@ -6,17 +6,35 @@ import { AdminContext } from "../../context/AdminContext";
 import { GoPlus } from "react-icons/go";
 import { useState } from "react";
 import { useEffect } from "react";
-import { fetchData } from "../../utils/api";
+import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 function Category() {
- const {setOpenFullScreenPanel } = useContext(AdminContext);
- const [categoryData, setCategoryData] = useState(null);
+//  const [categoryData, setCategoryData] = useState(null);
+const {setOpenFullScreenPanel, alertBox,categoryData,setCategoryData } = useContext(AdminContext);
 
- useEffect(() => {
-  fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res)=>{
-    setCategoryData(res.data)
-  })
- }, [])
+const deleteCategory = async (_id) => {
+  try {
+    const res = await deleteData(API_PATH.CATEGORY.DELETE_CATEGORY(_id));
+
+    if (res?.success) {
+      alertBox("Category Deleted", "success");
+
+      // remove deleted category from UI
+      setCategoryData(prev => prev.filter(cat => cat._id !== _id));
+    } else {
+      alertBox("Category not Deleted", "error");
+    }
+  } catch (error) {
+    alertBox("Server Error", "error");
+    console.log(error);
+  }
+};
+
+//  useEffect(() => {
+//   fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res)=>{
+//     setCategoryData(res.data)
+//   })
+//  }, [])
    return (
      <div className="p-5">  
      <div className="flex items-center justify-between flex-wrap">
@@ -58,7 +76,7 @@ function Category() {
                <td className="px-6 py-4">
                  <div className="flex w-20 h-20 min-w-20 items-center gap-4 overflow-y-auto overflow-hidden no-scroll rounded-md cursor-pointer">
                    <img
-                     src={item.images}
+                     src={item?.images[0]}
                      alt=""
                      className="w-full h-full rounded-md transition-all hover:scale-110 "
                    />
@@ -67,9 +85,12 @@ function Category() {
  
                <td className="px-6 py-4 whitespace-nowrap">
                  <div className="flex items-center gap-2">
-                   <AiOutlineEdit className="text-[18px]" />
-                   <FaEye className="text-[18px]" />
-                   <FaRegTrashAlt className="text-[18px]" />
+                   <AiOutlineEdit className="text-[18px] link" onClick={()=>setOpenFullScreenPanel({
+                     open:true,
+                     model:"Edit Category",
+                     id:item?._id
+                   })} />
+                   <FaRegTrashAlt className="text-[18px] cursor-pointer link" onClick={()=>deleteCategory(item._id)} />
                  </div>
                </td>
              </tr>

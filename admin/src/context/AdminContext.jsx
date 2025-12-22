@@ -1,20 +1,21 @@
 import { createContext, forwardRef, useState } from "react";
-import Slide from '@mui/material/Slide';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
+import Slide from "@mui/material/Slide";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
 import AddProduct from "../pages/Products/AddProduct";
 import AddHomeBanner from "../pages/Home/AddHomeBanner";
 import AddCategory from "../pages/Category/AddCategory";
 import AddSubCategory from "../pages/Category/AddSubCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { API_PATH } from "../utils/apiPath";
 import { fetchData } from "../utils/api";
+import EditCategory from "../pages/Category/EditCategory";
 
 export const AdminContext = createContext();
 
@@ -24,52 +25,57 @@ const Transition = forwardRef(function Transition(props, ref) {
 const AdminContextProvider = (props) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
-   const [userData, setUserData] = useState(null)
-   const navigate = useNavigate()
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const [openFullScreenPanel, setOpenFullScreenPanel] = useState({
-    open:false,
-    model:''
+    open: false,
+    model: "",
+    id: "",
   });
-  
-   const alertBox = (msg,type)=>{
-  if (type === "success") {
-    toast.success(msg)
-  }
-  if (type === "error") {
-    toast.error(msg)
-  }
-}
- const logout = ()=>{
-    fetchData(API_PATH.AUTH.LOGOUT).then((res)=>{
+  const [categoryData, setCategoryData] = useState(null);
+
+  const alertBox = (msg, type) => {
+    if (type === "success") {
+      toast.success(msg);
+    }
+    if (type === "error") {
+      toast.error(msg);
+    }
+  };
+  const logout = () => {
+    fetchData(API_PATH.AUTH.LOGOUT).then((res) => {
       console.log(res);
       if (res?.success === true) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         setIsLogin(false);
-        navigate("/login")
+        navigate("/login");
       }
-    })
-  }
- useEffect(() => {
-    const token = localStorage.getItem("accessToken")
+    });
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     if (token !== undefined && token !== null && token !== "") {
-    setIsLogin(true);
-    fetchData(API_PATH.AUTH.USER_DETAIL).then((res)=>{
-      setUserData(res.data)
-      if (res?.res?.data?.error === true) {
-        if (res?.res?.data?.message==="You have not login") {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
+      setIsLogin(true);
+      fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
+        setCategoryData(res.data);
+      });
+      fetchData(API_PATH.AUTH.USER_DETAIL).then((res) => {
+        setUserData(res.data);
+        if (res?.res?.data?.error === true) {
+          if (res?.res?.data?.message === "You have not login") {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
 
-          alertBox("You are not login", "error");
-          setIsLogin(false)
+            alertBox("You are not login", "error");
+            setIsLogin(false);
+          }
         }
-      }
-    })
-  }else{
-    setIsLogin(false)
-  }
-}, [isLogin])
+      });
+    } else {
+      setIsLogin(false);
+    }
+  }, [isLogin]);
 
   const value = {
     sidebarOpen,
@@ -81,28 +87,34 @@ const AdminContextProvider = (props) => {
     Transition,
     alertBox,
     logout,
-    userData, setUserData
+    userData,
+    setUserData,
+    categoryData,setCategoryData
   };
   return (
     <AdminContext.Provider value={value}>
-        <Dialog
+      <Dialog
         fullScreen
         open={openFullScreenPanel.open}
-        onClose={()=>setOpenFullScreenPanel({
-        open:false,
-        })}
+        onClose={() =>
+          setOpenFullScreenPanel({
+            open: false,
+          })
+        }
         slots={{
           transition: Transition,
         }}
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
-              onClick={()=>setOpenFullScreenPanel({
-                open:false,
-              })}
+              onClick={() =>
+                setOpenFullScreenPanel({
+                  open: false,
+                })
+              }
               aria-label="close"
             >
               <CloseIcon />
@@ -112,26 +124,15 @@ const AdminContextProvider = (props) => {
             </Typography>
           </Toolbar>
         </AppBar>
-        {
-          openFullScreenPanel?.model === "Add Product"&&(
-            <AddProduct/>
-          )
-        }
-        {
-          openFullScreenPanel?.model === "Add Home Banners Slide" && (
-            <AddHomeBanner/>
-          )
-        }
-        {
-          openFullScreenPanel?.model === "Add Category" && (
-            <AddCategory/>
-          )
-        }
-        {
-          openFullScreenPanel?.model === "Add Sub Category" && (
-            <AddSubCategory/>
-          )
-        }
+        {openFullScreenPanel?.model === "Add Product" && <AddProduct />}
+        {openFullScreenPanel?.model === "Add Home Banners Slide" && (
+          <AddHomeBanner />
+        )}
+        {openFullScreenPanel?.model === "Add Category" && <AddCategory />}
+        {openFullScreenPanel?.model === "Add Sub Category" && (
+          <AddSubCategory />
+        )}
+        {openFullScreenPanel?.model === "Edit Category" && <EditCategory />}
       </Dialog>
       {props.children}
     </AdminContext.Provider>

@@ -18,7 +18,15 @@ export const API_PATH = {
   ADDRESS: {
     ADD: "/api/address/add",
   },
-  CATEGORY:{
-    
+   CATEGORY:{
+    CREATE_CATEGORY:"/api/category/create",
+    UPLOAD_IMAGES:"/api/category/upload",
+    GET_CATEGORY_COUNT: "/api/category/get/count",
+    GET_SUB_CATEGORY_COUNT:"/api/category/sub/get/count",
+    GET_CATEGORIES:"/api/category/",
+    GET_CATEGORY_BY_ID:(id)=>`/api/category/get/${id}`,
+    DELETE_CATEGORY_IMAGE:"/api/category/deleteImage",
+    DELETE_CATEGORY: (id)=>`/api/category/delete/${id}`,
+    UPDATE_CATEGORY: (id)=>`/api/category/update/${id}`
   }
 };

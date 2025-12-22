@@ -9,11 +9,11 @@ categoryRouter.post('/create' ,createCategory);
 categoryRouter.put('/upload',auth,upload.array('images') ,uploadCategoryImages);
 categoryRouter.get('/get/count' ,getCategoryCount);
 categoryRouter.get('/sub/get/count' ,getSubCategoryCount);
-categoryRouter.get('get/:id' ,getCategory);
+categoryRouter.get('/get/:id' ,getCategory);
 categoryRouter.get('/',getCategories);
 categoryRouter.delete('/deleteImage' ,auth, removeImageFromCloudinary);
-categoryRouter.delete('delete/:id' ,auth, deleteCategory);
-categoryRouter.put('update/:id', auth, upload.array('images'), updateCategory);
+categoryRouter.delete('/delete/:id' ,auth, deleteCategory);
+categoryRouter.put('/update/:id', auth, upload.array('images'), updateCategory);
 
 
 

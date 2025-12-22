@@ -15,6 +15,7 @@ const AppContextProvider = (props) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null)
   const [activeTab, setActiveTab] = useState("account");
+   const [categoryData, setCategoryData] = useState(null);
   const navigate = useNavigate()
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -52,6 +53,11 @@ const AppContextProvider = (props) => {
       }
     })
   }
+    useEffect(() => {
+      fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
+        setCategoryData(res.data);
+      });
+    }, []);
  useEffect(() => {
     const token = localStorage.getItem("accessToken")
     if (token !== undefined && token !== null && token !== "") {
@@ -85,7 +91,7 @@ const AppContextProvider = (props) => {
     isLogin,setIsLogin,
     activeTab, setActiveTab, apiUrl,
     alertBox,userData, setUserData,
-    logout
+    logout,categoryData
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
@@ -19,7 +19,6 @@ import Signup from "./pages/Auth/Signup";
 import ForgetPassword from "./pages/Auth/ForgetPassword";
 import Verify from "./pages/Auth/Verify";
 import ChangePassword from "./pages/Auth/ChangePassword";
-import { AdminContext } from "./context/AdminContext";
 import AdminProfile from "./pages/Users/AdminProfile";
 
 function App() {

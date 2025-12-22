@@ -10,19 +10,17 @@ import { AdminContext } from "../../context/AdminContext";
 
 function AddSubCategory() {
   const [productCat, setProductCat] = useState("");
-  const [categoryData, setCategoryData] = useState([]);
+  // const [categoryData, setCategoryData] = useState([]);
   const [subCatName, setSubCatName] = useState("");
 
-  const { alertBox } = useContext(AdminContext);
-  useEffect(() => {
-    fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
-      setCategoryData(res?.data || []);
-    });
-  }, []);
+  const { alertBox,categoryData,setCategoryData } = useContext(AdminContext);
 
-  const handleChangeProductCat = (event) => {
-    setProductCat(event.target.value);
-  };
+  // useEffect(() => {
+  //   fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
+  //     setCategoryData(res?.data || []);
+  //   });
+  // }, []);
+
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -42,8 +40,16 @@ function AddSubCategory() {
   const res =  await postData(API_PATH.CATEGORY.CREATE_CATEGORY, payload);
    if (res?.success) {
       alertBox("Sub Category created", "success");
+       setCategoryData(prev => 
+      prev.map(cat => 
+        cat._id === productCat 
+          ? { ...cat, children: [...(cat.children || []), res.category] } 
+          : cat
+      )
+    );
+     setSubCatName("");
+    setProductCat("");
     }
-  
 };
 
   return (
