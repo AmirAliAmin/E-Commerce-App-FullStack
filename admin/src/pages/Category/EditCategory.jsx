@@ -15,7 +15,8 @@ function EditCategory() {
     name: "",
     images: [],
   });
-  const { alertBox, openFullScreenPanel } = useContext(AdminContext);
+  const { alertBox, openFullScreenPanel, setCategoryData } =
+    useContext(AdminContext);
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setFormField(() => {
@@ -34,17 +35,35 @@ function EditCategory() {
     }
 
     const id = openFullScreenPanel?.id;
-    await putData(`${API_PATH.CATEGORY.UPDATE_CATEGORY(id)}`, formField).then(
-      (res) => {
-        if (res?.success) {
+    await putData(`${API_PATH.CATEGORY.UPDATE_CATEGORY(id)}`, formField)
+      .then((res) => {
+        if (res?.success && res?.category) {
           setFormField({
-            name: res.category.name,
+            name: res.category.name || "",
             images: res.category.images || [],
           });
+          setCategoryData((prev) =>
+            prev.map((cat) =>
+              cat._id === res.category._id
+                ? {
+                    ...cat,
+                    name: res.category.name,
+                    images: res.category.images,
+                  }
+                : cat
+            )
+          );
+
+          alertBox("Category Updated", "success");
+        } else {
+          alertBox("Failed to update category", "error");
+          console.log(res);
         }
-        alertBox("Category Updated", "success");
-      }
-    );
+      })
+      .catch((err) => {
+        alertBox("Server Error", "error");
+        console.error(err);
+      });
   };
   const handleDeleteImage = async (img) => {
     const res = await deleteImage(

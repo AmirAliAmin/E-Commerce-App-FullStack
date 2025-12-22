@@ -251,9 +251,9 @@ export async function deleteCategory(req, res) {
 
 export async function updateCategory(req, res) {
   try {
-   const { name, images = [], parentCatName, parentCatId } = req.body;
+    const { name, images = [], parentCatName, parentCatId } = req.body;
 
-   // start with existing images from frontend
+    // Start with existing images from frontend
     const imageArr = [...images];
 
     const options = {
@@ -261,43 +261,44 @@ export async function updateCategory(req, res) {
       unique_filename: false,
       overwrite: false,
     };
-    for (let i = 0; i < req?.files?.length; i++) {
-      const img = await cloudinary.uploader.upload(
-        req.files[i].path,
-        options,
-        function (error, result) {
-          console.log(result);
-          imageArr.push(result.secure_url);
-          fs.unlinkSync(`uploads/${req.files[i].filename}`);
-          console.log(req.files[i].filename);
-        }
-      );
+
+    // Upload new files if any
+    if (req.files?.length) {
+      for (const file of req.files) {
+        const result = await cloudinary.uploader.upload(file.path, options);
+        imageArr.push(result.secure_url);
+        fs.unlinkSync(file.path); // safely remove uploaded file
+      }
     }
+
+    // Update category
     const category = await CategoryModel.findByIdAndUpdate(
       req.params.id,
       {
         name,
-        images:imageArr,
+        images: imageArr,
         parentCatId,
         parentCatName,
       },
       { new: true }
     );
+
     if (!category) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Category cannot be updated",
         success: false,
         error: true,
       });
     }
-    imageArr=[]
-    res.status(200).json({
+
+    return res.status(200).json({
       success: true,
       error: false,
       message: "Category Updated",
-      category
+      category,
     });
   } catch (error) {
+    console.error(error); // always log the error for debugging
     return res.status(500).json({
       message: error.message || error,
       error: true,
@@ -305,6 +306,7 @@ export async function updateCategory(req, res) {
     });
   }
 }
+
 
 
 export async function removeImageFromCloudinary(req, res) {
