@@ -27,7 +27,7 @@ export async function createCategory(req, res) {
 
     return res.status(201).json({
       success: true,
-      category,
+      data:category,
     });
   } catch (error) {
     return res.status(500).json({

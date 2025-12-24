@@ -20,6 +20,7 @@ import ForgetPassword from "./pages/Auth/ForgetPassword";
 import Verify from "./pages/Auth/Verify";
 import ChangePassword from "./pages/Auth/ChangePassword";
 import AdminProfile from "./pages/Users/AdminProfile";
+import ProductDetails from "./pages/Products/ProductDetails";
 
 function App() {
    
@@ -46,6 +47,7 @@ function App() {
           <Route path="/user" element={<Users />} />
           <Route path="/order" element={<Orders />} />
           <Route path="/admin-profile" element={<AdminProfile/>} />
+          <Route path="/productDetails/:id" element={<ProductDetails/>} />
         </Route>
       </Routes>
     </div>

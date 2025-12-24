@@ -13,7 +13,7 @@ import { AdminContext } from '../context/AdminContext';
 function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(null);
    const {sidebarOpen,setSidebarOpen} = useContext(AdminContext)
-  return sidebarOpen && (
+  return sidebarOpen &&  (
     <div className='w-[60%] md:w-[30%] lg:w-[17%] bg-white fixed z-10 inset-0 top-0 left-0 border-r border-gray-200 shadow-lg p-2 transition-all'>
       <div className='w-full flex justify-end lg:hidden' onClick={()=>setSidebarOpen(!sidebarOpen)}>X</div>
       <div className='md:py-2 w-full'>

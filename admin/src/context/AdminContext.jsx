@@ -6,16 +6,13 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import AddProduct from "../pages/Products/AddProduct";
-import AddHomeBanner from "../pages/Home/AddHomeBanner";
-import AddCategory from "../pages/Category/AddCategory";
-import AddSubCategory from "../pages/Category/AddSubCategory";
+
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_PATH } from "../utils/apiPath";
 import { fetchData } from "../utils/api";
-import EditCategory from "../pages/Category/EditCategory";
+
 
 export const AdminContext = createContext();
 
@@ -33,6 +30,7 @@ const AdminContextProvider = (props) => {
     id: "",
   });
   const [categoryData, setCategoryData] = useState(null);
+  const [productData, setProductData] = useState([]);
 
   const alertBox = (msg, type) => {
     if (type === "success") {
@@ -89,51 +87,12 @@ const AdminContextProvider = (props) => {
     logout,
     userData,
     setUserData,
-    categoryData,setCategoryData
+    categoryData,setCategoryData,
+    navigate,
+    productData, setProductData
   };
   return (
     <AdminContext.Provider value={value}>
-      <Dialog
-        fullScreen
-        open={openFullScreenPanel.open}
-        onClose={() =>
-          setOpenFullScreenPanel({
-            open: false,
-          })
-        }
-        slots={{
-          transition: Transition,
-        }}
-      >
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() =>
-                setOpenFullScreenPanel({
-                  open: false,
-                })
-              }
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {openFullScreenPanel.model}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        {openFullScreenPanel?.model === "Add Product" && <AddProduct />}
-        {openFullScreenPanel?.model === "Add Home Banners Slide" && (
-          <AddHomeBanner />
-        )}
-        {openFullScreenPanel?.model === "Add Category" && <AddCategory />}
-        {openFullScreenPanel?.model === "Add Sub Category" && (
-          <AddSubCategory />
-        )}
-        {openFullScreenPanel?.model === "Edit Category" && <EditCategory />}
-      </Dialog>
       {props.children}
     </AdminContext.Provider>
   );

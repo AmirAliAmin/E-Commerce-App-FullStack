@@ -13,6 +13,18 @@ import { MdLogout } from "react-icons/md";
 import Divider from '@mui/material/Divider';
 import { AdminContext } from "../context/AdminContext";
 import { useNavigate } from "react-router-dom";
+import AddProduct from "../pages/Products/AddProduct";
+import AddHomeBanner from "../pages/Home/AddHomeBanner";
+import AddCategory from "../pages/Category/AddCategory";
+import AddSubCategory from "../pages/Category/AddSubCategory";
+import EditCategory from "../pages/Category/EditCategory";
+import Slide from "@mui/material/Slide";
+import Dialog from "@mui/material/Dialog";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
+import EditProduct from "../pages/Products/EditProduct";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -27,7 +39,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 function Header() {
   const navigate = useNavigate()
   const [anchorMyAcc, setAnchorMyAcc] = useState(null);
-  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin,logout,userData} = useContext(AdminContext)
+  const {sidebarOpen,setSidebarOpen, isLogin,setIsLogin,logout,userData,openFullScreenPanel,setOpenFullScreenPanel,Transition} = useContext(AdminContext)
   const open = Boolean(anchorMyAcc);
   const handleClickMyAcc = (event) => {
     setAnchorMyAcc(event.currentTarget);
@@ -36,6 +48,7 @@ function Header() {
     setAnchorMyAcc(null);
   };
   return (
+    <>
     <header className={`w-full h-auto py-2 transition-all ${sidebarOpen===true? "lg:pl-45 xl:pl-57" :"pl-2"} pr-10 bg-[#ffff] shadow-md flex items-center justify-between`}>
       <div>
         <Button className="w-10! h-10! min-w-10! rounded-full! " onClick={()=>setSidebarOpen(!sidebarOpen)}>
@@ -132,6 +145,49 @@ function Header() {
         
       </div>
     </header>
+    <Dialog
+        fullScreen
+        open={openFullScreenPanel.open}
+        onClose={() =>
+          setOpenFullScreenPanel({
+            open: false,
+          })
+        }
+        slots={{
+          transition: Transition,
+        }}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() =>
+                setOpenFullScreenPanel({
+                  open: false,
+                })
+              }
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              {openFullScreenPanel.model}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        {openFullScreenPanel?.model === "Add Product" && <AddProduct />}
+        {openFullScreenPanel?.model === "Add Home Banners Slide" && (
+          <AddHomeBanner />
+        )}
+        {openFullScreenPanel?.model === "Add Category" && <AddCategory />}
+        {openFullScreenPanel?.model === "Add Sub Category" && (
+          <AddSubCategory />
+        )}
+        {openFullScreenPanel?.model === "Edit Category" && <EditCategory />}
+        {openFullScreenPanel?.model === "Edit Product" && <EditProduct />}
+      </Dialog>
+    </>
   );
 }
 

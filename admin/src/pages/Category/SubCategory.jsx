@@ -3,8 +3,6 @@ import { BiExport } from "react-icons/bi";
 import { AdminContext } from "../../context/AdminContext";
 import { GoPlus } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
-import { useState } from "react";
-import { useEffect } from "react";
 import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 function SubCategory() {
@@ -18,7 +16,7 @@ function SubCategory() {
     if (res?.success) {
       alertBox("Sub-Category Deleted", "success");
 
-      // update state by removing the deleted child from its parent
+ 
       setCategoryData(prev =>
         prev.map(parent => ({
           ...parent,
@@ -64,7 +62,7 @@ function SubCategory() {
           </button>
         </div>
       </div>
-      <div className="relative overflow-x-auto mt-5 no-scroll">
+      <div className="relative h-90 overflow-x-auto mt-5 no-scroll">
         <table className="text-sm text-left rtl:text-right text-gray-500 ">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>

@@ -1,16 +1,16 @@
 import React, { useContext, useEffect } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet} from "react-router-dom";
 import { AdminContext } from "../context/AdminContext";
 
 function Layout() {
-  const {sidebarOpen} = useContext(AdminContext);
-  const history = useNavigate();
+  const { sidebarOpen,navigate} = useContext(AdminContext);
+  
   useEffect(() => {
     const token = localStorage.getItem("accessToken")
     if (!token) {
-      history("/login");
+      navigate("/login");
     }
   }, []);
   return (

@@ -22,8 +22,8 @@ function Navbar({ setBoxOpen, boxOpen }) {
           </button>
         </div>
 
-        <div className="col_2 lg:[70%]  xl:w-[60%] overflow-x-auto overflow-y-scroll lg:overflow-visible no-scroll">
-          <ul className="flex items-center gap-5 text-gray-700 ">
+        <div className="col_2 lg:w-[70%]  xl:w-[60%] overflow-x-auto overflow-y-scroll lg:overflow-visible no-scroll">
+          <ul className="flex items-center overflow-x-auto overflow-y-hidden whitespace-nowrap no-scroll gap-5 text-gray-700 ">
             <li className="list-none">
                <Link
                   to={`/`}

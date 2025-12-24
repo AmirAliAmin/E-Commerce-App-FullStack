@@ -4,7 +4,7 @@ import { AdminContext } from "../context/AdminContext";
 import { uploadImage } from "../utils/api";
 import { API_PATH } from "../utils/apiPath";
 
-function UploadBox({ multiple = false, setImages }) {
+function UploadBox({ multiple = false, setImages,url }) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState([]);
   const { alertBox } = useContext(AdminContext);
@@ -31,7 +31,7 @@ function UploadBox({ multiple = false, setImages }) {
       files.forEach((file) => formData.append("images", file));
 
       const res = await uploadImage(
-        API_PATH.CATEGORY.UPLOAD_IMAGES,
+        url,
         formData
       );
 
@@ -50,17 +50,24 @@ function UploadBox({ multiple = false, setImages }) {
 
   return (
     <>
-      <div className="p-3 my-5 rounded-md border-2 border-dashed border-gray-400 bg-gray-100 hover:bg-gray-200 cursor-pointer flex flex-col items-center justify-center relative">
-        <FaImages className="text-[50px] opacity-35" />
-        <h4 className="text-[14px] opacity-35">Image Upload</h4>
-
-        <input
-          type="file"
-          multiple={multiple}
-          accept="image/*"
-          onChange={onChangeFile}
-          className="absolute inset-0 opacity-0 cursor-pointer"
-        />
+      <div className="p-3 my-5 rounded-md border-2 border-dashed border-gray-400 bg-gray-100 hover:bg-gray-200 cursor-pointer h-37.5 w-full flex flex-col items-center justify-center relative">
+        {
+          uploading === true ? <>
+           <div className=" animate-spin w-15 h-15 border-3 border-primary border-solid rounded-full border-t-transparent"></div>
+          <h4 className="text-[14px] opacity-35">Uploading</h4>
+          </>:
+          <>
+          <FaImages className="text-[50px] opacity-35" />
+          <h4 className="text-[14px] opacity-35">Image Upload</h4>
+          <input
+            type="file"
+            multiple={multiple}
+            accept="image/*"
+            onChange={onChangeFile}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+          />
+          </>
+        }
       </div>
     </>
   );

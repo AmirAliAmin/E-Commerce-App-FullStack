@@ -28,5 +28,22 @@ export const API_PATH = {
     DELETE_CATEGORY_IMAGE:"/api/category/deleteImage",
     DELETE_CATEGORY: (id)=>`/api/category/delete/${id}`,
     UPDATE_CATEGORY: (id)=>`/api/category/update/${id}`
+  },
+  PRODUCTS :{
+    CREATE_PRODUCT:"/api/product/create",
+    UPLOAD_IMAGES:"/api/product/uploadImage",
+    GET_ALL_PRODUCT:"/api/product/allproduct",
+    GET_PRODUCT_BY_CAT_NAME:"/api/product/getbycatgoryname",
+    GET_PRODUCT_BY_CAT_ID:(id)=>`/api/product/getbycatgoryid/${id}`,
+    GET_PRODUCT_BY_SUBCAT_NAME:"/api/product/getbysubcatgoryname",
+    GET_PRODUCT_BY_SUBCAT_ID:(id)=>`/api/product/getbysubcatgoryid/${id}`,
+    GET_PRODUCT_BY_THIRDSUBCAT_NAME:"/api/product/getbythirdsubcatgoryname",
+    GET_PRODUCT_BY_THIRDSUBCAT_ID:(id)=>`/api/product/getbythirdsubcatgoryid/${id}`,
+    GET_PRODUCT_BY_PRICE:"/api/product/getbyprice",
+    GET_PRODUCT_BY_RATING:"/api/product/getbyrating",
+    DELETE_IMAGES:"/api/product/deleteImage",
+    DELETE_PRODUCT:(id)=>`/api/product/delete/${id}`,
+    GET_PRODUCT_BY_ID:(id)=>`/api/product/get/${id}`,
+    UPDATE_PRODUCT:(id)=>`/api/product/update/${id}`,
   }
 };

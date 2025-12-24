@@ -52,7 +52,7 @@ const productSchema = new mongoose.Schema({
     category:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Category",
-        required:true,
+      //   required:true,
     },
     countInStock:{
        type: Number,
@@ -69,6 +69,10 @@ const productSchema = new mongoose.Schema({
     discount:{
         type:Number,
         required:true
+    },
+    sale:{
+      type:Number,
+      default:0
     },
     productRam:[
         {

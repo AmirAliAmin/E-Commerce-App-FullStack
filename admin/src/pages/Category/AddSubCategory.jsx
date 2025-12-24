@@ -47,7 +47,7 @@ function AddSubCategory() {
           : cat
       )
     );
-     setSubCatName("");
+    setSubCatName("");
     setProductCat("");
     }
 };

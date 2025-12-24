@@ -2,8 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { products } from '../../assets/assets';
 import ProductCard from './ProductCard';
+import { useContext } from 'react';
+import { AppContext } from '../../context/AppContext';
 
 function PopularProducts() {
+    const {categoryData} = useContext(AppContext)
     const [openMenu, setOpenMenu] = useState("Fashion");
     const [indicatorStyle, setIndicatorStyle] = useState({});
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -46,11 +49,6 @@ function PopularProducts() {
         setOpenMenu(menuName);
     };
 
-    const menuItems = [
-        "Fashion", "Electronic", "Bags", "Footwear", 
-        "Groceries", "Beauty", "Wellness", "Jewellery"
-    ];
-
      useEffect(() => {
         updateIndicatorPosition();
         filterProductsByCategory("Fashion");
@@ -75,21 +73,21 @@ function PopularProducts() {
                             style={indicatorStyle}
                         />
                         
-                        {menuItems.map((item) => (
+                        {categoryData?.map((item) => (
                             <li 
-                                key={item}
-                                ref={el => menuRefs.current[item] = el}
-                                onClick={() => handleMenuClick(item)}
+                                key={item._id}
+                                ref={el => menuRefs.current[item.name] = el}
+                                onClick={() => handleMenuClick(item.name)}
                                 className="shrink-0"
                             >
                                 <Link 
                                     className={`link text-[14px] md:text-[16px] py-2 block transition-all duration-200 cursor-pointer ${
-                                        openMenu === item 
+                                        openMenu === item.name 
                                             ? "text-primary font-medium" 
                                             : "text-gray-600 hover:text-gray-900"
                                     }`}
                                 >
-                                    {item}
+                                    {item.name}
                                 </Link>
                             </li>
                         ))}

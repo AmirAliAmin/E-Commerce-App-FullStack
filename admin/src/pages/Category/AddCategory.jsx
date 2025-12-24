@@ -7,7 +7,7 @@ import { IoCloudUploadSharp } from "react-icons/io5";
 import { useState } from "react";
 import { useContext } from "react";
 import { AdminContext } from "../../context/AdminContext";
-import { postData } from "../../utils/api";
+import { deleteImage, postData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 
 function AddCategory() {
@@ -15,7 +15,7 @@ function AddCategory() {
     name: "",
     images: [],
   });
-  const { alertBox } = useContext(AdminContext);
+  const { alertBox,setOpenFullScreenPanel ,setCategoryData} = useContext(AdminContext);
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setFormField(() => {
@@ -37,16 +37,26 @@ function AddCategory() {
 
     if (res?.success) {
       alertBox("Category created", "success");
+      setOpenFullScreenPanel({
+          open: false,
+        });
+      setCategoryData((prev) => [...prev, res.data]);
+      setFormField({
+        name:"",
+        images:[]
+      })
     }
   };
    const handleDeleteImage = async (img) => {
-    const res = await deleteImage( `${API_PATH.CATEGORY.DELETE_CATEGORY_IMAGE}?img=${encodeURIComponent(img)}`);
-    setFormField({
-      images:[]
-    })
-
-    if (res?.success) {
-      alertBox("Category Deleted successfully", "success");
+    const res = await deleteImage(`${API_PATH.CATEGORY.DELETE_CATEGORY_IMAGE}?img=${encodeURIComponent(img)}`);
+    console.log(res)
+    if (res) {
+      alertBox("Image Deleted successfully", "success");
+      setFormField({
+        images:[]
+      })
+    }else{
+      alertBox("Category Image is Not Deleted", "error")
     }
    }
   return (
@@ -92,6 +102,7 @@ function AddCategory() {
                     images,
                   }));
                 }}
+                url={API_PATH.CATEGORY.UPLOAD_IMAGES}
               />
             </div>
             <br />

@@ -6,10 +6,10 @@ import { AdminContext } from "../../context/AdminContext";
 import { GoPlus } from "react-icons/go";
 import { useState } from "react";
 import { useEffect } from "react";
-import { deleteData, fetchData } from "../../utils/api";
+import { deleteData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 function Category() {
-//  const [categoryData, setCategoryData] = useState(null);
+
 const {setOpenFullScreenPanel, alertBox,categoryData,setCategoryData } = useContext(AdminContext);
 
 const deleteCategory = async (_id) => {
@@ -18,8 +18,6 @@ const deleteCategory = async (_id) => {
 
     if (res?.success) {
       alertBox("Category Deleted", "success");
-
-      // remove deleted category from UI
       setCategoryData(prev => prev.filter(cat => cat._id !== _id));
     } else {
       alertBox("Category not Deleted", "error");
@@ -30,11 +28,7 @@ const deleteCategory = async (_id) => {
   }
 };
 
-//  useEffect(() => {
-//   fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res)=>{
-//     setCategoryData(res.data)
-//   })
-//  }, [])
+
    return (
      <div className="p-5">  
      <div className="flex items-center justify-between flex-wrap">
@@ -47,8 +41,8 @@ const deleteCategory = async (_id) => {
                    })}><GoPlus />Add Category</button> 
                </div>
                  </div>
-       <div className="relative overflow-x-auto mt-5 no-scroll">
-         <table className="text-sm text-left rtl:text-right text-gray-500 ">
+       <div className="relative h-90 overflow-x-auto mt-5 no-scroll">
+         <table className="text-sm  text-left rtl:text-right text-gray-500 ">
            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
              <tr>
                  <th scope="col" className="px-6 py-3 whitespace-nowrap">

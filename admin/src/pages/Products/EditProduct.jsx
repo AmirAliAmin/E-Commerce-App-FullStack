@@ -9,7 +9,8 @@ import { MdCancel } from "react-icons/md";
 import { IoCloudUploadSharp } from "react-icons/io5";
 import { AdminContext } from "../../context/AdminContext";
 import { API_PATH } from "../../utils/apiPath";
-import { deleteImage, postData } from "../../utils/api";
+import { deleteImage, fetchData, postData, putData } from "../../utils/api";
+import { useEffect } from "react";
 
 const ITEM_HEIGH = 48;
 const ITEM_PADDING_TOP = 8;
@@ -22,9 +23,15 @@ const MenuProps = {
   },
 };
 
-function AddProduct() {
-  const { categoryData, alertBox, setOpenFullScreenPanel, navigate,productData, setProductData } =
-    useContext(AdminContext);
+function EditProduct() {
+  const {
+    categoryData,
+    alertBox,
+    setOpenFullScreenPanel,
+    openFullScreenPanel,
+    navigate,
+    setProductData,
+  } = useContext(AdminContext);
   const [isLoading, setIsLoading] = useState(false);
   const [formField, setFormField] = useState({
     name: "",
@@ -56,6 +63,37 @@ function AddProduct() {
   const [productWeight, setProductWeight] = useState([]);
   const [productSize, setProductSize] = useState([]);
 
+  useEffect(() => {
+    const id = openFullScreenPanel?.id;
+    fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_ID(id)).then((res) => {
+      if (res?.success) {
+        console.log(res);
+        setFormField({
+          name: res.product.name || "",
+          images: res.product.images || [],
+          description: res?.product.description || "",
+          brand: res.product?.brand || "",
+          price: res.product?.price || "",
+          oldprice: res.product?.oldprice || "",
+          catName: res.product?.catName || "",
+          subcatName: res.product?.subcatName || "",
+          countInStock: res.product?.countInStock || "",
+          rating: res.product?.rating,
+          isFeatured: res.product?.isFeatured || "",
+          discount: res.product?.discount || "",
+          productRam: res.product?.productRam || [],
+          size: res.product?.size || [],
+          productWeight: res.product?.productWeight || [],
+        });
+        setProductCat(res.product?.catId);
+        setProductSubCat(res.product?.subcatId);
+        setProductFeature(res.product.isFeatured);
+        setProductRAMS(res.product.productRam);
+        setProductSize(res.product.size);
+        setProductWeight(res.product.productWeight);
+      }
+    });
+  }, []);
   const handleChangeProductCat = (event) => {
     setProductCat(event.target.value);
     formField.catId = event.target.value;
@@ -66,7 +104,6 @@ function AddProduct() {
   };
   const handleChangeProductSubCat = (event) => {
     setProductSubCat(event.target.value);
-    formField.subcatId = event.target.value;
   };
 
   const selectSubCatByName = (name) => {
@@ -132,47 +169,42 @@ function AddProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (formField?.name.trim() === "") {
-      alertBox("Please Enter your Name", "error");
-      return;
-    }
-    if (formField?.description.trim() === "") {
-      alertBox("Please Enter your Description", "error");
-      return;
-    }
-    if (formField?.brand.trim() === "") {
-      alertBox("Please Enter Brand Name", "error");
-      return;
-    }
-    if (formField?.brand.trim() === "") {
-      alertBox("Please Enter Brand Name", "error");
-      return;
-    }
-    if (formField?.price.trim() === "") {
-      alertBox("Please Enter Price", "error");
-      return;
-    }
-    if (formField?.catName.trim() === "") {
-      alertBox("Please Select Category ", "error");
-      return;
-    }
-    if (formField?.countInStock.trim() === "") {
-      alertBox("Please Enter Stock for product", "error");
-      return;
-    }
-    if (formField?.images.length === 0) {
-      alertBox("Please Select images ", "error");
-      return;
-    }
-    postData(API_PATH.PRODUCTS.CREATE_PRODUCT, formField).then((res) => {
+    const id = openFullScreenPanel?.id;
+    putData(API_PATH.PRODUCTS.UPDATE_PRODUCT(id), formField).then((res) => {
       // console.log(res);
       if (res?.error === false) {
-        alertBox(res?.message || "Product is Added", "success");
+        alertBox(res?.message || "Product is Updated", "success");
         setIsLoading(false);
         setOpenFullScreenPanel({
           open: false,
         });
-        setProductData((prev) => [...prev, res.data]);
+        setFormField({
+          name: res.product?.name || "",
+          images: res.product?.images || [],
+          description: res?.product?.description || "",
+          brand: res.product?.brand || "",
+          price: res.product?.price || "",
+          oldprice: res.product?.oldprice || "",
+          catName: res.product?.catName || "",
+          subcatName: res.product?.subcatName || "",
+          countInStock: res.product?.countInStock || "",
+          rating: res.product?.rating,
+          isFeatured: res.product?.isFeatured || "",
+          discount: res.product?.discount || "",
+          productRam: res.product?.productRam || [],
+          size: res.product?.size || [],
+          productWeight: res.product?.productWeight || [],
+        });
+        setProductCat(res.product?.catId);
+        setProductSubCat(res.product?.subcatId);
+        setProductFeature(res.product?.isFeatured);
+        setProductRAMS(res.product?.productRam);
+        setProductSize(res.product?.size);
+        setProductWeight(res.product?.productWeight);
+        setProductData((prev) =>
+          prev.map((item) => (item._id === res.data._id ? res.data : item))
+        );
+
         navigate("/product/list");
       } else {
         alertBox(res?.message, "error");
@@ -182,7 +214,7 @@ function AddProduct() {
   };
   return (
     <section className="p-5">
-      <h1 className=" font-bold text-[20px]">Create Product</h1>
+      <h1 className=" font-bold text-[20px]">Edit Product</h1>
       <form onSubmit={handleSubmit}>
         <div className="max-h-88 no-scroll overflow-y-auto">
           <div className="bg-white py-3 px-5 m-2 rounded-xl shadow border border-gray-200">
@@ -394,9 +426,8 @@ function AddProduct() {
               <div className="space-y-2">
                 <h3 className="text-[14px] font-medium ">Rating</h3>
                 <Rating
-                  name="half-rating"
-                  defaultValue={1}
-                  precision={0.5}
+                  name="rating"
+                  value={formField.rating}
                   onChange={onChangeRating}
                 />
               </div>
@@ -451,4 +482,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default EditProduct;
