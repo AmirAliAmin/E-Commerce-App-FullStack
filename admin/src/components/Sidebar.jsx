@@ -53,6 +53,10 @@ function Sidebar() {
       
           <NavLink  to={'/product/add'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Product Upload
         </NavLink >
+        <NavLink  to={'/product/addproductsize'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Product Size
+        </NavLink >
+        <NavLink  to={'/product/addproductRAMS'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Product RAMS
+        </NavLink >
         </ul>
 
           )

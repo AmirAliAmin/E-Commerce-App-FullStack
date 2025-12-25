@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import auth from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
-import { createProduct, deleteProduct, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary, updateProductbyId, uploadProductImages } from '../controllers/product.controller.js';
+import { addProductRAMS, addProductSize, createProduct, deleteProduct, deleteProductRAMS, deleteProductSize, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsRAMS, getProductsSize, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary, updateProductbyId, uploadProductImages } from '../controllers/product.controller.js';
 
 const productRouter = Router();
 
@@ -22,5 +22,12 @@ productRouter.get('/get/:id' ,getProductById);
 productRouter.delete('/delete/:id' ,deleteProduct);
 productRouter.delete('/deleteImage' ,auth, removeImageFromCloudinary);
 productRouter.put('/update/:id',auth ,updateProductbyId);
+productRouter.delete('/productRAMS/delete/:id' ,deleteProductRAMS);
+productRouter.post('/productRAMS/add',auth ,addProductRAMS);
+productRouter.get('/allproductRAMS' ,getProductsRAMS);
+productRouter.delete('/productSize/delete/:id' ,deleteProductSize);
+productRouter.post('/productSize/add',auth ,addProductSize);
+productRouter.get('/allproductSize' ,getProductsSize);
+
 
 export default productRouter;

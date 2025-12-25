@@ -22,15 +22,15 @@ function Navbar({ setBoxOpen, boxOpen }) {
           </button>
         </div>
 
-        <div className="col_2 lg:w-[70%]  xl:w-[60%] overflow-x-auto overflow-y-scroll lg:overflow-visible no-scroll">
-          <ul className="flex items-center overflow-x-auto overflow-y-hidden whitespace-nowrap no-scroll gap-5 text-gray-700 ">
+        <div className="col_2 lg:w-[70%]  xl:w-[60%] overflow-x-auto overflow-y-scroll lg:overflow-visible no-scroll ">
+          <ul className="flex items-center  whitespace-nowrap no-scroll gap-5 text-gray-700 ">
             <li className="list-none">
                <Link
                   to={`/`}
                   className="link text-[16px] font-medium py-2 block"
                 >Home</Link>
             </li>
-            {categoryData?.map((parent) => (
+            {categoryData?.slice(0,8)?.map((parent) => (
               <li className="list-none relative group" key={parent._id}>
                 <Link
                   to={`/products/${parent.name}`}

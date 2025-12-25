@@ -21,6 +21,8 @@ import Verify from "./pages/Auth/Verify";
 import ChangePassword from "./pages/Auth/ChangePassword";
 import AdminProfile from "./pages/Users/AdminProfile";
 import ProductDetails from "./pages/Products/ProductDetails";
+import AddRAMS from "./pages/Products/AddRAMS";
+import AddSize from "./pages/Products/AddSize";
 
 function App() {
    
@@ -48,6 +50,8 @@ function App() {
           <Route path="/order" element={<Orders />} />
           <Route path="/admin-profile" element={<AdminProfile/>} />
           <Route path="/productDetails/:id" element={<ProductDetails/>} />
+          <Route path="/product/addproductRAMS" element={<AddRAMS/>} />
+          <Route path="/product/addproductsize" element={<AddSize/>} />
         </Route>
       </Routes>
     </div>

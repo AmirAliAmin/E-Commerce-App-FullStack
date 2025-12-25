@@ -56,6 +56,23 @@ export const putData = async (url, formData) => {
   }
 };
 
+export const deleteData = async (url, formData) => {
+  try {
+    const response = await fetch(apiUrl + url, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const uploadImage = async (url, formData) => {
   try {
     const response = await fetch(apiUrl + url, {
@@ -64,6 +81,21 @@ export const uploadImage = async (url, formData) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
       body: formData, 
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteImage = async (url) => {
+  try {
+    const response = await fetch(apiUrl + url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
     });
 
     return await response.json();

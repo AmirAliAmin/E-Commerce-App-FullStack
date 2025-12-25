@@ -668,3 +668,29 @@ export async function userDetails(req, res) {
     });
   }
 }
+
+export async function getAllUser(req, res) {
+  try {
+    const users = await UserModel.find()
+    if (!users) {
+      res.status(400).json({
+        message: "User are not found",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      data: users,
+    });
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

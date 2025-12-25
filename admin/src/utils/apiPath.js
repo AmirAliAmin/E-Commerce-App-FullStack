@@ -14,6 +14,7 @@ export const API_PATH = {
     RESET_PASSWORD: "/api/password/reset",
     UPDATE_PASSWORD: "/api/password/update",
     USER_DETAIL: "/api/userdetail",
+    GET_ALL_USERS:"/api/getalluser"
   },
   ADDRESS: {
     ADD: "/api/address/add",
@@ -31,6 +32,8 @@ export const API_PATH = {
   },
   PRODUCTS :{
     CREATE_PRODUCT:"/api/product/create",
+    CREATE_PRODUCT_RAMS:"/api/product/productRAMS/add",
+    CREATE_PRODUCT_SIZE:"/api/product/productSize/add",
     UPLOAD_IMAGES:"/api/product/uploadImage",
     GET_ALL_PRODUCT:"/api/product/allproduct",
     GET_PRODUCT_BY_CAT_NAME:"/api/product/getbycatgoryname",
@@ -43,7 +46,18 @@ export const API_PATH = {
     GET_PRODUCT_BY_RATING:"/api/product/getbyrating",
     DELETE_IMAGES:"/api/product/deleteImage",
     DELETE_PRODUCT:(id)=>`/api/product/delete/${id}`,
+    DELETE_PRODUCT_RAMS:(id)=>`/api/product/productRAMS/delete/${id}`,
+    DELETE_PRODUCT_SIZE:(id)=>`/api/product/productSize/delete/${id}`,
     GET_PRODUCT_BY_ID:(id)=>`/api/product/get/${id}`,
     UPDATE_PRODUCT:(id)=>`/api/product/update/${id}`,
+    GET_ALL_PRODUCT_RAMS:"/api/product/allproductRAMS",
+    GET_ALL_PRODUCT_SIZE:"/api/product/allproductSize",
+  },
+  HOME:{
+    CREATE_HOME_BANNER:"/api/home/create",
+    GET_ALL_HOME_BANNER:"/api/home/get",
+    DELETE_HOME_BANNER:(id)=>`/api/home/delete/${id}`,
+    UPLOAD_IMAGES:"/api/home/uploadImage",
+    DELETE_IMAGES:"/api/home/deleteImage",
   }
 };

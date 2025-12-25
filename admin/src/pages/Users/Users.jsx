@@ -3,8 +3,24 @@ import Pagination from "@mui/material/Pagination";
 import SearchBox from "../../components/SearchBox";
 import { AdminContext } from "../../context/AdminContext";
 import { MdEmail } from "react-icons/md";
+import { fetchData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
+import { useEffect } from "react";
 
 function Users() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [ userData, setUserData ] = useState([])
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
+      if (res?.error === false) {
+        setUserData(res.data);
+        console.log(res.data);
+        setIsLoading(false);
+      }
+    });
+  }, []);
   return (
     <>
       <div className="card">
@@ -35,123 +51,51 @@ function Users() {
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">
                       User Phone No.
                     </th>
-                     <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                    <th scope="col" className="px-6 py-3 whitespace-nowrap">
                       Created
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-white border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="cursor-pointer" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4  overflow-y-auto">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU5rtOcSD42xjPX4g4m3AIKwzJeCpLCf5Abw&s"
-                          alt=""
-                          className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      Amir Ali Amin
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      aliaminamir77@gmail.com
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">03261971792</td>
-                    <td className="px-6 py-4 whitespace-nowrap">10-12-2025</td>
-                  </tr>
-                   <tr className="bg-white border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="cursor-pointer" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4  overflow-y-auto">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU5rtOcSD42xjPX4g4m3AIKwzJeCpLCf5Abw&s"
-                          alt=""
-                          className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      Amir Ali Amin
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      aliaminamir77@gmail.com
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">03261971792</td>
-                    <td className="px-6 py-4 whitespace-nowrap">10-12-2025</td>
-                  </tr>
-                   <tr className="bg-white border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="cursor-pointer" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4  overflow-y-auto">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU5rtOcSD42xjPX4g4m3AIKwzJeCpLCf5Abw&s"
-                          alt=""
-                          className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      Amir Ali Amin
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      aliaminamir77@gmail.com
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">03261971792</td>
-                    <td className="px-6 py-4 whitespace-nowrap">10-12-2025</td>
-                  </tr>
-                   <tr className="bg-white border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="cursor-pointer" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4  overflow-y-auto">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU5rtOcSD42xjPX4g4m3AIKwzJeCpLCf5Abw&s"
-                          alt=""
-                          className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      Amir Ali Amin
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      aliaminamir77@gmail.com
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">03261971792</td>
-                    <td className="px-6 py-4 whitespace-nowrap">10-12-2025</td>
-                  </tr>
-                   <tr className="bg-white border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <input type="checkbox" className="cursor-pointer" />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4  overflow-y-auto">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU5rtOcSD42xjPX4g4m3AIKwzJeCpLCf5Abw&s"
-                          alt=""
-                          className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      Amir Ali Amin
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      aliaminamir77@gmail.com
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">03261971792</td>
-                    <td className="px-6 py-4 whitespace-nowrap">10-12-2025</td>
-                  </tr>
-                  
+                  {isLoading === false ? (
+                    userData?.map((item) => (
+                      <tr key={item._id} className="bg-white border-b border-gray-200">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <input type="checkbox" className="cursor-pointer" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-4  overflow-y-auto">
+                            <img
+                              src={item?.avatar}
+                              alt=""
+                              className="w-12 h-12 min-w-12 rounded-full border object-cover"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item?.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item?.email}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          03{item?.mobile}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                           {new Date(item?.createdAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className="pt-30">
+                        <div className=" animate-spin w-10 h-10 border-2 border-primary border-solid rounded-full border-t-transparent"></div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

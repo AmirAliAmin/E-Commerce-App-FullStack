@@ -16,7 +16,7 @@ import MyAccount from "./pages/myAccount/MyAccount";
 
 function App() {
   return (
-    <div className="relative">
+    <div className="">
       <div><Toaster/></div>
       <div className="pb-45.5">
         <Header />

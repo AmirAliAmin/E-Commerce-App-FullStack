@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { RiArrowDropUpLine } from "react-icons/ri";
 import { products } from '../../assets/assets';
@@ -7,13 +7,35 @@ import SliderRange from '../../components/SliderRange';
 import { MdOutlineMenu } from "react-icons/md";
 import { IoGridOutline } from "react-icons/io5";
 import ListProductCard from '../../components/products/ListProductCard';
+import { API_PATH } from '../../utils/apiPath';
+import { fetchData } from '../../utils/api';
+import { AppContext } from '../../context/AppContext';
 
 
 function Product() {
+    const { categoryData } = useContext(AppContext);
+
     const [openCategory, setOpenCategory] = useState(true);
     const [openAvailable, setOpenAvailable] = useState(true);
     const [openSize, setOpenSize] = useState(true);
     const [productStyle,setProductStyle] = useState("grid");
+    const [isLoading, setIsLoading] = useState(false);
+    const [productData, setProductData] = useState([]);
+
+     const productFilter = productData.filter(
+    (item) => item.catName ===  "Jewellery"
+  );
+
+    useEffect(() => {
+    setIsLoading(true);
+    fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
+      if (res?.error === false) {
+        setProductData(res.data);
+        console.log(res.data)
+        setIsLoading(false);
+      }
+    });
+  }, []);
 
 
   return (
@@ -31,30 +53,15 @@ function Product() {
                     {
                         openCategory && (
                     <div className='flex group flex-col gap-2 overflow-auto h-47 py-2 cursor-pointer text-gray-600'>
-                        <label htmlFor="Fashion" className='text-lg'>
-                            <input type="checkbox" name="Fashion" id="Fashion" className='w-4 h-4 cursor-pointer mr-2' /> Fashion
+                        {
+                            categoryData?.map((item)=>(
+                        <label key={item._id} htmlFor={item._id} className='text-lg'>
+                            <input type="checkbox" name={item.name} id={item._id} className='w-4 h-4 cursor-pointer mr-2' /> {item.name}
                         </label>
-                         <label htmlFor="Electronic" className='text-lg'>
-                            <input type="checkbox" name="Electronic" id="Electronic" className='w-4 h-4 cursor-pointer mr-2' /> Electronic
-                        </label>
-                         <label htmlFor="Bags" className='text-lg'>
-                            <input type="checkbox" name="Bags" id="Bags" className='w-4 h-4 cursor-pointer mr-2'/> Bags
-                        </label>
-                         <label htmlFor="Footwear" className='text-lg'>
-                            <input type="checkbox" name="Footwear" id="Footwear" className='w-4 h-4 cursor-pointer mr-2' /> Footwear
-                        </label>
-                         <label htmlFor="Groceries" className='text-lg'>
-                            <input type="checkbox" name="Groceries" id="Groceries" className='w-4 h-4 cursor-pointer mr-2'/> Groceries
-                        </label>
-                         <label htmlFor="Beauty" className='text-lg'>
-                            <input type="checkbox" name="Beauty" id="Beauty" className='w-4 h-4 cursor-pointer mr-2'/> Beauty
-                        </label>
-                         <label htmlFor="Wellness" className='text-lg'>
-                            <input type="checkbox" name="Wellness" id="Wellness" className='w-4 h-4 cursor-pointer mr-2'/> Wellness
-                        </label>
-                         <label htmlFor="Jewellery" className='text-lg'>
-                            <input type="checkbox" name="Jewellery" id="Jewellery" className='w-4 h-4 cursor-pointer mr-2' /> Jewellery
-                        </label>
+
+                            ))
+                        }
+
                     </div>
 
                         )
@@ -130,7 +137,7 @@ function Product() {
                         <div className={` w-7 h-7 flex items-center justify-center ${productStyle === "grid" ? "bg-primary rounded-full text-white cursor-pointer":""}`} onClick={()=>setProductStyle("grid")}>
                         <IoGridOutline className='text-xl cursor-pointer' />
                         </div>
-                        <p className='tracking-wider text-md text-gray-700 hidden md:block'>There are 22 products</p>
+                        <p className='tracking-wider text-md text-gray-700 hidden md:block'>There are {productData.length} products</p>
                     </div>
                     <div>
                         <label htmlFor="sort">
@@ -149,17 +156,18 @@ function Product() {
                 <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-5 gap-4 mx-2 py-6'>
 
                     {
-                        products.map((item, index)=>(
+                        productData.map((item)=>(
                             
                                 <ProductCard 
-                                key={index}
-                                id={item.id} 
-                                image={item.image}
+                                key={item._id}
+                                id={item._id} 
+                                images={item.images}
                                 name={item.name}
                                 brand={item.brand}
                                 price={item.price}
-                                original={item.original}
+                                original={item.oldprice}
                                 discount={item.discount}
+                                rating={item.rating}
                                 />
                             
                         ))
@@ -172,17 +180,18 @@ function Product() {
                     productStyle === "list" && (
                         <div className='flex flex-col  gap-4 mx-2 py-6'>
                             {
-                        products.map((item, index)=>(
+                        productData.map((item, index)=>(
                             
                                 <ListProductCard
                                 key={index} 
                                 id={item.id} 
-                                image={item.image}
+                                images={item.images}
                                 name={item.name}
                                 brand={item.brand}
                                 price={item.price}
                                 original={item.original}
                                 discount={item.discount}
+                                rating={item.rating}
                                 />
                             
                         ))

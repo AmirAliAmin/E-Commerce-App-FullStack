@@ -11,30 +11,45 @@ import SearchBox from "../../components/SearchBox";
 import { AdminContext } from "../../context/AdminContext";
 import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
+import Rating from "@mui/material/Rating";
 
 function Products() {
-
   const [categoryFilter, setCategoryFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { setOpenFullScreenPanel, productData, setProductData, alertBox,categoryData,navigate } =
-    useContext(AdminContext);
+  const {
+    setOpenFullScreenPanel,
+    productData,
+    setProductData,
+    alertBox,
+    categoryData,
+    navigate,
+  } = useContext(AdminContext);
 
   const handleChangeCatFilter = (event) => {
     setCategoryFilter(event.target.value);
-    setIsLoading(true)
-    fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)).then((res)=>{
+    setIsLoading(true);
+    if (event.target.value === "") {
+      fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
       if (res?.error === false) {
-        setProductData(res.product);
-        setIsLoading(false)
-        console.log(res)
+        setProductData(res.data);
+        console.log(res.data)
+        setIsLoading(false);
       }
     });
+    }else{
+      fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)).then(
+        (res) => {
+          if (res?.error === false) {
+            setProductData(res.data);
+            setIsLoading(false);
+            console.log(res);
+          }
+        }
+      );
+    }
   };
-  //   const selectCatByName = (name) => {
-  //   fetchData()
-  // };
   const rowsPerPage = 10;
   const sortedProducts = [...(productData || [])].reverse();
   const paginatedProducts = sortedProducts?.slice(
@@ -47,15 +62,15 @@ function Products() {
   };
   const totalPages = Math.ceil((productData?.length || 0) / rowsPerPage);
 
-  const deleteCategory = async (_id) => {
+  const deleteProduct = async (_id) => {
     try {
       const res = await deleteData(API_PATH.PRODUCTS.DELETE_PRODUCT(_id));
 
       if (res?.success) {
-        alertBox("Category Deleted", "success");
+        alertBox("Product Deleted", "success");
         setProductData((prev) => prev.filter((cat) => cat._id !== _id));
       } else {
-        alertBox("Category not Deleted", "error");
+        alertBox("Product not Deleted", "error");
       }
     } catch (error) {
       alertBox("Server Error", "error");
@@ -64,11 +79,12 @@ function Products() {
   };
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
       if (res?.error === false) {
         setProductData(res.data);
-        setIsLoading(false)
+        console.log(res.data)
+        setIsLoading(false);
       }
     });
   }, []);
@@ -104,7 +120,7 @@ function Products() {
                 <h4 className="font-semibold text-[12px] mb-1 whitespace-nowrap mr-2">
                   Category By:
                 </h4>
-                 {categoryData?.length !== 0 && (
+                {categoryData?.length !== 0 && (
                   <Select
                     labelId="demo-simple-select-label"
                     id="productCatDrop"
@@ -114,6 +130,7 @@ function Products() {
                     label="Category"
                     onChange={handleChangeCatFilter}
                   >
+                    <MenuItem value="">All Categories</MenuItem>
                     {categoryData?.map((parent) => (
                       <MenuItem
                         key={parent._id}
@@ -161,90 +178,105 @@ function Products() {
                       sale
                     </th>
                     <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                      Rating
+                    </th>
+                    <th scope="col" className="px-6 py-3 whitespace-nowrap">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody className="">
-                  
-                  { isLoading === false ?
-                  productData?.length !== 0 &&
-                  paginatedProducts?.map((item) => (
-                    <tr
-                      className="bg-white border-b  border-gray-200"
-                      key={item?._id}
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <input type="checkbox" className="cursor-pointer" />
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-4 w-60 overflow-y-auto">
-                          <Link to={`/product/${item?._id}`}>
-                            <img
-                              src={item?.images[0]}
-                              alt=""
-                              className="w-16.25 h-16.25 min-w-15"
-                            />
-                          </Link>
-                          <div className="w-[70%]">
+                  {isLoading === false ? (
+                    productData?.length !== 0 &&
+                    paginatedProducts?.map((item) => (
+                      <tr
+                        className="bg-white border-b  border-gray-200"
+                        key={item?._id}
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <input type="checkbox" className="cursor-pointer" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-4 w-60 overflow-y-auto">
                             <Link to={`/product/${item?._id}`}>
-                              <h3 className="font-bold text-black text-[12px] hover:text-primary leading-4">
-                                {item?.name}
-                              </h3>
+                              <img
+                                src={item?.images[0]}
+                                alt=""
+                                className="w-16.25 h-16.25 min-w-15"
+                              />
                             </Link>
-                            <p className="text-[12px]">{item?.brand}</p>
+                            <div className="w-[70%]">
+                              <Link to={`/product/${item?._id}`}>
+                                <h3 className="font-bold text-black text-[12px] hover:text-primary leading-4">
+                                  {item?.name}
+                                </h3>
+                              </Link>
+                              <p className="text-[12px]">{item?.brand}</p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {item?.catName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {item?.subcatName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {item?.brand}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <p className="  text-primary">₹{item?.price}.00</p>
-                        <p className="line-through text-gray-500 ">
-                          {item?.oldprice}.00
-                        </p>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex">{item?.sale}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <AiOutlineEdit
-                            className="text-[18px] link"
-                            onClick={() =>
-                              setOpenFullScreenPanel({
-                                open: true,
-                                model: "Edit Product",
-                                id: item?._id,
-                              })
-                            }
-                          />
-                          <FaEye className="text-[18px] link" onClick={()=>navigate(`/productDetails/${item?._id}`)} />
-                          <FaRegTrashAlt
-                            className="text-[18px] link"
-                            onClick={() => deleteCategory(item?._id)}
-                          />
-                        </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item?.catName}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item?.subcatName}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item?.brand}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <p className="  text-primary">₹{item?.price}.00</p>
+                          <p className="line-through text-gray-500 ">
+                            {item?.oldprice}.00
+                          </p>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex">{item?.sale}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex">
+                            <Rating
+                              name="rating"
+                              value={item?.rating}
+                            />
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <AiOutlineEdit
+                              className="text-[18px] link"
+                              onClick={() =>
+                                setOpenFullScreenPanel({
+                                  open: true,
+                                  model: "Edit Product",
+                                  id: item?._id,
+                                })
+                              }
+                            />
+                            <FaEye
+                              className="text-[18px] link"
+                              onClick={() =>
+                                navigate(`/productDetails/${item?._id}`)
+                              }
+                            />
+                            <FaRegTrashAlt
+                              className="text-[18px] link"
+                              onClick={() => deleteProduct(item?._id)}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr className="">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className="pt-30">
+                        <div className=" animate-spin w-10 h-10 border-2 border-primary border-solid rounded-full border-t-transparent"></div>
                       </td>
                     </tr>
-                  )):
-                 <tr className="">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td className="pt-30">
-                  <div className=" animate-spin w-10 h-10 border-2 border-primary border-solid rounded-full border-t-transparent"></div>
-                  </td>
-                 </tr>
-                  
-                  }
+                  )}
                 </tbody>
               </table>
             </div>

@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { FaEye, FaRegTrashAlt } from "react-icons/fa";
 import { IoCloudUploadSharp } from "react-icons/io5";
-import { AdminContext } from "../../context/AdminContext";
 import { deleteData, fetchData, postData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
+import { AdminContext } from "../../context/AdminContext";
 
-function AddRAMS() {
+function AddSize() {
   const [formField, setFormField] = useState();
   const [productRAMSData, setProductRAMSData] = useState([]);
   const { alertBox } = useContext(AdminContext);
@@ -16,54 +16,54 @@ function AddRAMS() {
       alertBox("Please Enter RAMS", "error");
       return;
     }
-    postData(API_PATH.PRODUCTS.CREATE_PRODUCT_RAMS, {
+    postData(API_PATH.PRODUCTS.CREATE_PRODUCT_SIZE, {
       name: formField,
     }).then((res) => {
       // console.log(res);
       if (res?.error === false) {
-        alertBox(res?.message || "Product RAMS is Added", "success");
+        alertBox(res?.message || "Product Size is Added", "success");
         setProductRAMSData((prev) => [...prev, res.data]);
       } else {
         alertBox(res?.message, "error");
       }
     });
   };
-   useEffect(() => {
-      fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT_RAMS).then((res) => {
-        if (res?.error === false) {
-          setProductRAMSData(res.data);
-        }
-      });
-    }, []);
-   const deleteProductRAMS = async (_id) => {
-      try {
-        const res = await deleteData(API_PATH.PRODUCTS.DELETE_PRODUCT_RAMS(_id));
-  
-        if (res?.success) {
-          alertBox("Product RAMS Deleted", "success");
-          setProductRAMSData((prev) => prev.filter((rams) => rams._id !== _id));
-        } else {
-          alertBox("Product RAMS not Deleted", "error");
-        }
-      } catch (error) {
-        alertBox("Server Error", "error");
-        console.log(error);
+  useEffect(() => {
+    fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT_SIZE).then((res) => {
+      if (res?.error === false) {
+        setProductRAMSData(res.data);
       }
-    };
+    });
+  }, []);
+  const deleteProductRAMS = async (_id) => {
+    try {
+      const res = await deleteData(API_PATH.PRODUCTS.DELETE_PRODUCT_SIZE(_id));
+
+      if (res?.success) {
+        alertBox("Product Size Deleted", "success");
+        setProductRAMSData((prev) => prev.filter((rams) => rams._id !== _id));
+      } else {
+        alertBox("Product Size not Deleted", "error");
+      }
+    } catch (error) {
+      alertBox("Server Error", "error");
+      console.log(error);
+    }
+  };
   return (
     <section className="p-5">
-      <h1 className=" font-bold text-[20px]">Add Product RAMS</h1>
+      <h1 className=" font-bold text-[20px]">Add Product Size</h1>
       <form onSubmit={handleSubmit}>
         <div className="max-h-88 no-scroll overflow-y-auto">
           <div className="bg-white py-3 px-5 m-2 rounded-xl shadow border border-gray-200">
             <div className="grid grid-cols-1 mt-6 mb-3 ">
               <div className="space-y-2">
-                <h3 className="text-[14px] font-medium ">Product RAMS</h3>
+                <h3 className="text-[14px] font-medium ">Product Size</h3>
                 <input
                   type="text"
                   name="name"
                   value={formField}
-                  onChange={(e) => setFormField(e.target.value)}
+                  onChange={(e)=>setFormField(e.target.value)}
                   className="w-full outline-none py-2 px-2 border border-gray-400 rounded-md text-sm"
                 />
               </div>
@@ -83,7 +83,7 @@ function AddRAMS() {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>
               <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                Product RAMS
+                Product Size
               </th>
 
               <th scope="col" className="px-6 py-3 whitespace-nowrap">
@@ -97,9 +97,10 @@ function AddRAMS() {
                 <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    <FaRegTrashAlt className="text-[18px] link"
-                    onClick={() => deleteProductRAMS(item?._id)}
-                     />
+                    <FaRegTrashAlt
+                      className="text-[18px] link"
+                      onClick={() => deleteProductRAMS(item?._id)}
+                    />
                   </div>
                 </td>
               </tr>
@@ -111,4 +112,4 @@ function AddRAMS() {
   );
 }
 
-export default AddRAMS;
+export default AddSize;
