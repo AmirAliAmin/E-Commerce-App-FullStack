@@ -39,7 +39,7 @@ function ProductCard({
       original,
       discount,
       category,
-      image,
+      images,
     };
     handleClickOpenProductDetailModel(productCardData);
   };
@@ -48,7 +48,7 @@ function ProductCard({
     <div>
       <div className="border border-gray-300 rounded-lg shadow">
         <div className="relative group h-50 overflow-hidden rounded-t-lg flex justify-center ">
-          <Link to={`/product/${id}`}>
+          <Link to={`/product/${id}`} onClick={()=>scrollTo(0,0)}>
             <img
               src={images?.[0]}
               alt={name}

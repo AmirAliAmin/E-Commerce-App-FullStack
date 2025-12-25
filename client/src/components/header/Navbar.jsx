@@ -28,6 +28,7 @@ function Navbar({ setBoxOpen, boxOpen }) {
                <Link
                   to={`/`}
                   className="link text-[16px] font-medium py-2 block"
+                  onClick={()=>scrollTo(0,0)}
                 >Home</Link>
             </li>
             {categoryData?.slice(0,8)?.map((parent) => (

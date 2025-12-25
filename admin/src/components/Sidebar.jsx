@@ -26,7 +26,7 @@ function Sidebar() {
       </div>
       <ul className='md:mt-4'>
         
-        <NavLink  to={'/'} className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link'><RxDashboard className='text-[16px]'/>Dashboard</NavLink>
+        <NavLink  to={'/'} className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] nav-link'  onClick={()=>scrollTo(0,0)}><RxDashboard className='text-[16px]'/>Dashboard</NavLink>
         
         <NavLink   className='w-full py-3 px-2 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea]' onClick={()=>setMenuOpen(menuOpen==="Home" ? null:"Home")}><FaRegImage className='text-[16px]'/>Home Slides <FaAngleDown className={`ml-auto transition-all ${menuOpen === "Home" ? "rotate-180":""}`}/></NavLink>
         {

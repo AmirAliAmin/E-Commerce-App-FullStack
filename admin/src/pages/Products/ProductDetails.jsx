@@ -13,7 +13,7 @@ import Rating from "@mui/material/Rating";
 
 function ProductDetails() {
   const { id } = useParams();
-  const { productData, setProductData } = useContext(AdminContext);
+  const [ productData, setProductData ] = useState(null)
   const [image, setImage] = useState("");
 
   useEffect(() => {
@@ -21,9 +21,9 @@ function ProductDetails() {
 
     fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_ID(id)).then((res) => {
       if (res?.error === false) {
-        setProductData(res.product);
+        setProductData(res?.product);
         console.log(res);
-        setImage(res.product.images?.[0] ?? null);
+        setImage(res?.product.images?.[0] ?? null);
       }
     });
   }, [id]);
