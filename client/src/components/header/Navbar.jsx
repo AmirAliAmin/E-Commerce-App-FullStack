@@ -34,17 +34,17 @@ function Navbar({ setBoxOpen, boxOpen }) {
             {categoryData?.slice(0,8)?.map((parent) => (
               <li className="list-none relative group" key={parent._id}>
                 <Link
-                  to={`/products/${parent.name}`}
+                  to={`/products?catId=${parent._id}`}
                   className="link text-[16px] font-medium py-2 block"
                 >
                   {parent.name}
                 </Link>
-                <div className="absolute top-full left-0 hidden group-hover:block bg-white w-48 pt-2 z-500 shadow-lg rounded-lg">
+                <div className="absolute top-full left-0 hidden group-hover:block bg-white h-20  pt-2 z-500 shadow-2xl rounded-lg">
                   <ul className="">
                     {parent.children?.map((child) => (
-                      <li key={child._id} className="px-4 py-2 text-gray-800  border-b border-gray-100 link">
+                      <Link to={`/products?subcatId=${child._id}`} key={child._id} className="px-4 py-2 text-gray-800  border-b border-gray-100 link">
                         {child.name}
-                      </li>
+                      </Link>
                     ))}
                    
                   </ul>

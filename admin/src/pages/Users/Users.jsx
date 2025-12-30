@@ -79,7 +79,7 @@ function Users() {
                           {item?.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          03{item?.mobile}
+                          +{item?.mobile}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                            {new Date(item?.createdAt).toLocaleDateString()}

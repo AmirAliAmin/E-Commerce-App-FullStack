@@ -19,7 +19,7 @@ function ListProductCard({
 }) {
   return (
     <div>
-      <div className="border overflow-hidden w-full h-120 md:h-65 lg:h-60 xl:h-75 lg:h- border-gray-300 flex flex-col md:flex-row rounded-md shadow-lg ">
+      <div className="border overflow-hidden w-full h-120 md:h-65 lg:h-60 xl:h-70 lg:h- border-gray-300 flex flex-col md:flex-row rounded-md shadow-lg ">
         <div className="relative group w-full lg:w-[25%] h-full overflow-hidden rounded-l-md">
           <Link to={`/product/${id}`} className="h-[300px] overflow-hidden">
             <img

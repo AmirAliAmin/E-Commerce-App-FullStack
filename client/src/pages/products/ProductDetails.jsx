@@ -35,7 +35,6 @@ function ProductDetails() {
     fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_ID(id)).then((res) => {
       if (res?.error === false) {
         setProductData(res.product);
-        console.log(res.product);
         setImage(res.product.images[0]);
         setSizes(res.product.size[0])
         setIsLoading(false);
@@ -76,7 +75,7 @@ function ProductDetails() {
               </span>
             </h5>
             <div className="flex items-center">
-              <Rating name="rating" size="small" value={productData.rating} />
+              <Rating name="rating" size="small" value={Number(productData?.rating) || 0} readOnly />
             </div>
             <p>Review(19)</p>
           </div>
@@ -88,16 +87,15 @@ function ProductDetails() {
             <p className="font-light text-sm">
               Available In Stock:{" "}
               <span className="text-lg font-bold text-green-700">
-                -31 Items
+                {productData.countInStock} Items
               </span>
             </p>
           </div>
           <p className="py-3 font-light lg:text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto,
-            minima consequuntur eveniet atque nulla, voluptatem nobis autem
-            fuga, rem praesentium quasi itaque porro. Repellendus, tempora
-            eveniet aperiam eius numquam et.
+            {productData.description}
           </p>
+          {
+            productData?.size?.length !== 0 &&
           <div className="flex gap-2">
           <div className="uppercase ">Size:</div>
           { 
@@ -108,6 +106,7 @@ function ProductDetails() {
             ))
           }
           </div>
+          }
           <p className="py-2">Free Shipping (Est. Delivery Time 2-3 Days)</p>
           <div className="space-x-3 flex">
             <input
@@ -175,7 +174,7 @@ function ProductDetails() {
                         </p>
                       </div>
                     </div>
-                    <Rating name="rating" size="small" value={productData?.rating} />
+                    <Rating name="rating" size="small" value={productData?.rating} readOnly />
                   </div>
                   <div className="flex flex-wrap justify-between px-5 py-2 my-3 items-center border border-gray-300 rounded-lg w-full">
                     <div className="flex flex-wrap lg:flex-nowrap items-center gap-2 w-full lg:w-[60%]">
@@ -190,7 +189,7 @@ function ProductDetails() {
                         </p>
                       </div>
                     </div>
-                    <Rating name="rating" size="small" value={productData?.rating} />
+                    <Rating name="rating" size="small" value={productData?.rating} readOnly />
                   </div>
                 </div>
               </div>
