@@ -121,6 +121,7 @@ function PopularProducts() {
                 discount={item.discount}
                 original={item.oldprice}
                 rating={item.rating}
+                item={item}
               />
             </div>
           ))

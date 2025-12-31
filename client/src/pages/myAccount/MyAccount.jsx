@@ -393,7 +393,7 @@ function MyAccount() {
               {
                 addressPanel && (
                   
-                    <div className="absolute bg-[#00000080] w-full  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
+                    <div className="absolute bg-[#00000080] w-full h-275  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
                     <AddAddress setAddressPanel={setAddressPanel}/>
                     </div>
                  

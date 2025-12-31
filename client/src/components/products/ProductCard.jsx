@@ -19,12 +19,14 @@ function ProductCard({
   category,
   images,
   rating,
+  item
 }) {
   const {
     openProductDetailModel,
     selectedProductCard,
     handleClickOpenProductDetailModel,
     handleCloseOpenProductDetailModel,
+    userData, setUserData,addtoCart
   } = useContext(AppContext);
 
   const [imageData, setImageData] = useState(images?.[0]);
@@ -44,11 +46,14 @@ function ProductCard({
     handleClickOpenProductDetailModel(productCardData);
   };
 
+  const addToCart = (product, userId,quantity)=>{
+    addtoCart(product,userId,quantity)
+  }
   return (
     <div>
       <div className="border border-gray-300 rounded-lg shadow">
         <div className="relative group h-50 overflow-hidden rounded-t-lg flex justify-center ">
-          <Link to={`/product/${id}`} onClick={()=>scrollTo(0,0)}>
+          <Link to={`/product/${id}`} onClick={() => scrollTo(0, 0)}>
             <img
               src={images?.[0]}
               alt={name}
@@ -88,7 +93,7 @@ function ProductCard({
             <p className="line-through text-gray-500">₹{original}</p>
             <p className="text-primary font-medium">₹{price}</p>
           </div>
-          <button className="w-full border border-primary mt-2 py-2 text-primary rounded-lg text-xs flex items-center justify-center gap-1 cursor-pointer hover:bg-primary hover:text-white transition-colors">
+          <button className="w-full border border-primary mt-2 py-2 text-primary rounded-lg text-xs flex items-center justify-center gap-1 cursor-pointer hover:bg-primary hover:text-white transition-colors" onClick={()=>addToCart(item,userData?._id ,1)}>
             <IoCartOutline className="text-xl" /> ADD TO CART
           </button>
         </div>
@@ -108,7 +113,7 @@ function ProductCard({
                   <div className="flex gap-4 flex-col md:flex-row">
                     <div className="flex-1">
                       <img
-                        src={selectedProductCard.image[0]}
+                        src={selectedProductCard?.images[0]}
                         alt={selectedProductCard.name}
                         className="w-full h-auto rounded-lg"
                       />
@@ -123,12 +128,8 @@ function ProductCard({
                           {selectedProductCard.brand}
                         </span>
                       </p>
-                      <div className="flex items-center mt-2">
-                        <TiStar className="text-[#FAAF00]" />
-                        <TiStar className="text-[#FAAF00]" />
-                        <TiStar className="text-[#FAAF00]" />
-                        <TiStar className="text-[#FAAF00]" />
-                        <GoStar className="text-gray-400 text-xs" />
+                      <div className="flex items-center">
+                        <Rating name="rating" size="small" value={selectedProductCard.rating} />
                       </div>
 
                       <div className="flex items-center gap-3 mt-3">

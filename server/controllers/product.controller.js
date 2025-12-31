@@ -965,3 +965,42 @@ export async function filters(req, res) {
     });
   }
 }
+
+export async function sortBy(req, res) {
+  try {
+    const { products, sortBy, order } = req.body;
+
+    if (!products || !sortBy || !order) {
+      return res.status(400).json({
+        error: true,
+        message: "Missing sorting parameters",
+      });
+    }
+
+    const sortedItems = [...products].sort((a, b) => {
+      if (typeof a[sortBy] === "string") {
+        return order === "asc"
+          ? a[sortBy].localeCompare(b[sortBy])
+          : b[sortBy].localeCompare(a[sortBy]);
+      }
+
+      return order === "asc"
+        ? a[sortBy] - b[sortBy]
+        : b[sortBy] - a[sortBy];
+    });
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      products: sortedItems,
+      page: 0,
+      totalPages: 0,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

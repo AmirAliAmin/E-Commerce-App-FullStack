@@ -27,7 +27,8 @@ function Header() {
     setActiveTab,
     userData,
     logout,
-    categoryData
+    categoryData,
+    cartData
   } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -86,11 +87,11 @@ function Header() {
               <ul className="flex items-center gap-5">
                 {isLogin === false ? (
                   <li className="list-none text-[#3E3E3E] hidden lg:block">
-                    <Link to={"/login"} className="link text-[16px] ">
+                    <Link to={"/login"} onClick={scrollTo(0,0)} className="link text-[16px] ">
                       Login
                     </Link>
                     <span className="pr-4">|</span>{" "}
-                    <Link to={"/register"} className="link text-[16px]">
+                    <Link to={"/register"}  onClick={scrollTo(0,0)} className="link text-[16px]">
                       Register
                     </Link>
                   </li>
@@ -173,7 +174,7 @@ function Header() {
                   >
                     <IoCartOutline className="text-[25px]" />{" "}
                     <span className="absolute bg-primary w-4 h-4 rounded-full -right-2 -top-2 flex justify-center items-center text-white text-xs">
-                      4
+                      {cartData?.length}
                     </span>
                   </Link>
                   <div className="hidden group-hover:block absolute bg-[#070707ba] px-7 py-1 rounded-lg  text-white mt-2 right-0.5  text-xs group-hover:transition-all duration-500">
@@ -206,7 +207,7 @@ function Header() {
                 <div key={parent._id}>
                   <div className="flex justify-between items-center">
                     <h1 className="link">
-                      <Link to={"/"}>{parent.name}</Link>
+                      <Link  to={`/products?catId=${parent._id}`}>{parent.name}</Link>
                     </h1>
                     <div
                       className="cursor-pointer"
@@ -226,9 +227,9 @@ function Header() {
                     <ul className="pl-3 space-y-2 mt-1 text-gray-700">
                       {
                         parent.children?.map((child)=>(
-                      <li className="flex justify-between items-center link">
+                      <Link to={`/products?subcatId=${child._id}`} className="flex justify-between items-center link">
                         {child.name}
-                      </li>
+                      </Link>
 
                         ))
                       }

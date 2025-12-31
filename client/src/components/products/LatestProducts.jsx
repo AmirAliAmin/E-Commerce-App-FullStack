@@ -13,7 +13,7 @@ function LatestProducts() {
     fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
       if (res?.error === false) {
         setProductData(res.data);
-        console.log(res.data);
+        // console.log(res.data);
         setIsLoading(false);
       }
     });

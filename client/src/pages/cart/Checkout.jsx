@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IoBagHandleSharp } from "react-icons/io5";
+import { AppContext } from "../../context/AppContext";
 
 function Checkout() {
+  const {cartData} = useContext(AppContext)
   return (
     <section className="py-10 pb-10">
       <div className="container w-[80%] max-w-[80%] flex gap-5 ">
@@ -64,18 +66,15 @@ function Checkout() {
                 <span className='text-[16px] font-bold'>Subtotal</span>
             </p>
             <hr className="text-gray-300"/>
+            {
+              cartData?.map((item)=>(
              <p className='flex items-center justify-between mt-2'>
-                <span className='text-[14px]'>Men Slim Fit Shirt</span>
-                <span className='text-[14px]'>$1,300.00</span>
+                <span className='text-[14px]'>{item?.productTitle}</span>
+                <span className='text-[14px]'>${item?.subTotal}</span>
             </p>
-            <p className='flex items-center justify-between mt-2'>
-                <span className='text-[14px]'>Men Slim Fit Shirt</span>
-                <span className='text-[14px]'>$1,300.00</span>
-            </p>
-            <p className='flex items-center justify-between mt-2'>
-                <span className='text-[14px]'>Subtotal</span>
-                <span className='text-[14px]'>$1,300.00</span>
-            </p>
+
+              ))
+            }
              <button className='mt-2 w-full py-2 flex items-center justify-center gap-1 bg-primary rounded-md text-white' onClick={()=>navigate("/checkout")}><IoBagHandleSharp className=''/>CHECKOUT</button>
           </div>
         </div>

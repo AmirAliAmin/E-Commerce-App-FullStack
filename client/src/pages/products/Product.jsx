@@ -23,6 +23,7 @@ function Product() {
   const [productStyle, setProductStyle] = useState("grid");
   const [isLoading, setIsLoading] = useState(false);
   const [productData, setProductData] = useState([]);
+  const [selectSortVal, setSelectSortVal] = useState("Name: A To Z");
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -33,11 +34,12 @@ function Product() {
     maxPrice: "",
     rating: "",
     page: 1,
-    limit: 10,
+    limit: 15,
   });
 
   const [price, setPrice] = useState([0, 600000]);
   const location = useLocation();
+
   const handleCheckboxChange = (field, value) => {
     const currentValues = filter[field] || [];
     const updatedValues = currentValues?.includes(value)
@@ -90,6 +92,36 @@ function Product() {
       }
     });
   };
+  const handleSortBy = async (e) => {
+  const value = e.target.value;
+  setSelectSortVal(value);
+
+  let sortBy = "";
+  let order = "";
+
+  if (value === "Name: A To Z") {
+    sortBy = "name";
+    order = "asc";
+  } else if (value === "Name: Z To A") {
+    sortBy = "name";
+    order = "desc";
+  } else if (value === "Price: Low To High") {
+    sortBy = "price";
+    order = "asc";
+  } else if (value === "Price: High To Low") {
+    sortBy = "price";
+    order = "desc";
+  }
+
+  const res = await postData(API_PATH.PRODUCTS.PRODUCTS_SORTBY, {
+    products:productData,
+    sortBy,
+    order,
+  });
+
+  setProductData(res.products);
+};
+
   useEffect(() => {
     filter.page = page;
     filterData();
@@ -344,12 +376,18 @@ function Product() {
                 <select
                   name="sort"
                   id="sort"
+                  value={selectSortVal}
+                  onChange={handleSortBy}
                   className="outline-none border text-gray-700 ml-2 w-20 md:w-auto"
                 >
-                  <option value="">Name: A To Z</option>
-                  <option value="">Name: Z To A</option>
-                  <option value="">Price: Low to High</option>
-                  <option value="">Price: High To Low</option>
+                  <option value={"Name: A To Z"}>Name: A To Z</option>
+                  <option value={"Name: Z To A"}>Name: Z To A</option>
+                  <option value={"Price: Low To High"}>
+                    Price: Low to High
+                  </option>
+                  <option value={"Price: High To Low"}>
+                    Price: High To Low
+                  </option>
                 </select>
               </label>
             </div>

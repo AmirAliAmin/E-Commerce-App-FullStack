@@ -1,13 +1,24 @@
-import CartProductModel from "../models/cartProduct.model.js";
+import CartProductModel from "../models/cart.model.js";
+import CartModel from "../models/cart.model.js";
+// import CartProductModel from "../models/cartProduct.model.js";
 import UserModel from "../models/user.model.js";
 
 export async function addtoCartItemController(req, res) {
   try {
     const userId = req.userId;
-    const { productId } = req.body;
+    const {
+      productTitle,
+      images,
+      rating,
+      price,
+      quantity,
+      subTotal,
+      productId,
+      countInStock,
+    } = req.body;
 
     if (!productId) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "provide productId",
         success: false,
         error: true,
@@ -20,35 +31,44 @@ export async function addtoCartItemController(req, res) {
     });
 
     if (checkItemCart) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Item is already in cart",
-        success: false,
-        error: true,
       });
-    } else {
+    } 
+      // const cartItem = new CartProductModel({
+      //   quantity: quantity,
+      //   userId: userId,
+      //   productId: productId,
+      // });
+
       const cartItem = new CartProductModel({
-        quantity: 1,
-        userId: userId,
+        productTitle: productTitle,
+        images: images,
+        rating: rating,
+        price: price,
+        quantity: quantity,
+        subTotal: subTotal,
         productId: productId,
+        countInStock: countInStock,
+        userId: userId,
       });
 
-      const save = await cartItem.save();
+      const savedItem = await cartItem.save();
 
-      const updateCartUser = await UserModel.updateOne(
-        { _id: userId },
-        {
-          $push: {
-            shopping_cart: productId,
-          },
-        }
-      );
-    }
-
-    return res.status(200).json({
-      message: "Item Add successfully",
-      error: false,
-      success: true,
-    });
+      // const updateCartUser = await UserModel.updateOne(
+      //   { _id: userId },
+      //   {
+      //     $push: {
+      //       shopping_cart: productId,
+      //     },
+      //   }
+      // );
+      return res.status(200).json({
+        message: "Item Add successfully",
+        data: savedItem,
+        error: false,
+        success: true,
+      });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -61,12 +81,12 @@ export async function addtoCartItemController(req, res) {
 export async function getCartItem(req, res) {
   try {
     const userId = req.userId;
-    const cartItem = await CartProductModel.find({
+    const cartItems = await CartProductModel.find({
       userId: userId,
-    }).populate("productId");
+    });
 
     return res.json({
-      data: cartItem,
+      data: cartItems,
       error: false,
       success: true,
     });
@@ -130,10 +150,17 @@ export async function deletecartItem(req, res) {
 
     // Delete from cart table
     const deleteCartItem = await CartProductModel.deleteOne({
-      _id,
-      userId,
+      _id: _id,
+      userId: userId,
     });
 
+    if (!deleteCartItem) {
+      return res.status(404).json({
+        message: "The Product in the cart is not found",
+        error: true,
+        success: false,
+      });
+    }
     if (deleteCartItem.deletedCount === 0) {
       return res.status(400).json({
         message: "Cart item not deleted",
@@ -143,20 +170,23 @@ export async function deletecartItem(req, res) {
     }
 
     // Remove from user's shopping_cart
-    const user = await UserModel.findById(userId);
+    // const user = await UserModel.findOne({_id:userId});
 
-    user.shopping_cart = user.shopping_cart.filter(
-      (item) => item.toString() !== productId.toString()
-    );
+    // const cartItems = user?.shopping_cart;
+    // const updatedUserCart = [...cartItems.slice(0,cartItems.indexOf(productId)), ...cartItems.slice(cartItems.indexOf(productId)+1)]
+    // user.shopping_cart = user.shopping_cart.filter(
+    //   (item) => item.toString() !== productId.toString()
+    // );
 
-    await user.save();
+    // user.shopping_cart = updatedUserCart;
+
+    // await user.save();
 
     return res.json({
       message: "Removed cart item",
       error: false,
       success: true,
     });
-
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -165,4 +195,3 @@ export async function deletecartItem(req, res) {
     });
   }
 }
-
