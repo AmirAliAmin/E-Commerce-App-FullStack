@@ -14,7 +14,8 @@ const AppContextProvider = (props) => {
   const [userData, setUserData] = useState(null);
   const [activeTab, setActiveTab] = useState("account");
   const [categoryData, setCategoryData] = useState(null);
-  const [cartData, setCartData] = useState([])
+  const [cartData, setCartData] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -40,56 +41,59 @@ const AppContextProvider = (props) => {
       toast.error(msg);
     }
   };
-  
-const addtoCart = (product, userId, quantity = 1) => {
-  if (!userId) {
-    alertBox("You are not logged in", "error");
-    return;
-  }
 
-  const data = {
-    productTitle: product?.name,
-    images: product?.images?.[0],
-    rating: product?.rating || 0,
-    price: product?.price,
-    quantity,
-    subTotal: product?.price * quantity,
-    productId: product?._id,
-    countInStock: product?.countInStock,
-    userId,
+  const addtoCart = (product, userId, quantity = 1) => {
+    if (!userId) {
+      alertBox("You are not logged in", "error");
+      return;
+    }
+
+    const data = {
+      productTitle: product?.name,
+      images: product?.images?.[0],
+      rating: product?.rating || 0,
+      price: product?.price,
+      quantity,
+      subTotal: product?.price * quantity,
+      productId: product?._id,
+      countInStock: product?.countInStock,
+      userId,
+    };
+
+    postData(API_PATH.CART.ADD_TO_CART, data)
+      .then((res) => {
+        if (res?.error === false) {
+          // setCartData(res?.data)
+          alertBox(res?.message || "Added to cart", "success");
+          fetchData(API_PATH.CART.GET_CART_DATA).then((res) => {
+            if (res?.error === false) {
+              setCartData(res?.data);
+
+              console.log(res?.data);
+              alertBox();
+            }
+          });
+        } else {
+          alertBox(res?.message, "error");
+        }
+      })
+      .catch((err) => {
+        alertBox(
+          err?.response?.data?.message || "Something went wrong",
+          "error"
+        );
+      });
   };
 
-  postData(API_PATH.CART.ADD_TO_CART, data)
-    .then((res) => {
+  const getCartData = () => {
+    fetchData(API_PATH.CART.GET_CART_DATA).then((res) => {
       if (res?.error === false) {
-        // setCartData(res?.data)
-        alertBox(res?.message || "Added to cart", "success");
-        fetchData(API_PATH.CART.GET_CART_DATA).then((res)=>{
-          if (res?.error === false) {
-            setCartData(res?.data)
-            console.log(res?.data)
-            alertBox()
-          }
-        })
-      }else{
-        alertBox(res?.message, "error");
+        setCartData(res?.data);
+        console.log(res?.data);
+        alertBox();
       }
-    })
-    .catch((err) => {
-      alertBox(err?.response?.data?.message || "Something went wrong", "error");
     });
-};
-
-const getCartData = ()=>{
- fetchData(API_PATH.CART.GET_CART_DATA).then((res)=>{
-          if (res?.error === false) {
-            setCartData(res?.data)
-            console.log(res?.data)
-            alertBox()
-          }
-        })
-}
-
+  };
 
   const logout = () => {
     fetchData(API_PATH.AUTH.LOGOUT).then((res) => {
@@ -97,8 +101,8 @@ const getCartData = ()=>{
       if (res?.success === true) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        setUserData()
-        setCartData([])
+        setUserData();
+        setCartData([]);
         setIsLogin(false);
         navigate("/");
       }
@@ -125,7 +129,7 @@ const getCartData = ()=>{
           }
         }
       });
-      getCartData()
+      getCartData();
     } else {
       setIsLogin(false);
     }
@@ -152,7 +156,11 @@ const getCartData = ()=>{
     logout,
     categoryData,
     addtoCart,
-    cartData
+    cartData,
+    setCartData,
+    isAdded,
+    setIsAdded,
+    getCartData,
   };
 
   return (

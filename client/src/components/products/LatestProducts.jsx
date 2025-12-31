@@ -42,6 +42,7 @@ function LatestProducts() {
               price={item.price}
               discount={item.discount}
               rating={item.rating}
+              item={item}
             />
           </div>
         ))}

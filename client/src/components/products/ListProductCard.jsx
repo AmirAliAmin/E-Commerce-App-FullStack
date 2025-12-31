@@ -15,7 +15,8 @@ function ListProductCard({
   discount,
   category,
   images,
-  rating
+  rating,
+  item
 }) {
   return (
     <div>

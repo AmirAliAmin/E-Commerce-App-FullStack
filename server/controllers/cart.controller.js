@@ -102,8 +102,7 @@ export async function getCartItem(req, res) {
 export async function updateCartItemQty(req, res) {
   try {
     const userId = req.userId;
-    const { _id, quantity } = req.body;
-
+    const { _id, quantity,subTotal } = req.body;
     if (!_id || !quantity) {
       return res.status(400).json({
         message: "Provide _id, quantity",
@@ -117,7 +116,8 @@ export async function updateCartItemQty(req, res) {
       },
       {
         quantity: quantity,
-      }
+        subTotal:subTotal
+      },{new:true}
     );
 
     return res.json({
@@ -138,11 +138,11 @@ export async function updateCartItemQty(req, res) {
 export async function deletecartItem(req, res) {
   try {
     const userId = req.userId;
-    const { _id, productId } = req.body;
+    const { id } = req.params;
 
-    if (!_id || !productId) {
+    if (!id) {
       return res.status(400).json({
-        message: "Provide _id and productId",
+        message: "Provide cart item id",
         error: true,
         success: false,
       });
@@ -150,7 +150,7 @@ export async function deletecartItem(req, res) {
 
     // Delete from cart table
     const deleteCartItem = await CartProductModel.deleteOne({
-      _id: _id,
+      _id: id,
       userId: userId,
     });
 

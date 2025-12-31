@@ -7,7 +7,7 @@ const cartRouter = Router();
 cartRouter.post('/add', auth,addtoCartItemController);
 cartRouter.get('/get', auth,getCartItem);
 cartRouter.put('/update-qlty', auth, updateCartItemQty)
-cartRouter.delete('/delete-cart-item', auth, deletecartItem)
+cartRouter.delete('/delete-cart-item/:id', auth, deletecartItem)
 
 
 export default cartRouter;

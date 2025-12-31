@@ -4,11 +4,35 @@ import { MdOutlineCancel } from "react-icons/md";
 import { assets } from "../../assets/assets";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { deleteData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
 
 function CartDrawer() {
-  const { openCartPanel, setOpenCartPanel, toggleDrawer, cartData } =
-    useContext(AppContext);
+  const {
+    setOpenCartPanel,
+
+    cartData,
+    setCartData,
+    alertBox,
+    
+  } = useContext(AppContext);
   const navigate = useNavigate();
+  const deleteProduct = async (_id) => {
+    try {
+      const res = await deleteData(API_PATH.CART.DELETE_CART_PRODUCT(_id));
+
+      if (res?.success) {
+        alertBox("Product Deleted from Cart", "success");
+        setCartData((prev) => prev.filter((cat) => cat._id !== _id));
+        // setIsAdded(false)
+      } else {
+        alertBox("Product not Deleted from Cart", "error");
+      }
+    } catch (error) {
+      alertBox("Server Error", "error");
+      console.log(error);
+    }
+  };
   return (
     <div
       className="absolute inset-0 h-screen z-50 bg-[#00000030]"
@@ -46,7 +70,10 @@ function CartDrawer() {
                     ${item.price}
                   </span>{" "}
                 </p>
-                <RiDeleteBin5Line className="mt-2 text-xl link" />
+                <RiDeleteBin5Line
+                  className="mt-2 text-xl link"
+                  onClick={() => deleteProduct(item?._id)}
+                />
               </div>
             </div>
           ))}
@@ -54,8 +81,12 @@ function CartDrawer() {
         <div className="flex flex-col gap-4 absolute bottom-2.5 left-2.5">
           <div className="">
             <div className="flex items-center justify-between">
-              <h1>1 Item</h1>
-              <p className="text-primary">$999.00</p>
+              <h1>{cartData.length} Item</h1>
+              <p className="text-primary">{
+                (cartData?.length !== 0 ?
+                  cartData?.map(item=> parseInt(item.price) * item.quantity).reduce
+                  ((total,value)=>total + value ,0):0)?.toLocaleString('en-US',{style:'currency', currency : 'Pkr'})
+              }</p>
             </div>
             <div className="flex items-center justify-between">
               <h1>Shipping</h1>

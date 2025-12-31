@@ -64,5 +64,7 @@ export const API_PATH = {
   CART:{
     ADD_TO_CART:"/api/cart/add",
     GET_CART_DATA:"/api/cart/get",
+    UPDATE_CART_QTY:"/api/cart/update-qlty",
+    DELETE_CART_PRODUCT:(id)=>`/api/cart/delete-cart-item/${id}`,
   }
 };

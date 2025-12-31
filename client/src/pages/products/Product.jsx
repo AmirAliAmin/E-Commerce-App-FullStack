@@ -406,6 +406,7 @@ function Product() {
                     original={item.oldprice}
                     discount={item.discount}
                     rating={item.rating}
+                    item={item}
                   />
                 ))}
               </div>
@@ -433,6 +434,7 @@ function Product() {
                     original={item.original}
                     discount={item.discount}
                     rating={item.rating}
+                    item={item}
                   />
                 ))}
               </div>
