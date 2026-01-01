@@ -7,8 +7,9 @@ import { FcGoogle } from "react-icons/fc";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { AdminContext } from "../../context/AdminContext";
-import { postData } from "../../../../client/src/utils/api";
-import { API_PATH } from "../../../../client/src/utils/apiPath";
+import { API_PATH } from "../../utils/apiPath";
+import { postData } from "../../utils/api";
+
 
 function Signup() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);

@@ -2,8 +2,9 @@ import React, { useState, useRef, useContext, useEffect } from "react";
 import Security from '../../assets/security.png';
 import {Link,useNavigate } from "react-router-dom";
 import { AdminContext } from "../../context/AdminContext";
-import { postData } from "../../../../client/src/utils/api";
-import { API_PATH } from "../../../../client/src/utils/apiPath";
+import { API_PATH } from "../../utils/apiPath";
+import { postData } from "../../utils/api";
+
 
 function Verify() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);

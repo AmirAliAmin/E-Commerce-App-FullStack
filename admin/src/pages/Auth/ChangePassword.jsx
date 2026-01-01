@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { AdminContext } from "../../context/AdminContext";
-import { putData } from "../../../../client/src/utils/api";
-import { API_PATH } from "../../../../client/src/utils/apiPath";
+import { putData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
+
 
 function ChangePassword() {
   const [showPass, setShowPass] = useState(false);
