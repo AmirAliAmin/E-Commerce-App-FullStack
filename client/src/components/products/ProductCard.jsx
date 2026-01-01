@@ -31,7 +31,8 @@
       userData,
       addtoCart,
       cartData,
-      setCartData
+      setCartData,
+      isLogin
     } = useContext(AppContext);
 
     const [imageData, setImageData] = useState(images?.[0]);
@@ -55,7 +56,11 @@
 
     const addToCart = (product, userId, quantity) => {
       addtoCart(product, userId, quantity);
-      setIsAdded(true);
+      if (isLogin) {
+        setIsAdded(true);
+      }else{
+        setIsAdded(false)
+      }
     };
 
     useEffect(() => {
@@ -69,7 +74,7 @@
         setIsAdded(false);
       }
     }, [cartData]);
-    
+
 const minusQty = async () => {
   if (quantity <= 1) return;
 
