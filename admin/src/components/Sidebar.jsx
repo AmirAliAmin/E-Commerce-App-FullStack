@@ -35,7 +35,7 @@ function Sidebar() {
           <NavLink  to={'/home/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Home Banner Slide
           </NavLink >
           
-          <NavLink  to={'/home/slide'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Slide List
+          <NavLink  to={'/home/list'} className='w-full py-1 pl-7 font-medium flex items-center gap-3 justify-start text-[14px] cursor-pointer hover:bg-[#eaeaea] text-gray-700 nav-link'>Add Slide List
           </NavLink >
         </ul>
 
