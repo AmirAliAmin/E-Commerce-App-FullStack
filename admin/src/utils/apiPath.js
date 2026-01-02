@@ -18,6 +18,8 @@ export const API_PATH = {
   },
   ADDRESS: {
     ADD: "/api/address/add",
+    GET: "/api/address/addressdetail",
+    UPDATE:(id)=>`/api/address/${id}`
   },
   CATEGORY:{
     CREATE_CATEGORY:"/api/category/create",
@@ -60,5 +62,17 @@ export const API_PATH = {
     DELETE_HOME_BANNER:(id)=>`/api/home/delete/${id}`,
     UPLOAD_IMAGES:"/api/home/uploadImage",
     DELETE_IMAGES:"/api/home/deleteImage",
+  },
+    CART:{
+    ADD_TO_CART:"/api/cart/add",
+    GET_CART_DATA:"/api/cart/get",
+    UPDATE_CART_QTY:"/api/cart/update-qlty",
+    DELETE_CART_PRODUCT:(id)=>`/api/cart/delete-cart-item/${id}`,
+    EMPTY_CART:(id)=>`/api/cart/emprty-cart/${id}`,
+  },
+  ORDER:{
+    ADD_ORDER:"/api/order/create",
+    GET_ORDER:"/api/order/get",
+    GET_ALL_ORDER:"/api/order/all"
   }
 };

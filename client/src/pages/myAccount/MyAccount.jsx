@@ -49,23 +49,6 @@ function MyAccount() {
   } = useContext(AppContext);
   const history = useNavigate();
 
-  // Dummy order data
-  const orders = [
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "pending",
-      date: "2024-10-05",
-    },
-  ];
   const getInitials = (fullName) => {
     if (!fullName) return "";
     const words = fullName.split(" ");
@@ -218,15 +201,6 @@ function MyAccount() {
     }
   };
 
-  //  const getAddress = () => {
-  //     fetchData(API_PATH.ADDRESS.GET).then((res) => {
-  //       if (res?.error === false) {
-  //         setAddress(res?.data)
-  //         alertBox();
-  //         console.log(address)
-  //       }
-  //     });
-  //   };
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -712,58 +686,38 @@ function MyAccount() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item?.paymentId}
                           </td>
-
-                          {/* Products */}
-                          <td className="px-6 py-4  overflow-auto whitespace-nowrap flex">
+                          <td className="px-6 py-4  overflow-auto whitespace-nowrap flex w-80 max-w-80 no-scroll">
                             {item?.product.map((p) => (
                               <div key={p._id} className="text-sm">
-                                {p.productTitle}{p.quantity} ,
+                                {p.productTitle} ({p.quantity}) ,
                               </div>
                             ))}
                           </td>
-
-                          {/* Customer Name (from userId populate OR fallback) */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.userId?.name || "N/A"}
                           </td>
-
-                          {/* Phone */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.delivery_address?.mobile}
                           </td>
-
-                          {/* Address */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.delivery_address?.address_line},
                             {item.delivery_address?.city}
                           </td>
-
-                          {/* Pincode */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.delivery_address?.pincode}
                           </td>
-
-                          {/* Total Amount */}
                           <td className="px-6 py-4 whitespace-nowrap font-bold">
                             Rs. {item.totalAmt}
                           </td>
-
-                          {/* Email */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.userId?.email || "N/A"}
                           </td>
-
-                          {/* User ID */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {item.userId?._id || item.userId}
                           </td>
-
-                          {/* Order Status */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             <Badge status={item.order_Status} />
                           </td>
-
-                          {/* Date */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             {new Date(item.createdAt).toLocaleDateString()}
                           </td>

@@ -162,6 +162,14 @@ function Dashboard() {
     },
   ];
 
+    const [orderData, setOrderData] = useState(null);
+    useEffect(() => {
+      fetchData(API_PATH.ORDER.GET_ALL_ORDER).then((res) => {
+        if (res?.error === false) {
+          setOrderData(res?.data);
+        }
+      });
+    }, []);
   return (
     <div>
       <div className="w-full p-5 border border-gray-200 flex items-center justify-between gap-8 mb-6 ">
@@ -461,36 +469,53 @@ function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((item, index) => (
-                <tr key={index} className="bg-white border-b border-gray-200">
-                  <td className="px-6 py-4 whitespace-nowrap"></td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.orderId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.paymentId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.product}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.phone}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.address}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.pincode}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.total}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.userId}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge status={item.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
-                </tr>
-              ))}
-            </tbody>
+            {orderData?.slice(0,5)?.map((item, index) => (
+              <tr key={item._id} className="bg-white border-b border-gray-200">
+                <td className="px-3 py-4 text-center">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{item._id}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.paymentId}
+                </td>
+                <td className="px-6 py-4  overflow-auto whitespace-nowrap flex w-80 max-w-80 no-scroll">
+                  {item.product.map((p) => (
+                    <div key={p._id} className="text-sm">
+                      {p.productTitle} × {p.quantity}
+                    </div>
+                  ))}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.userId?.name || "N/A"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.delivery_address?.mobile}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.delivery_address?.address_line},{" "}
+                  {item.delivery_address?.city}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.delivery_address?.pincode}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap font-bold">
+                  Rs. {item.totalAmt}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.userId?.email || "N/A"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {typeof item.userId === "object"
+                    ? item.userId._id
+                    : item.userId}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <Badge status={item.order_Status} />
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
           </table>
         </div>
       </div>

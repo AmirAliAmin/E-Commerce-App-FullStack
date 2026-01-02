@@ -82,3 +82,31 @@ export const getOrderDetailsController = async (req, res) => {
     });
   }
 };
+
+export async function getAllOrder(req, res) {
+  try {
+    const order = await OrderModel.find()
+      .sort({ createdAt: -1 })
+      .populate("userId", "name email");
+
+    if (!order) {
+      res.status(400).json({
+        message: "orders are not found",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

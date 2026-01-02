@@ -14,6 +14,7 @@ export const API_PATH = {
     RESET_PASSWORD: "/api/password/reset",
     UPDATE_PASSWORD: "/api/password/update",
     USER_DETAIL: "/api/userdetail",
+    GET_ALL_USERS:"/api/getalluser"
   },
   ADDRESS: {
     ADD: "/api/address/add",
@@ -72,6 +73,7 @@ export const API_PATH = {
   },
   ORDER:{
     ADD_ORDER:"/api/order/create",
-    GET_ORDER:"/api/order/get"
+    GET_ORDER:"/api/order/get",
+    GET_ALL_ORDER:"/api/order/all"
   }
 };
