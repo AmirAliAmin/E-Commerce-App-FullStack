@@ -24,7 +24,8 @@ function MyAccount() {
   const [showPass3, setShowPass3] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
-   const [addressPanel, setAddressPanel] = useState(false)
+  const [addressPanel, setAddressPanel] = useState(false);
+  const [orderData, setOrderData] = useState(null);
   const [formField, setFormField] = useState({
     name: "",
     number: "",
@@ -36,8 +37,16 @@ function MyAccount() {
     confirmPassword: "",
   });
 
-  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox,address,getAddress } =
-    useContext(AppContext);
+  const {
+    activeTab,
+    setActiveTab,
+    userData,
+    setUserData,
+    logout,
+    alertBox,
+    address,
+    getAddress,
+  } = useContext(AppContext);
   const history = useNavigate();
 
   // Dummy order data
@@ -224,7 +233,6 @@ function MyAccount() {
       history("/");
     }
     getAddress();
-    
   }, []);
   useEffect(() => {
     if (userData) {
@@ -238,6 +246,17 @@ function MyAccount() {
     }
   }, [userData]);
 
+  useEffect(() => {
+    fetchData(API_PATH.ORDER.GET_ORDER).then((res) => {
+      if (res?.error === false) {
+        setOrderData(res?.data);
+      }
+    });
+  }, []);
+
+   useEffect(() => {
+     window.scrollTo(0, 0);
+    }, [])
   return (
     <section className="py- w-full">
       <div className="container flex gap-5">
@@ -398,27 +417,32 @@ function MyAccount() {
                     </div>
                   </form>
 
-                  <div className="flex items-center justify-center p-5 border border-dashed border-gray-500 bg-[#f1faff] hover:bg-[#eee9e9] my-3 cursor-pointer" onClick={()=>setAddressPanel(!addressPanel)}>
-                <span className="text-[14px] font-medium">Add Address</span>
-              </div>
-              {
-                addressPanel && (
-                  
-                    <div className="fixed bg-[#00000080] w-full h-full  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
-                    <AddAddress setAddressPanel={setAddressPanel} />
-                    </div>
-                 
-                )
-              }
-              <h1>My Address</h1>
-              <hr className="mb-4 text-gray-300"/>
-              <div className="bg-[#f1faff] hover:bg-[#eee9e9] w-full py-2 border border-gray-300 text-gray-600 flex justify-center">
-                {address.map((adrr)=>(
-                  <div key={adrr._id}>
-                    <p>{adrr?.address_line},{adrr.city},{adrr.state},{adrr.country}</p>
+                  <div
+                    className="flex items-center justify-center p-5 border border-dashed border-gray-500 bg-[#f1faff] hover:bg-[#eee9e9] my-3 cursor-pointer"
+                    onClick={() => setAddressPanel(!addressPanel)}
+                  >
+                    <span className="text-[14px] font-medium">Add Address</span>
                   </div>
-                ))}
-              </div>
+                  {addressPanel && (
+                    <div
+                      className="fixed bg-[#00000080] w-full h-full  z-500 inset-0 border text-white flex justify-center"
+                      onClick={() => setAddressPanel(false)}
+                    >
+                      <AddAddress setAddressPanel={setAddressPanel} />
+                    </div>
+                  )}
+                  <h1>My Address</h1>
+                  <hr className="mb-4 text-gray-300" />
+                  <div className="bg-[#f1faff] hover:bg-[#eee9e9] w-full py-2 border border-gray-300 text-gray-600 flex justify-center">
+                    {address.map((adrr) => (
+                      <div key={adrr._id}>
+                        <p>
+                          {adrr?.address_line},{adrr.city},{adrr.state},
+                          {adrr.country}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 {showChangePass && (
                   <div className="card bg-white p-5 shadow-lg rounded-md">
@@ -672,47 +696,76 @@ function MyAccount() {
                       </tr>
                     </thead>
                     <tbody>
-                      {orders.map((item, index) => (
+                      {orderData?.map((item, index) => (
                         <tr
-                          key={index}
+                          key={item?._id}
                           className="bg-white border-b border-gray-200"
                         >
-                          <td className="px-6 py-4 whitespace-nowrap"></td>
+                          <td className="px-3 py-4 text-center">{index + 1}</td>
+
+                          {/* Order ID */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.orderId}
+                            {item?._id}
                           </td>
+
+                          {/* Payment ID */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.paymentId}
+                            {item?.paymentId}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {item.product}
+
+                          {/* Products */}
+                          <td className="px-6 py-4  overflow-auto whitespace-nowrap flex">
+                            {item?.product.map((p) => (
+                              <div key={p._id} className="text-sm">
+                                {p.productTitle}{p.quantity} ,
+                              </div>
+                            ))}
                           </td>
+
+                          {/* Customer Name (from userId populate OR fallback) */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.name}
+                            {item.userId?.name || "N/A"}
                           </td>
+
+                          {/* Phone */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.phone}
+                            {item.delivery_address?.mobile}
                           </td>
+
+                          {/* Address */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.address}
+                            {item.delivery_address?.address_line},
+                            {item.delivery_address?.city}
                           </td>
+
+                          {/* Pincode */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.pincode}
+                            {item.delivery_address?.pincode}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {item.total}
+
+                          {/* Total Amount */}
+                          <td className="px-6 py-4 whitespace-nowrap font-bold">
+                            Rs. {item.totalAmt}
                           </td>
+
+                          {/* Email */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.email}
+                            {item.userId?.email || "N/A"}
                           </td>
+
+                          {/* User ID */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.userId}
+                            {item.userId?._id || item.userId}
                           </td>
+
+                          {/* Order Status */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <Badge status={item.status} />
+                            <Badge status={item.order_Status} />
                           </td>
+
+                          {/* Date */}
                           <td className="px-6 py-4 whitespace-nowrap">
-                            {item.date}
+                            {new Date(item.createdAt).toLocaleDateString()}
                           </td>
                         </tr>
                       ))}

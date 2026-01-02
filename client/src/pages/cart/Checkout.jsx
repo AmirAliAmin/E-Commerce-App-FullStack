@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
-import { putData } from "../../utils/api";
+import { deleteData, postData, putData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 import { BsPaypal } from "react-icons/bs";
 import { SiRazorpay } from "react-icons/si";
+import { products } from "../../assets/assets";
 
 function Checkout() {
-  const { cartData, address, setAddress, userData, alertBox } =
+  const { cartData, address, setAddress, userData, alertBox,getCartData } =
     useContext(AppContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +71,55 @@ function Checkout() {
   }
 };
 
+const handleOrder = async () => {
+  try {
+    if (!address || address.length === 0) {
+      alertBox("Please add delivery address", "error");
+      return;
+    }
+
+    if (!cartData || cartData.length === 0) {
+      alertBox("Your cart is empty", "error");
+      return;
+    }
+
+    const totalAmt = cartData.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    const payLoad = {
+      userId: userData?._id,
+      product: cartData,
+      paymentId: "COD",
+      payment_status: "PENDING",
+      delivery_address: {
+        address_line: address[0].address_line,
+        city: address[0].city,
+        state: address[0].state,
+        country: address[0].country,
+        pincode: address[0].pincode,
+        mobile: address[0].mobile,
+      },
+      totalAmt,
+    };
+
+    const res = await postData(API_PATH.ORDER.ADD_ORDER, payLoad);
+
+    if (res?.success) {
+      alertBox(res.message, "success");
+      await deleteData(API_PATH.CART.EMPTY_CART(userData._id));
+      getCartData();
+      navigate("/");
+    } else {
+      alertBox(res?.message, "error");
+    }
+  } catch (error) {
+    alertBox("Something went wrong", "error");
+  }
+};
+
+
   useEffect(() => {
     if (address) {
       setFormField({
@@ -92,7 +142,7 @@ function Checkout() {
   return (
     <section className="py-10 pb-10">
       <div className="container  w-[80%] max-w-[80%] flex flex-wrap gap-5 ">
-        <div className="w-full md:w-[65%]">
+        <div className="w-full lg:w-[65%]">
           <form action="" onSubmit={handleSubmit}>
             <div className="shadow-md rounded-md p-5 bg-white">
               <div className="py-2 px-3 border-b border-[rgba(0,0,0,0.1)] flex justify-between items-center">
@@ -180,7 +230,7 @@ function Checkout() {
                 ))}
               </div>
         </div>
-        <div className="w-full md:w-[30%]">
+        <div className="w-full lg:w-[30%]">
           <div className="shadow-md rounded-md p-5 bg-white">
             <h3 className="pb-3">YOUR ORDER</h3>
             <hr className="text-gray-300" />
@@ -232,7 +282,7 @@ function Checkout() {
             </button>
             <button
               className="mt-2 w-full py-2 flex items-center justify-center gap-1 bg-primary rounded-md text-white"
-              onClick={() => navigate("/checkout")}
+              onClick={handleOrder}
             >
               CASH ON DELIVERY
             </button>

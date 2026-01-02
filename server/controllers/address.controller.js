@@ -91,13 +91,13 @@ export async function updateAddressDetails(req, res) {
       { new: true }
     );
 
-    if (!updateAddress) {
-      return res.status(404).json({
-        message: "Address not found",
-        success: false,
-        error: true,
-      });
-    }
+    // if (!updateAddress) {
+    //   return res.status(404).json({
+    //     message: "Address not found",
+    //     success: false,
+    //     error: true,
+    //   });
+    // }
 
     return res.json({
       message: "Address updated successfully",
