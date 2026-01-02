@@ -190,6 +190,12 @@ export async function loginUserController(req, res) {
       data: {
         accessToken,
         refreshToken,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
       },
     });
   } catch (error) {

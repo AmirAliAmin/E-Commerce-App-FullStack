@@ -5,19 +5,41 @@ const orderSchema = new mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:"User"
     },
-    orderId:{
-        type: String,
-        required:[true,"Provide orderId"],
-        unique:true
-    },
-    productId:{
-        type:mongoose.Schema.ObjectId,
-        ref:"product"
-    },
-    product_detail :{
-        type:String,
-        image:Array
-    },
+    product:[
+        {
+            productId:{
+                type:String,
+            },
+            productTitle:{
+                type:String,
+            },
+            quantity:{
+                type:Number,
+            },
+            price:{
+                type:Number,
+            },
+            image:{
+                type:String
+            },
+            subTotal:{
+                type:String,
+            },
+        }
+    ],
+    // orderId:{
+    //     type: String,
+    //     required:[true,"Provide orderId"],
+    //     unique:true
+    // },
+    // productId:{
+    //     type:mongoose.Schema.ObjectId,
+    //     ref:"product"
+    // },
+    // product_detail :{
+    //     type:String,
+    //     image:Array
+    // },
     paymentId :{
         type:String,
         default:""
@@ -26,13 +48,13 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:""
     },
+    order_Status:{
+         type:String,
+        default:"pending"
+    },
     delivery_address:{
         type:mongoose.Schema.ObjectId,
-        ref:"addres"
-    },
-    subTotalAmt:{
-        type:Number,
-        default:0,
+        ref:"address"
     },
     totalAmt:{
         type:Number,

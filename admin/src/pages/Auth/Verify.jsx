@@ -84,7 +84,7 @@ function Verify() {
       }).then((res) => {
         if (res?.error !== true) {
           alertBox(res?.message, "success");
-          navigate("/forgetPassword");
+          navigate("/change-password");
         } else {
           alertBox(res?.message, "error");
         }

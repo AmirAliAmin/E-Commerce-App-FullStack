@@ -36,7 +36,7 @@ function MyAccount() {
     confirmPassword: "",
   });
 
-  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox,address, setAddress } =
+  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox,address,getAddress } =
     useContext(AppContext);
   const history = useNavigate();
 
@@ -209,21 +209,22 @@ function MyAccount() {
     }
   };
 
-   const getAddress = () => {
-      fetchData(API_PATH.ADDRESS.GET).then((res) => {
-        if (res?.error === false) {
-          setAddress(res?.data)
-          console.log(res?.data)
-          alertBox();
-        }
-      });
-    };
+  //  const getAddress = () => {
+  //     fetchData(API_PATH.ADDRESS.GET).then((res) => {
+  //       if (res?.error === false) {
+  //         setAddress(res?.data)
+  //         alertBox();
+  //         console.log(address)
+  //       }
+  //     });
+  //   };
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
       history("/");
     }
     getAddress();
+    
   }, []);
   useEffect(() => {
     if (userData) {

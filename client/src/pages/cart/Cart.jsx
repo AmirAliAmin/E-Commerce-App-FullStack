@@ -59,6 +59,9 @@ function Cart() {
         navigate("/");
       }
     }, []);
+     useEffect(() => {
+       window.scrollTo(0, 0);
+      }, [])
   return (
     <section className="py-10 pb-10">
       <div className="container w-[80%] max-w-[80%] flex gap-5 ">

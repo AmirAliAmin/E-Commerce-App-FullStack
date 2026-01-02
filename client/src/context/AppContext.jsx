@@ -90,7 +90,6 @@ const AppContextProvider = (props) => {
     fetchData(API_PATH.CART.GET_CART_DATA).then((res) => {
       if (res?.error === false) {
         setCartData(res?.data);
-        console.log(res?.data);
         alertBox();
       }
     });
@@ -109,6 +108,15 @@ const AppContextProvider = (props) => {
       }
     });
   };
+  const getAddress = () => {
+        fetchData(API_PATH.ADDRESS.GET).then((res) => {
+          if (res?.error === false) {
+            setAddress(res?.data)
+            alertBox();
+            console.log(res?.data)
+          }
+        });
+      };
   useEffect(() => {
     fetchData(API_PATH.CATEGORY.GET_CATEGORIES).then((res) => {
       setCategoryData(res.data);
@@ -131,6 +139,7 @@ const AppContextProvider = (props) => {
         }
       });
       getCartData();
+       getAddress();
     } else {
       setIsLogin(false);
     }
@@ -162,7 +171,7 @@ const AppContextProvider = (props) => {
     isAdded,
     setIsAdded,
     getCartData,
-    address, setAddress
+    address, setAddress,getAddress
   };
 
   return (

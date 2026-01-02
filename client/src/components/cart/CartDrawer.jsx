@@ -110,7 +110,7 @@ function CartDrawer() {
             </button>
             <button
               className="bg-primary py-2 px-8 hover:bg-red-100 hover:text-primary border border-primary cursor-pointer  text-white rounded-lg"
-              onClick={() => navigate("/checkout")}
+              onClick={() =>{navigate("/checkout"), setOpenCartPanel(false)}}
             >
               CheckOut
             </button>

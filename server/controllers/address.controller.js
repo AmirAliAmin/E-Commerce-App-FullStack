@@ -66,27 +66,39 @@ export async function addressDetail(req, res) {
 export async function updateAddressDetails(req, res) {
   try {
     const userId = req.userId;
-    const { address_line, city, state, pincode, country, mobile, status  } = req.body;
+    const { address_line, city, state, pincode, country, mobile, status } = req.body;
+
     const user = await UserModel.findById(userId);
-    if (!user) return res.status(400).send("The user cannot be Updated!");
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+        error: true,
+      });
+    }
 
-
-
-    const updateAddress = await AddressModel.findByIdAndUpdate(
-      userId,
+    const updateAddress = await AddressModel.findOneAndUpdate(
+      { userId: userId },
       {
-        address_line: address_line,
-        mobile: mobile,
-        city: city,
-        state:  state,
-        pincode: pincode,
-        country:country,
-        status:status,
+        address_line,
+        mobile,
+        city,
+        state,
+        pincode,
+        country,
+        status,
       },
       { new: true }
     );
 
-   
+    if (!updateAddress) {
+      return res.status(404).json({
+        message: "Address not found",
+        success: false,
+        error: true,
+      });
+    }
+
     return res.json({
       message: "Address updated successfully",
       error: false,
@@ -101,3 +113,4 @@ export async function updateAddressDetails(req, res) {
     });
   }
 }
+

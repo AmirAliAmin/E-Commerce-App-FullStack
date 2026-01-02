@@ -48,10 +48,11 @@ function ProuductSection() {
                 name={item.name}
                 images={item.images}
                 brand={item.brand}
-                original={item.original}
                 price={item.price}
                 discount={item.discount}
+                original={item.oldprice}
                 rating={item.rating}
+                item={item}
               />
             </div>
           ))
@@ -76,14 +77,15 @@ function ProuductSection() {
               className="flex shrink-0 w-46 min-w-46 h-90 min-h-90"
             >
               <ProductCard
-                id={item._id}
+                 id={item._id}
                 name={item.name}
                 images={item.images}
                 brand={item.brand}
-                original={item.original}
                 price={item.price}
                 discount={item.discount}
+                original={item.oldprice}
                 rating={item.rating}
+                item={item}
               />
             </div>
           ))

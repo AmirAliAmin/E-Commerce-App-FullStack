@@ -93,7 +93,7 @@ function Verify() {
 
   return (
     <div className="container">
-      <div className="card shadow-md w-[400px] m-auto rounded-md bg-white p-6">
+      <div className="card shadow-md lg:w-[400px] m-auto rounded-md bg-white p-6">
         <div className="flex justify-center">
           <img src={Security} alt="security" className="w-20" />
         </div>

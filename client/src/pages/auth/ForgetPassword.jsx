@@ -81,7 +81,7 @@ function ForgetPassword() {
   return (
     <section className="py-10">
       <div className="container">
-        <div className="card shadow-md w-[300px] m-auto rounded-md bg-white p-4">
+        <div className="card shadow-md lg:w-[300px] m-auto rounded-md bg-white p-4">
           <h1 className="text-center text-[20px] font-medium">
             Forget Password
           </h1>

@@ -195,3 +195,23 @@ export async function deletecartItem(req, res) {
     });
   }
 }
+
+export async function emptyCartController(req, res) {
+  try {
+    const userId = req.params.id
+    // const cartItem = await CartProductModel.find({userId: userId})
+
+    await CartProductModel.deleteMany({userId:userId});
+
+    return res.status(200).json({
+      error:false,
+      success:true
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

@@ -37,6 +37,7 @@ function Dashboard() {
     alertBox,
     categoryData,
     navigate,
+    userData
   } = useContext(AdminContext);
   const handleChangeCatFilter = (event) => {
     setCategoryFilter(event.target.value);
@@ -167,7 +168,7 @@ function Dashboard() {
         <div className="md:w-[50%]">
           <h1 className="text-[30px] font-bold leading-9 mb-3">
             Good Morning,
-            <br /> Amir
+            <br /> {userData?.name}
           </h1>
           <p>
             Here's What happening on your store today. See the statistics at
