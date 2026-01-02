@@ -59,16 +59,19 @@ const AdminContextProvider = (props) => {
         setCategoryData(res.data);
       });
       fetchData(API_PATH.AUTH.USER_DETAIL).then((res) => {
-        setUserData(res.data);
-        if (res?.res?.data?.error === true) {
-          if (res?.res?.data?.message === "You have not login") {
+        
+        if (res?.data?.error === true) {
+          if (res?.data?.message === "You have not login") {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
 
             alertBox("You are not login", "error");
             setIsLogin(false);
+            navigate("/login");
+            return ;
           }
         }
+        setUserData(res.data);
       });
     } else {
       setIsLogin(false);

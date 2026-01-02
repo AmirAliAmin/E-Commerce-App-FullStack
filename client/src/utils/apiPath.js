@@ -17,6 +17,7 @@ export const API_PATH = {
   },
   ADDRESS: {
     ADD: "/api/address/add",
+    GET: "/api/address/addressdetail"
   },
    CATEGORY:{
     CREATE_CATEGORY:"/api/category/create",

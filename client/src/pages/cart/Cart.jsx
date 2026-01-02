@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../../assets/assets";
 import { IoClose } from "react-icons/io5";
 import { GoTriangleDown } from "react-icons/go";
@@ -53,6 +53,12 @@ function Cart() {
     setQytState(null);
   };
   const navigate = useNavigate();
+  useEffect(() => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        navigate("/");
+      }
+    }, []);
   return (
     <section className="py-10 pb-10">
       <div className="container w-[80%] max-w-[80%] flex gap-5 ">

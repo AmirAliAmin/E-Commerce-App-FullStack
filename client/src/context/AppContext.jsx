@@ -16,6 +16,7 @@ const AppContextProvider = (props) => {
   const [categoryData, setCategoryData] = useState(null);
   const [cartData, setCartData] = useState([]);
   const [isAdded, setIsAdded] = useState(false);
+  const [address, setAddress] = useState([]);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -161,6 +162,7 @@ const AppContextProvider = (props) => {
     isAdded,
     setIsAdded,
     getCartData,
+    address, setAddress
   };
 
   return (

@@ -103,3 +103,14 @@ export const deleteImage = async (url) => {
     console.log(error);
   }
 };
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.data?.message === "You have not login") {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);

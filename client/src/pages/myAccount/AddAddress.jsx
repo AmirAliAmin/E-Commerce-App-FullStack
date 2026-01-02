@@ -7,6 +7,7 @@ import { API_PATH } from "../../utils/apiPath";
 import { postData } from "../../utils/api";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
+import { useEffect } from "react";
 
 function AddAddress({ setAddressPanel }) {
   const [formField, setFormField] = useState({
@@ -19,7 +20,7 @@ function AddAddress({ setAddressPanel }) {
     status: true,
   });
 
-  const {alertBox} = useContext(AppContext)
+  const {alertBox, setAddress,} = useContext(AppContext)
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setFormField(() => {
@@ -36,15 +37,19 @@ function AddAddress({ setAddressPanel }) {
 
     if (response?.success) {
       alertBox("Address added successfully","success");
+      setAddress(response.data)
       setAddressPanel(false);
     } else {
       alertBox(response?.message || "Something went wrong", "error");
     }
   };
 
+  useEffect(() => {
+   window.scrollTo(0, 0);
+  }, [])
   return (
     <div
-      className="bg-white text-black w-[50%] h-[40%] p-4 rounded-md"
+      className="bg-white text-black lg:w-[50%] h-[80%] p-4 rounded-md"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between">

@@ -1,9 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { AppContext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 function Checkout() {
   const {cartData} = useContext(AppContext)
+   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      navigate("/");
+    }
+  }, []);
   return (
     <section className="py-10 pb-10">
       <div className="container w-[80%] max-w-[80%] flex gap-5 ">

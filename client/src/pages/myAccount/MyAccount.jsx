@@ -11,7 +11,7 @@ import { AppContext } from "../../context/AppContext";
 import Badge from "../../components/badge";
 import { useNavigate } from "react-router-dom";
 import { API_PATH } from "../../utils/apiPath";
-import { putData, uploadImage } from "../../utils/api";
+import { fetchData, putData, uploadImage } from "../../utils/api";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import AddAddress from "./AddAddress";
@@ -36,7 +36,7 @@ function MyAccount() {
     confirmPassword: "",
   });
 
-  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox } =
+  const { activeTab, setActiveTab, userData, setUserData, logout, alertBox,address, setAddress } =
     useContext(AppContext);
   const history = useNavigate();
 
@@ -209,11 +209,21 @@ function MyAccount() {
     }
   };
 
+   const getAddress = () => {
+      fetchData(API_PATH.ADDRESS.GET).then((res) => {
+        if (res?.error === false) {
+          setAddress(res?.data)
+          console.log(res?.data)
+          alertBox();
+        }
+      });
+    };
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
       history("/");
     }
+    getAddress();
   }, []);
   useEffect(() => {
     if (userData) {
@@ -393,13 +403,21 @@ function MyAccount() {
               {
                 addressPanel && (
                   
-                    <div className="absolute bg-[#00000080] w-full h-275  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
-                    <AddAddress setAddressPanel={setAddressPanel}/>
+                    <div className="fixed bg-[#00000080] w-full h-full  z-500 inset-0 border text-white flex justify-center" onClick={()=>setAddressPanel(false)}>
+                    <AddAddress setAddressPanel={setAddressPanel} />
                     </div>
                  
                 )
               }
-              
+              <h1>My Address</h1>
+              <hr className="mb-4 text-gray-300"/>
+              <div className="bg-[#f1faff] hover:bg-[#eee9e9] w-full py-2 border border-gray-300 text-gray-600 flex justify-center">
+                {address.map((adrr)=>(
+                  <div key={adrr._id}>
+                    <p>{adrr?.address_line},{adrr.city},{adrr.state},{adrr.country}</p>
+                  </div>
+                ))}
+              </div>
                 </div>
                 {showChangePass && (
                   <div className="card bg-white p-5 shadow-lg rounded-md">
