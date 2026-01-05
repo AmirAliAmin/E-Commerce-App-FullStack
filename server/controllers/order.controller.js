@@ -1,6 +1,7 @@
-import { error } from "console";
+import { count, error } from "console";
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
+import UserModel from "../models/user.model.js";
 
 export const createOrderController = async (req, res) => {
   try {
@@ -114,125 +115,237 @@ export async function getAllOrder(req, res) {
 export async function totalSaleController(req, res) {
   try {
     const currentYear = new Date().getFullYear();
-
     const ordersList = await OrderModel.find();
 
+    const months = [
+      "JAN", "FEB", "MAR", "APRIL", "MAY", "JUNE",
+      "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+    ];
+
+    const monthlySales = months.map(month => ({
+      name: month,
+      totalSale: 0,
+    }));
+
     let totalSale = 0;
-    let monthlySales = [
+
+    ordersList.forEach(order => {
+      const orderDate = new Date(order.createdAt);
+      const year = orderDate.getFullYear();
+      const monthIndex = orderDate.getMonth(); // 0–11
+
+      if (year === currentYear) {
+        const amount = Number(order.totalAmt) || 0;
+        monthlySales[monthIndex].totalSale += amount;
+        totalSale += amount;
+      }
+    });
+
+    return res.status(200).json({
+      totalSale,
+      monthlySales,
+      error: false,
+      success: true,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+
+
+export async function totalUsersController(req, res) {
+  try {
+    const users = await UserModel.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+
+    let monthlyUsers = [
       {
         name: "JAN",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "FEB",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "MAR",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "APRIL",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "MAY",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "JUNE",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "JULY",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "AUG",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "SEP",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "OCT",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "NOV",
-        totalSale: 0,
+        totalUser: 0,
       },
       {
         name: "DEC",
-        totalSale: 0,
+        totalUser: 0,
       },
     ];
 
-    for (let i = 0; i < ordersList.length; i++) {
-     totalSale = totalSale + parseInt(ordersList[i].totalAmt);
-     const str = JSON.stringify(ordersList[i].createdAt);
-     const year = str.substr(1,4);
-     const monthStr = str.substr(6,8);
-     const month = parseInt(monthStr.substr(0,2));
-
-     if (currentYear === year) {
-      if (month === 1) {
-        monthlySales[0] = {
-          name:'JAN',
-          totalSale:monthlySales[0].totalSale = parseInt(monthlySales[0].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+    for (let i = 0; i < users.length; i++) {
+      if (users[i]?._id?.month === 1) {
+        monthlyUsers[0] = {
+          name: "JAN",
+          totalUser: users[i].count,
+        };
       }
 
-      if (month === 2) {
-        monthlySales[1] = {
-          name:'FEB',
-          totalSale:monthlySales[1].totalSale = parseInt(monthlySales[1].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+      if (users[i]?._id?.month === 2) {
+        monthlyUsers[1] = {
+          name: "FEB",
+          totalUser: users[i].count,
+        };
       }
 
-      if (month === 3) {
-        monthlySales[2] = {
-          name:'MAR',
-          totalSale:monthlySales[2].totalSale = parseInt(monthlySales[2].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+      if (users[i]?._id?.month === 3) {
+        monthlyUsers[2] = {
+          name: "MAR",
+          totalUser: users[i].count,
+        };
+      }
+     if (users[i]?._id?.month === 4) {
+        monthlyUsers[3] = {
+          name: "APRIL",
+          totalUser: users[i].count,
+        };
       }
 
-
-      if (month === 4) {
-        monthlySales[3] = {
-          name:'APRIL',
-          totalSale:monthlySales[3].totalSale = parseInt(monthlySales[3].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+     if (users[i]?._id?.month === 5) {
+        monthlyUsers[4] = {
+          name: "MAY",
+          totalUser: users[i].count,
+        };
+      }
+      if (users[i]?._id?.month === 6) {
+        monthlyUsers[5] = {
+          name: "JUNE",
+          totalUser: users[i].count,
+        };
       }
 
-      if (month === 5) {
-        monthlySales[4] = {
-          name:'MAY',
-          totalSale:monthlySales[4].totalSale = parseInt(monthlySales[4].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
-      }
-      if (month === 6) {
-        monthlySales[5] = {
-          name:'JUNE',
-          totalSale:monthlySales[5].totalSale = parseInt(monthlySales[5].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+      if (users[i]?._id?.month === 7) {
+        monthlyUsers[6] = {
+          name: "JULY",
+          totalUser: users[i].count,
+        };
       }
 
-      if (month === 7) {
-        monthlySales[6] = {
-          name:'JULY',
-          totalSale:monthlySales[6].totalSale = parseInt(monthlySales[6].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+      if (users[i]?._id?.month === 8) {
+        monthlyUsers[7] = {
+          name: "AUG",
+          totalUser: users[i].count,
+        };
       }
 
-      if (month === 8) {
-        monthlySales[7] = {
-          name:'AUG',
-          totalSale:monthlySales[8].totalSale = parseInt(monthlySales[8].totalSale) + parseInt(ordersList[i].totalAmt)
-        }
+     if (users[i]?._id?.month === 9) {
+        monthlyUsers[8] = {
+          name: "SEP",
+          totalUser: users[i].count,
+        };
       }
-     }
+
+      if (users[i]?._id?.month === 10) {
+        monthlyUsers[9] = {
+          name: "OCT",
+          totalUser: users[i].count,
+        };
+      }
+      if (users[i]?._id?.month === 11) {
+        monthlyUsers[10] = {
+          name: "NOV",
+          totalUser: users[i].count,
+        };
+      }
+      if (users[i]?._id?.month === 12) {
+        monthlyUsers[11] = {
+          name: "DEC",
+          totalUser: users[i].count,
+        };
+      }
+      
     }
-  } catch (error) {}
+    
+     return res.status(200).json({
+      totalUser: monthlyUsers,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
 }
+
+export async function getDashboardStats(req, res) {
+  try {
+    const totalUsers = await UserModel.countDocuments();
+
+    const orders = await OrderModel.find();
+
+    const totalSales = orders.reduce((sum, order) => sum + (order.totalAmt || 0), 0);
+
+    return res.status(200).json({
+      error: false,
+      success: true,
+      data: {
+        totalUsers,
+        totalSales,
+        totalOrders: orders.length,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+

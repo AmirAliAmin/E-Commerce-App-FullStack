@@ -73,6 +73,9 @@ export const API_PATH = {
   ORDER:{
     ADD_ORDER:"/api/order/create",
     GET_ORDER:"/api/order/get",
-    GET_ALL_ORDER:"/api/order/all"
+    GET_ALL_ORDER:"/api/order/all",
+    GET_TOTAL_SALES:"/api/order/sales",
+    GET_TOTAL_UDSERS:"/api/order/totalusers",
+    STATS: "/api/order/dashboard-stats",
   }
 };

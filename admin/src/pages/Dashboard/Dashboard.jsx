@@ -30,7 +30,10 @@ function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [allUsers, setAllUsers] = useState([]);
+  const [totalOrders, setTotalOrders] = useState([]);
+  const [totalUsers, setTotalUsers] = useState([]);
+  const [totalSales, setTotalSales] = useState([]);
+
 
   const {
     setOpenFullScreenPanel,
@@ -104,13 +107,24 @@ function Dashboard() {
   (sum, order) => sum + (order.totalAmt || 0),
   0
 );
+// useEffect(() => {
+//   fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
+//     if (res?.error === false) {
+//       setAllUsers(res.data);
+//     }
+//   });
+// }, []);
 useEffect(() => {
-  fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
+  fetchData(API_PATH.ORDER.STATS).then((res) => {
     if (res?.error === false) {
-      setAllUsers(res.data);
+      const stats = res.data;
+      setTotalUsers(stats.totalUsers);
+      setTotalOrders(stats.totalOrders);
+      setTotalSales(stats.totalSales);
     }
   });
 }, []);
+
 
   return (
     <div>
@@ -144,17 +158,17 @@ useEffect(() => {
       <div className=" w-full px-4 py-2 overflow-y-auto flex gap-10 no-scroll">
         <DashboardBox
           title={"Users"}
-          price={allUsers?.length}
+          price={totalUsers}
           icon={<FaUsers />}
           color={"text-green-500"}
         />
         
-        {/* <DashboardBox
+        <DashboardBox
           title={"Revnenue"}
-          price={"$"+totalOrderAmount}
+          price={"$"+totalSales}
           icon={<RiBankFill />}
           color={"text-purple-500"}
-        /> */}
+        />
         <DashboardBox
           title={"Products"}
           price={productData?.length}
@@ -163,13 +177,13 @@ useEffect(() => {
         />
         <DashboardBox
           title={"Total Order"}
-          price={orderData?.length}
+          price={totalOrders}
           icon={<FiGitlab />}
           color={"text-blue-500"}
         />
         <DashboardBox
           title={"Order Amount"}
-          price={"$"+totalOrderAmount}
+          price={"$"+totalSales}
           icon={<IoIosGift />}
           color={"text-primary"}
         />
@@ -472,16 +486,6 @@ useEffect(() => {
         <h1 className="py-5 px-3 font-bold text-[20px]">
           Total Users and Sales
         </h1>
-        <div className="flex items-center gap-5 px-5 py-5">
-          <span className="flex items-center gap-1 text-[14px]">
-            <span className="block w-2.5 h-2.5 rounded-full bg-[#82CA9D]"></span>
-            Total User
-          </span>
-          <span className="flex items-center gap-1 text-[14px]">
-            <span className="block w-2.5 h-2.5 rounded-full bg-[#8884D8]"></span>
-            Total Sale
-          </span>
-        </div>
         <div className="relative overflow-x-hidden mt-5 no-scroll px-5">
           <Chast1 />
         </div>
