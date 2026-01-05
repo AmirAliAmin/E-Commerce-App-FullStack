@@ -26,6 +26,7 @@ function Chast1() {
       const users = userRes?.totalUser || [];
       const sales = saleRes?.monthlySales || [];
       console.log(sales)
+      console.log(users)
 
       const mergedData = users.map((u) => {
         const saleMatch = sales.find((s) => s.name === u.name);
@@ -63,7 +64,7 @@ function Chast1() {
           <Legend />
 
           <Bar dataKey="totalSale" fill="#16a34a" name="Total Sales" />
-          <Bar dataKey="totalUser" fill="#0858f7" name="Total Users" />
+          <Bar dataKey="totalUser" fill="#0858F7" name="Total Users" />
         </BarChart>
       )}
     </div>

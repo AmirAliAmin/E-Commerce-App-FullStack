@@ -40,7 +40,7 @@ function ProductDetails() {
         setIsLoading(false);
       }
     });
-  }, []);
+  }, [id]);
 
   return productData ? (
     <section className="pt-5 transition-opacity ease-in duration-500 opacity-100 mx-10 sm:mx-2">

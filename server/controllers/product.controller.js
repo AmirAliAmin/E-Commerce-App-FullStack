@@ -1,3 +1,4 @@
+import { error } from "console";
 import ProductModel from "../models/product.model.js";
 import ProductRAMSModel from "../models/productRAMS.model.js";
 import ProductSizeModel from "../models/productSize.model.js";
@@ -998,6 +999,38 @@ export async function sortBy(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+
+export async function searchProductController(req, res) {
+  try {
+    const query = req.query.q;
+    // console.log(query)
+    if (!query) {
+      return res.status(400).json({message:"query is required" ,success:false, error:true})
+    }
+
+    const items = await ProductModel.find({
+      $or:[
+        {name: {$regex: query, $options: "i"}},
+        {brand: {$regex: query, $options: "i"}},
+        {catName: {$regex: query, $options: "i"}},
+        {subcatName: {$regex: query, $options: "i"}},
+      ]
+    }).populate("category")
+
+    
+    return res.status(200).json({
+      error: false,
+      success: true,
+      products: items,
+    });
+  } catch (error) {
+     return res.status(500).json({
       message: error.message || error,
       error: true,
       success: false,

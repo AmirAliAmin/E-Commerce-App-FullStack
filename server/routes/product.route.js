@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import auth from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
-import { addProductRAMS, addProductSize, createProduct, deleteProduct, deleteProductRAMS, deleteProductSize, filters, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsRAMS, getProductsSize, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary, sortBy, updateProductbyId, uploadProductImages } from '../controllers/product.controller.js';
+import { addProductRAMS, addProductSize, createProduct, deleteProduct, deleteProductRAMS, deleteProductSize, filters, getProductByCatId, getProductByCatName, getProductById, getProductByPrice, getProductByRating, getProductBySubCatId, getProductBySubCatName, getProductByThirdSubCatId, getProductByThirdSubCatName, getProducts, getProductsRAMS, getProductsSize, getProductsToatalCount, getProductThatisFeatured, removeImageFromCloudinary, searchProductController, sortBy, updateProductbyId, uploadProductImages } from '../controllers/product.controller.js';
 
 const productRouter = Router();
 
@@ -34,6 +34,9 @@ productRouter.get('/allproductSize' ,getProductsSize);
 
 productRouter.post("/filter", filters);
 productRouter.post("/sortBy", sortBy);
+
+productRouter.get("/search/get", searchProductController);
+
 
 
 export default productRouter;
