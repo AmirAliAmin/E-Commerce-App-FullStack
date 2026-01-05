@@ -110,3 +110,129 @@ export async function getAllOrder(req, res) {
     });
   }
 }
+
+export async function totalSaleController(req, res) {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    const ordersList = await OrderModel.find();
+
+    let totalSale = 0;
+    let monthlySales = [
+      {
+        name: "JAN",
+        totalSale: 0,
+      },
+      {
+        name: "FEB",
+        totalSale: 0,
+      },
+      {
+        name: "MAR",
+        totalSale: 0,
+      },
+      {
+        name: "APRIL",
+        totalSale: 0,
+      },
+      {
+        name: "MAY",
+        totalSale: 0,
+      },
+      {
+        name: "JUNE",
+        totalSale: 0,
+      },
+      {
+        name: "JULY",
+        totalSale: 0,
+      },
+      {
+        name: "AUG",
+        totalSale: 0,
+      },
+      {
+        name: "SEP",
+        totalSale: 0,
+      },
+      {
+        name: "OCT",
+        totalSale: 0,
+      },
+      {
+        name: "NOV",
+        totalSale: 0,
+      },
+      {
+        name: "DEC",
+        totalSale: 0,
+      },
+    ];
+
+    for (let i = 0; i < ordersList.length; i++) {
+     totalSale = totalSale + parseInt(ordersList[i].totalAmt);
+     const str = JSON.stringify(ordersList[i].createdAt);
+     const year = str.substr(1,4);
+     const monthStr = str.substr(6,8);
+     const month = parseInt(monthStr.substr(0,2));
+
+     if (currentYear === year) {
+      if (month === 1) {
+        monthlySales[0] = {
+          name:'JAN',
+          totalSale:monthlySales[0].totalSale = parseInt(monthlySales[0].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+      if (month === 2) {
+        monthlySales[1] = {
+          name:'FEB',
+          totalSale:monthlySales[1].totalSale = parseInt(monthlySales[1].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+      if (month === 3) {
+        monthlySales[2] = {
+          name:'MAR',
+          totalSale:monthlySales[2].totalSale = parseInt(monthlySales[2].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+
+      if (month === 4) {
+        monthlySales[3] = {
+          name:'APRIL',
+          totalSale:monthlySales[3].totalSale = parseInt(monthlySales[3].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+      if (month === 5) {
+        monthlySales[4] = {
+          name:'MAY',
+          totalSale:monthlySales[4].totalSale = parseInt(monthlySales[4].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+      if (month === 6) {
+        monthlySales[5] = {
+          name:'JUNE',
+          totalSale:monthlySales[5].totalSale = parseInt(monthlySales[5].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+      if (month === 7) {
+        monthlySales[6] = {
+          name:'JULY',
+          totalSale:monthlySales[6].totalSale = parseInt(monthlySales[6].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+
+      if (month === 8) {
+        monthlySales[7] = {
+          name:'AUG',
+          totalSale:monthlySales[8].totalSale = parseInt(monthlySales[8].totalSale) + parseInt(ordersList[i].totalAmt)
+        }
+      }
+     }
+    }
+  } catch (error) {}
+}

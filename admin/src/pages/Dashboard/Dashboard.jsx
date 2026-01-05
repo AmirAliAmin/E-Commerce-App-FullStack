@@ -24,11 +24,13 @@ import { AdminContext } from "../../context/AdminContext";
 import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 import Rating from "@mui/material/Rating";
+import { FaUsers } from "react-icons/fa";
 
 function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
 
   const {
     setOpenFullScreenPanel,
@@ -89,78 +91,6 @@ function Dashboard() {
       }
     });
   }, []);
-  const orders = [
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "pending",
-      date: "2024-10-05",
-    },
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "confirm",
-      date: "2024-10-05",
-    },
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "delivered",
-      date: "2024-10-05",
-    },
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "pending",
-      date: "2024-10-05",
-    },
-    {
-      orderId: "ORD123456",
-      paymentId: "PAY987654",
-      product: "Women Wide Jeans",
-      name: "Amir Ali Amin",
-      phone: "9876543210",
-      address: "Street 12, Karachi",
-      pincode: "75400",
-      total: "$120",
-      email: "aliaminamir@gmail.com",
-      userId: "USR001",
-      status: "delivered",
-      date: "2024-10-05",
-    },
-  ];
 
     const [orderData, setOrderData] = useState(null);
     useEffect(() => {
@@ -170,6 +100,18 @@ function Dashboard() {
         }
       });
     }, []);
+    const totalOrderAmount = orderData?.reduce(
+  (sum, order) => sum + (order.totalAmt || 0),
+  0
+);
+useEffect(() => {
+  fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
+    if (res?.error === false) {
+      setAllUsers(res.data);
+    }
+  });
+}, []);
+
   return (
     <div>
       <div className="w-full p-5 border border-gray-200 flex items-center justify-between gap-8 mb-6 ">
@@ -201,34 +143,35 @@ function Dashboard() {
       </div>
       <div className=" w-full px-4 py-2 overflow-y-auto flex gap-10 no-scroll">
         <DashboardBox
-          title={"New Order"}
-          price={"$1,390"}
-          icon={<IoIosGift />}
-          color={"text-primary"}
-        />
-        <DashboardBox
-          title={"Sale"}
-          price={"$57,890"}
-          icon={<IoPieChartSharp />}
+          title={"Users"}
+          price={allUsers?.length}
+          icon={<FaUsers />}
           color={"text-green-500"}
         />
-        <DashboardBox
+        
+        {/* <DashboardBox
           title={"Revnenue"}
-          price={"$12,590"}
+          price={"$"+totalOrderAmount}
           icon={<RiBankFill />}
           color={"text-purple-500"}
-        />
+        /> */}
         <DashboardBox
           title={"Products"}
-          price={"1,390"}
+          price={productData?.length}
           icon={<FaProductHunt />}
           color={"text-orange-400"}
         />
         <DashboardBox
-          title={"New Order"}
-          price={"1,390"}
+          title={"Total Order"}
+          price={orderData?.length}
           icon={<FiGitlab />}
           color={"text-blue-500"}
+        />
+        <DashboardBox
+          title={"Order Amount"}
+          price={"$"+totalOrderAmount}
+          icon={<IoIosGift />}
+          color={"text-primary"}
         />
       </div>
       <div className="my-4 shadow-md sm:rounded-lg bg-white">

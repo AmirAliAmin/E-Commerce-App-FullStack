@@ -28,24 +28,27 @@ function LatestProducts() {
 
       {/* Products Grid */}
       <div className="flex w-full items-center gap-4 overflow-auto no-scroll py-7">
-        {productData.reverse().slice(0, 20).map((item, index) => (
-          <div
-            key={index}
-            className="flex shrink-0 w-46 min-w-46 h-90 min-h-90"
-          >
-            <ProductCard
-              id={item._id}
-              name={item.name}
-              images={item.images}
-              brand={item.brand}
-              original={item.original}
-              price={item.price}
-              discount={item.discount}
-              rating={item.rating}
-              item={item}
-            />
-          </div>
-        ))}
+        {productData
+          .reverse()
+          .slice(0, 20)
+          .map((item, index) => (
+            <div
+              key={index}
+              className="flex shrink-0 w-46 min-w-46 h-90 min-h-90"
+            >
+              <ProductCard
+                id={item._id}
+                name={item.name}
+                images={item.images}
+                brand={item.brand}
+                price={item.price}
+                discount={item.discount}
+                original={item.oldprice}
+                rating={item.rating}
+                item={item}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );
