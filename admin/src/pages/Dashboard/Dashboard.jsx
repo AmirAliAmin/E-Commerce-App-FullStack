@@ -2,16 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import DashboardBox from "./DashboardBox";
 import { IoIosGift } from "react-icons/io";
 import { FiGitlab } from "react-icons/fi";
-import { IoPieChartSharp } from "react-icons/io5";
 import { RiBankFill } from "react-icons/ri";
 import { FaProductHunt } from "react-icons/fa6";
-import { MdWavingHand } from "react-icons/md";
 import img from "../../assets/card.jpg";
 import { GoPlus } from "react-icons/go";
 import { FaAngleDown } from "react-icons/fa";
 import Badge from "../../components/Badge";
 import { Link } from "react-router-dom";
-import { FaStar } from "react-icons/fa";
 import { AiOutlineEdit } from "react-icons/ai";
 import { FaEye } from "react-icons/fa6";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -34,7 +31,6 @@ function Dashboard() {
   const [totalUsers, setTotalUsers] = useState([]);
   const [totalSales, setTotalSales] = useState([]);
 
-
   const {
     setOpenFullScreenPanel,
     productData,
@@ -42,20 +38,31 @@ function Dashboard() {
     alertBox,
     categoryData,
     navigate,
-    userData
+    userData,
   } = useContext(AdminContext);
+
   const handleChangeCatFilter = (event) => {
     setCategoryFilter(event.target.value);
     setIsLoading(true);
-    fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)).then(
-      (res) => {
+    if (event.target.value === "") {
+      fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
         if (res?.error === false) {
-          setProductData(res.product);
+          setProductData(res.data);
+          console.log(res.data);
+          setIsLoading(false);
+        }
+      });
+    } else {
+      fetchData(
+        API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)
+      ).then((res) => {
+        if (res?.error === false) {
+          setProductData(res.data);
           setIsLoading(false);
           console.log(res);
         }
-      }
-    );
+      });
+    }
   };
   const rowsPerPage = 3;
   const sortedProducts = [...(productData || [])].reverse();
@@ -95,36 +102,35 @@ function Dashboard() {
     });
   }, []);
 
-    const [orderData, setOrderData] = useState(null);
-    useEffect(() => {
-      fetchData(API_PATH.ORDER.GET_ALL_ORDER).then((res) => {
-        if (res?.error === false) {
-          setOrderData(res?.data);
-        }
-      });
-    }, []);
-    const totalOrderAmount = orderData?.reduce(
-  (sum, order) => sum + (order.totalAmt || 0),
-  0
-);
-// useEffect(() => {
-//   fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
-//     if (res?.error === false) {
-//       setAllUsers(res.data);
-//     }
-//   });
-// }, []);
-useEffect(() => {
-  fetchData(API_PATH.ORDER.STATS).then((res) => {
-    if (res?.error === false) {
-      const stats = res.data;
-      setTotalUsers(stats.totalUsers);
-      setTotalOrders(stats.totalOrders);
-      setTotalSales(stats.totalSales);
-    }
-  });
-}, []);
-
+  const [orderData, setOrderData] = useState(null);
+  useEffect(() => {
+    fetchData(API_PATH.ORDER.GET_ALL_ORDER).then((res) => {
+      if (res?.error === false) {
+        setOrderData(res?.data);
+      }
+    });
+  }, []);
+  const totalOrderAmount = orderData?.reduce(
+    (sum, order) => sum + (order.totalAmt || 0),
+    0
+  );
+  // useEffect(() => {
+  //   fetchData(API_PATH.AUTH.GET_ALL_USERS).then((res) => {
+  //     if (res?.error === false) {
+  //       setAllUsers(res.data);
+  //     }
+  //   });
+  // }, []);
+  useEffect(() => {
+    fetchData(API_PATH.ORDER.STATS).then((res) => {
+      if (res?.error === false) {
+        const stats = res.data;
+        setTotalUsers(stats.totalUsers);
+        setTotalOrders(stats.totalOrders);
+        setTotalSales(stats.totalSales);
+      }
+    });
+  }, []);
 
   return (
     <div>
@@ -162,10 +168,10 @@ useEffect(() => {
           icon={<FaUsers />}
           color={"text-green-500"}
         />
-        
+
         <DashboardBox
           title={"Revnenue"}
-          price={"$"+totalSales}
+          price={"$" + totalSales}
           icon={<RiBankFill />}
           color={"text-purple-500"}
         />
@@ -183,7 +189,7 @@ useEffect(() => {
         />
         <DashboardBox
           title={"Order Amount"}
-          price={"$"+totalSales}
+          price={"$" + totalSales}
           icon={<IoIosGift />}
           color={"text-primary"}
         />
@@ -193,27 +199,28 @@ useEffect(() => {
         <div className="flex items-center w-full flex-wrap justify-start md:justify-between px-5">
           <div className="col w-[40%] md:w-[20%] fle">
             <h4 className="font-semibold text-[12px] mb-1">Category By</h4>
-             {categoryData?.length !== 0 && (
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="productCatDrop"
-                    size="small"
-                    className="w-full"
-                    value={categoryFilter}
-                    label="Category"
-                    onChange={handleChangeCatFilter}
+            {categoryData?.length !== 0 && (
+              <Select
+                labelId="demo-simple-select-label"
+                id="productCatDrop"
+                size="small"
+                className="w-full"
+                value={categoryFilter}
+                label="Category"
+                onChange={handleChangeCatFilter}
+              >
+                <MenuItem value={""}>All</MenuItem>
+                {categoryData?.map((parent) => (
+                  <MenuItem
+                    key={parent._id}
+                    value={parent._id}
+                    // onClick={() => selectCatByName(parent?.name)}
                   >
-                    {categoryData?.map((parent) => (
-                      <MenuItem
-                        key={parent._id}
-                        value={parent._id}
-                        // onClick={() => selectCatByName(parent?.name)}
-                      >
-                        {parent.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
+                    {parent.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
           </div>
 
           <div className="w-full md:w-[40%] lg:w-[25%] ml-auto flex items-center flex-wrap gap-3">
@@ -426,53 +433,56 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-            {orderData?.slice(0,5)?.map((item, index) => (
-              <tr key={item._id} className="bg-white border-b border-gray-200">
-                <td className="px-3 py-4 text-center">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{item._id}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.paymentId}
-                </td>
-                <td className="px-6 py-4  overflow-auto whitespace-nowrap flex w-80 max-w-80 no-scroll">
-                  {item.product.map((p) => (
-                    <div key={p._id} className="text-sm">
-                      {p.productTitle} × {p.quantity}
-                    </div>
-                  ))}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.userId?.name || "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.delivery_address?.mobile}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.delivery_address?.address_line},{" "}
-                  {item.delivery_address?.city}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.delivery_address?.pincode}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap font-bold">
-                  Rs. {item.totalAmt}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.userId?.email || "N/A"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {typeof item.userId === "object"
-                    ? item.userId._id
-                    : item.userId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <Badge status={item.order_Status} />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+              {orderData?.slice(0, 5)?.map((item, index) => (
+                <tr
+                  key={item._id}
+                  className="bg-white border-b border-gray-200"
+                >
+                  <td className="px-3 py-4 text-center">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item._id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.paymentId}
+                  </td>
+                  <td className="px-6 py-4  overflow-auto whitespace-nowrap flex w-80 max-w-80 no-scroll">
+                    {item.product.map((p) => (
+                      <div key={p._id} className="text-sm">
+                        {p.productTitle} × {p.quantity}
+                      </div>
+                    ))}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.userId?.name || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.delivery_address?.mobile}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.delivery_address?.address_line},{" "}
+                    {item.delivery_address?.city}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.delivery_address?.pincode}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap font-bold">
+                    Rs. {item.totalAmt}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {item.userId?.email || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {typeof item.userId === "object"
+                      ? item.userId._id
+                      : item.userId}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Badge status={item.order_Status} />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>

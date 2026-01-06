@@ -55,7 +55,7 @@ export const API_PATH = {
     GET_ALL_PRODUCT_RAMS:"/api/product/allproductRAMS",
     GET_ALL_PRODUCT_SIZE:"/api/product/allproductSize",
     PRODUCTS_FILTER:"/api/product/filter",
-    PRODUCTS_SEARCH:"/api/product/search"
+    PRODUCTS_SEARCH:"/api/product/search/get"
   },
   HOME:{
     CREATE_HOME_BANNER:"/api/home/create",

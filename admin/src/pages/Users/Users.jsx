@@ -21,6 +21,17 @@ function Users() {
       }
     });
   }, []);
+  const getInitials = (fullName) => {
+    if (!fullName) return "";
+    const words = fullName.split(" ");
+    let initials = "";
+
+    for (let i = 0; i < Math.min(words.length, 2); i++) {
+      initials += words[i][0];
+    }
+
+    return initials.toUpperCase();
+  };
   return (
     <>
       <div className="card">
@@ -65,11 +76,19 @@ function Users() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-4  overflow-y-auto">
-                            <img
-                              src={item?.avatar}
-                              alt=""
-                              className="w-12 h-12 min-w-12 rounded-full border object-cover"
-                            />
+                            {
+                              item?.avatar ? 
+                              <img
+                                src={item?.avatar}
+                                alt=""
+                                className="w-12 h-12 min-w-12 rounded-full border object-cover"
+                              />:
+                              <div className="bg-purple-500 h-12 min-w-12 rounded-full text-white flex items-center justify-center font-bold text-xl">
+                                {
+                                  getInitials(item?.name)
+                                }
+                              </div>
+                            }
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -79,7 +98,7 @@ function Users() {
                           {item?.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          +{item?.mobile}
+                          {item?.mobile}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                            {new Date(item?.createdAt).toLocaleDateString()}
