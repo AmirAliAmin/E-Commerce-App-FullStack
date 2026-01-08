@@ -1,10 +1,12 @@
 import Rating from "@mui/material/Rating";
-import React from "react";
-import { FaRegHeart } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from "react";
+import { FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { GoGitCompare, GoStar } from "react-icons/go";
 import { IoCartOutline } from "react-icons/io5";
-import { TiStar } from "react-icons/ti";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
+import { putData } from "../../utils/api";
+import { API_PATH } from "../../utils/apiPath";
 
 function ListProductCard({
   id,
@@ -16,8 +18,94 @@ function ListProductCard({
   category,
   images,
   rating,
-  item
+  item,
 }) {
+  const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const { userData, addtoCart, cartData, setCartData, isLogin } =
+    useContext(AppContext);
+
+  const addToCart = (product, userId, quantity) => {
+    addtoCart(product, userId, quantity);
+    if (isLogin) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
+    }
+  };
+
+  useEffect(() => {
+    const item = cartData?.filter((cartItem) =>
+      cartItem.productId.includes(id)
+    );
+    setQuantity(item[0]?.quantity);
+    if (item?.length !== 0) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
+    }
+  }, [cartData]);
+
+  const minusQty = async () => {
+    if (quantity <= 1) return;
+
+    const newQty = quantity - 1;
+    setQuantity(newQty);
+
+    const cartItem = cartData?.find((item) => item.productId === id);
+    if (!cartItem) return;
+
+    const obj = {
+      _id: cartItem._id,
+      quantity: newQty,
+      subTotal: price * newQty,
+    };
+
+    try {
+      const res = await putData(API_PATH.CART.UPDATE_CART_QTY, obj);
+      if (res?.success) {
+        setCartData((prev) =>
+          prev.map((item) =>
+            item._id === cartItem._id
+              ? { ...item, quantity: newQty, subTotal: price * newQty }
+              : item
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const addQty = async () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+
+    const cartItem = cartData?.find((item) => item.productId === id);
+    if (!cartItem) return;
+
+    const obj = {
+      _id: cartItem._id,
+      quantity: newQty,
+      subTotal: price * newQty,
+    };
+
+    try {
+      const res = await putData(API_PATH.CART.UPDATE_CART_QTY, obj);
+      if (res?.success) {
+        setCartData((prev) =>
+          prev.map((item) =>
+            item._id === cartItem._id
+              ? { ...item, quantity: newQty, subTotal: price * newQty }
+              : item
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div>
       <div className="border overflow-hidden w-full h-120 md:h-65 lg:h-60 xl:h-70 lg:h- border-gray-300 flex flex-col md:flex-row rounded-md shadow-lg ">
@@ -62,9 +150,30 @@ function ListProductCard({
             <p className="line-through text-gray-500">₹{original}.00</p>
             <p className="text-primary">₹{price}.00</p>
           </div>
-          <button className="px-5 border border-primary mt-3 py-2 text-primary rounded text-xs flex items-center text-center justify-center gap-1 cursor-pointer hover:bg-primary hover:text-white">
-            <IoCartOutline className="text-xs md:text-xl" /> ADD TO CART
-          </button>
+          {isAdded === false ? (
+            <button
+              className="w-full border border-primary mt-2 py-2 text-primary rounded-lg text-xs flex items-center justify-center gap-1 cursor-pointer hover:bg-primary hover:text-white transition-colors"
+              onClick={() => addToCart(item, userData?._id, quantity)}
+            >
+              <IoCartOutline className="text-xl" /> ADD TO CART
+            </button>
+          ) : (
+            <div className="flex items-center justify-between overflow-hidden rounded-full border border-[rgba(0,0,0,0.1)] mt-2">
+              <button
+                className="bg-gray-200 p-2 cursor-pointer"
+                onClick={minusQty}
+              >
+                <FaMinus />
+              </button>
+              <p>{quantity || 1}</p>
+              <button
+                className="bg-primary text-white p-2 cursor-pointer"
+                onClick={addQty}
+              >
+                <FaPlus className="text-sm" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

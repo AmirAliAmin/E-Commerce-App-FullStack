@@ -447,7 +447,7 @@ function Dashboard() {
                   <td className="px-6 py-4  overflow-auto whitespace-nowrap flex w-80 max-w-80 no-scroll">
                     {item.product.map((p) => (
                       <div key={p._id} className="text-sm">
-                        {p.productTitle} × {p.quantity}
+                        {p.productTitle}({p.quantity}),
                       </div>
                     ))}
                   </td>

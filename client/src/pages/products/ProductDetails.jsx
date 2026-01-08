@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ProductZoom from "../../components/productZoom/ProductZoom";
 import { useParams } from "react-router-dom";
 import { TiStar } from "react-icons/ti";
@@ -9,6 +9,7 @@ import { GoGitCompare } from "react-icons/go";
 import { fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 import Rating from "@mui/material/Rating";
+import { AppContext } from "../../context/AppContext";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -17,7 +18,21 @@ function ProductDetails() {
   const [currState, setCurrState] = useState("Description");
   const [sizes, setSizes] = useState('')
   const [isLoading, setIsLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
+  const {addtoCart,isLogin,userData,cartData} = useContext(AppContext)
 
+   const addToCart = (product, userId, quantity) => {
+      addtoCart(product, userId, quantity);
+      if (isLogin) {
+        setIsAdded(true);
+      }else{
+        setIsAdded(false)
+      }
+    };
+
+    const filterByName = cartData.filter(item=>item.productTitle === productData.name)
+    // console.log(filterByName)
   useEffect(() => {
     setIsLoading(true);
     fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_ID(id)).then((res) => {
@@ -104,10 +119,20 @@ function ProductDetails() {
               type="number"
               className="border w-15 pl-2 outline-none"
               placeholder="1"
+              value={quantity}
+              onChange={(e)=>setQuantity(e.target.value)}
             />
-            <button className="bg-primary px-2 py-1 rounded text-white flex items-center">
+            {
+              filterByName.length === 0 ? (
+            <button className="bg-primary px-2 py-1 rounded text-white flex items-center cursor-pointer"  onClick={() => addToCart(productData, userData?._id, quantity)}>
               <IoCartOutline /> ADD TO CART
             </button>
+              ):(
+                 <button className="bg-[#fe9797] px-2 py-1 rounded text-white flex items-center" disabled>
+              <IoCartOutline /> Added
+            </button>
+              )
+            }
           </div>
           <div className="flex gap-10 mt-6 text-lg">
             <p className="flex items-center link gap-2">

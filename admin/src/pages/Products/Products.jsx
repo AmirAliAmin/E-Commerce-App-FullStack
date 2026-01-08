@@ -32,22 +32,22 @@ function Products() {
     setIsLoading(true);
     if (event.target.value === "") {
       fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
-      if (res?.error === false) {
-        setProductData(res.data);
-        console.log(res.data)
-        setIsLoading(false);
-      }
-    });
-    }else{
-      fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)).then(
-        (res) => {
-          if (res?.error === false) {
-            setProductData(res.data);
-            setIsLoading(false);
-            console.log(res);
-          }
+        if (res?.error === false) {
+          setProductData(res.data);
+          console.log(res.data);
+          setIsLoading(false);
         }
-      );
+      });
+    } else {
+      fetchData(
+        API_PATH.PRODUCTS.GET_PRODUCT_BY_CAT_ID(event.target.value)
+      ).then((res) => {
+        if (res?.error === false) {
+          setProductData(res.data);
+          setIsLoading(false);
+          console.log(res);
+        }
+      });
     }
   };
   const rowsPerPage = 10;
@@ -83,7 +83,7 @@ function Products() {
     fetchData(API_PATH.PRODUCTS.GET_ALL_PRODUCT).then((res) => {
       if (res?.error === false) {
         setProductData(res.data);
-        console.log(res.data)
+        console.log(res.data);
         setIsLoading(false);
       }
     });
@@ -198,7 +198,7 @@ function Products() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-4 w-60 overflow-y-auto">
-                            <Link to={`/product/${item?._id}`}>
+                            <Link to={`/productDetails/${item?._id}`}>
                               <img
                                 src={item?.images[0]}
                                 alt=""
@@ -206,7 +206,7 @@ function Products() {
                               />
                             </Link>
                             <div className="w-[70%]">
-                              <Link to={`/product/${item?._id}`}>
+                              <Link to={`/productDetails/${item?._id}`}>
                                 <h3 className="font-bold text-black text-[12px] hover:text-primary leading-4">
                                   {item?.name}
                                 </h3>
@@ -235,10 +235,7 @@ function Products() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex">
-                            <Rating
-                              name="rating"
-                              value={item?.rating}
-                            />
+                            <Rating name="rating" value={item?.rating} />
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">

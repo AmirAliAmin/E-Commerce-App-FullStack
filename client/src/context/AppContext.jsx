@@ -71,7 +71,7 @@ const AppContextProvider = (props) => {
             if (res?.error === false) {
               setCartData(res?.data);
 
-              console.log(res?.data);
+              // console.log(res?.data);
               alertBox();
             }
           });
@@ -98,7 +98,7 @@ const AppContextProvider = (props) => {
 
   const logout = () => {
     fetchData(API_PATH.AUTH.LOGOUT).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res?.success === true) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -114,7 +114,7 @@ const AppContextProvider = (props) => {
           if (res?.error === false) {
             setAddress(res?.data)
             alertBox();
-            console.log(res?.data)
+            // console.log(res?.data)
           }
         });
       };

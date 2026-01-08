@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RiMenu2Line } from "react-icons/ri";
 import { FaAngleDown } from "react-icons/fa6";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoRocketSharp } from "react-icons/io5";
 import { AppContext } from "../../context/AppContext";
 
@@ -10,7 +10,6 @@ function Navbar({ setBoxOpen, boxOpen }) {
   const [homeNav, setHomeNav] = useState("Home");
 
   const location = useLocation();
-  const navigate = useNavigate("")
   useEffect(() => {
     if (location.pathname === "/") {
       setHomeNav("Products");

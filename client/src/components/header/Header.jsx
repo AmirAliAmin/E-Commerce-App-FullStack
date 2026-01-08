@@ -68,7 +68,7 @@ function Header() {
 
       <div>
         <div className="header py-4 border-b border-gray-200">
-          <div className="container flex items-center justify-between">
+          <div className="container w-full flex items-center justify-between">
             <div
               onClick={() => setBoxOpen(!boxOpen)}
               className="block lg:hidden text-3xl text-gray-700"
@@ -76,7 +76,7 @@ function Header() {
               <RiMenu2Line />
             </div>
             <div className="col1 w-[25%]">
-              <Link to={"/"}>
+              <Link to={"/"} onClick={()=>scrollTo(0,0)}>
                 <img src="/logo.jpg" />
               </Link>
             </div>
@@ -84,7 +84,7 @@ function Header() {
               <Search />
             </div>
             <div className="col3 w-[30%] flex items-center justify-end ">
-              <ul className="flex items-center gap-5">
+              <ul className="flex items-center gap-3">
                 {isLogin === false ? (
                   <li className="list-none text-[#3E3E3E] hidden lg:block">
                     <Link to={"/login"} onClick={scrollTo(0,0)} className="link text-[16px] ">
@@ -97,7 +97,7 @@ function Header() {
                   </li>
                 ) : (
                   <li className="list-none text-[#3E3E3E]  relative group transition-all duration-500">
-                    <Link className=" text-[22px] flex items-center gap-2 ">
+                    <Link className=" text-[22px] flex items-center gap-1 ">
                       <FaRegUserCircle className="link" />{" "}
                       <span className="text-[14px]  flex-col hidden md:flex">
                         <span>{userData?.name}</span>

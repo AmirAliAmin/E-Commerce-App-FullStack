@@ -12,8 +12,7 @@ function AddHomeBanner() {
   const [formField, setFormField] = useState({
     images: [],
   });
-  const [banner, setBanner] = useState([]);
-  const { alertBox, setOpenFullScreenPanel } = useContext(AdminContext);
+  const { alertBox, setOpenFullScreenPanel, setBanner } = useContext(AdminContext);
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setFormField(() => {

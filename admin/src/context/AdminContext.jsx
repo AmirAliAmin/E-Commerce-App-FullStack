@@ -1,12 +1,5 @@
 import { createContext, forwardRef, useState } from "react";
 import Slide from "@mui/material/Slide";
-import Dialog from "@mui/material/Dialog";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
-
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +16,7 @@ const AdminContextProvider = (props) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [banner, setBanner] = useState([]);
   const navigate = useNavigate();
   const [openFullScreenPanel, setOpenFullScreenPanel] = useState({
     open: false,
@@ -92,7 +86,8 @@ const AdminContextProvider = (props) => {
     setUserData,
     categoryData,setCategoryData,
     navigate,
-    productData, setProductData
+    productData, setProductData,
+    banner, setBanner
   };
   return (
     <AdminContext.Provider value={value}>

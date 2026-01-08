@@ -8,8 +8,7 @@ import { deleteData, fetchData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
 
 function HomeBanner() {
-  const { setOpenFullScreenPanel, alertBox } = useContext(AdminContext);
-  const [banner, setBanner] = useState([]);
+  const { setOpenFullScreenPanel, alertBox,banner, setBanner } = useContext(AdminContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const deleteBanner = async (_id) => {

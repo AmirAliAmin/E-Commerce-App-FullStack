@@ -87,26 +87,6 @@ function ProductDetails() {
             fuga, rem praesentium quasi itaque porro. Repellendus, tempora
             eveniet aperiam eius numquam et.
           </p>
-          <div className="uppercase ">Size:</div>
-          <p className="py-2">Free Shipping (Est. Delivery Time 2-3 Days)</p>
-          <div className="space-x-3 flex">
-            <input
-              type="number"
-              className="border w-15 pl-2 outline-none"
-              placeholder="1"
-            />
-            <button className="bg-primary px-2 py-1 rounded text-white flex items-center">
-              <IoCartOutline /> ADD TO CART
-            </button>
-          </div>
-          <div className="flex gap-10 mt-6 text-lg">
-            <p className="flex items-center link gap-2">
-              <FaRegHeart /> Add to Wishlist
-            </p>
-            <p className="flex items-center link gap-2">
-              <GoGitCompare /> Add to Compare
-            </p>
-          </div>
         </div>
       </div>
       <div className="container py-7 border-t border-gray-300">
