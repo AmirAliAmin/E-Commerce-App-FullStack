@@ -4,16 +4,17 @@ import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { deleteData, postData, putData } from "../../utils/api";
 import { API_PATH } from "../../utils/apiPath";
-import { BsPaypal } from "react-icons/bs";
+import { FaMobileAlt } from "react-icons/fa";
 import { SiRazorpay } from "react-icons/si";
 import { products } from "../../assets/assets";
 
 function Checkout() {
-  const { cartData, address, setAddress, userData, alertBox,getCartData } =
+  const { cartData, address, setAddress, userData, alertBox, getCartData } =
     useContext(AppContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [showAddress,setShowAddress] = useState(false)
+  const [showAddress, setShowAddress] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("COD")
   const [formField, setFormField] = useState({
     name: "",
     address_line: "",
@@ -40,85 +41,84 @@ function Checkout() {
       navigate("/");
     }
   }, []);
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    const res = await putData(API_PATH.ADDRESS.UPDATE(userData._id), {
-      address_line: formField.address_line,
-      city: formField.city,
-      state: formField.state,
-      pincode: formField.pincode,
-      country: formField.country,
-      mobile: formField.mobile,
-      status: formField.status,
-    });
+    try {
+      const res = await putData(API_PATH.ADDRESS.UPDATE(userData._id), {
+        address_line: formField.address_line,
+        city: formField.city,
+        state: formField.state,
+        pincode: formField.pincode,
+        country: formField.country,
+        mobile: formField.mobile,
+        status: formField.status,
+      });
 
-    if (res?.success) {
-      setAddress((prev) => [
-        {
-          ...prev[0],
-          ...formField,
+      if (res?.success) {
+        setAddress((prev) => [
+          {
+            ...prev[0],
+            ...formField,
+          },
+        ]);
+        alertBox("Address updated", "success");
+      }
+    } catch (error) {
+      alertBox("Something went wrong", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOrder = async () => {
+    try {
+      if (!address || address.length === 0) {
+        alertBox("Please add delivery address", "error");
+        return;
+      }
+
+      if (!cartData || cartData.length === 0) {
+        alertBox("Your cart is empty", "error");
+        return;
+      }
+
+      const totalAmt = cartData.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
+
+      const payLoad = {
+        userId: userData?._id,
+        product: cartData,
+        paymentId: paymentMethod,
+        payment_status: "PENDING",
+        delivery_address: {
+          address_line: address[0].address_line,
+          city: address[0].city,
+          state: address[0].state,
+          country: address[0].country,
+          pincode: address[0].pincode,
+          mobile: address[0].mobile,
         },
-      ]);
-      alertBox("Address updated", "success");
+        totalAmt,
+      };
+
+      const res = await postData(API_PATH.ORDER.ADD_ORDER, payLoad);
+
+      if (res?.success) {
+        alertBox(res.message, "success");
+        await deleteData(API_PATH.CART.EMPTY_CART(userData._id));
+        getCartData();
+        navigate("/");
+      } else {
+        alertBox(res?.message, "error");
+      }
+    } catch (error) {
+      alertBox("Something went wrong", "error");
     }
-  } catch (error) {
-    alertBox("Something went wrong", "error");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-const handleOrder = async () => {
-  try {
-    if (!address || address.length === 0) {
-      alertBox("Please add delivery address", "error");
-      return;
-    }
-
-    if (!cartData || cartData.length === 0) {
-      alertBox("Your cart is empty", "error");
-      return;
-    }
-
-    const totalAmt = cartData.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-
-    const payLoad = {
-      userId: userData?._id,
-      product: cartData,
-      paymentId: "COD",
-      payment_status: "PENDING",
-      delivery_address: {
-        address_line: address[0].address_line,
-        city: address[0].city,
-        state: address[0].state,
-        country: address[0].country,
-        pincode: address[0].pincode,
-        mobile: address[0].mobile,
-      },
-      totalAmt,
-    };
-
-    const res = await postData(API_PATH.ORDER.ADD_ORDER, payLoad);
-
-    if (res?.success) {
-      alertBox(res.message, "success");
-      await deleteData(API_PATH.CART.EMPTY_CART(userData._id));
-      getCartData();
-      navigate("/");
-    } else {
-      alertBox(res?.message, "error");
-    }
-  } catch (error) {
-    alertBox("Something went wrong", "error");
-  }
-};
-
+  };
 
   useEffect(() => {
     if (address) {
@@ -148,87 +148,89 @@ const handleOrder = async () => {
               <div className="py-2 px-3 border-b border-[rgba(0,0,0,0.1)] flex justify-between items-center">
                 <h2>Billing DETAILS</h2>
                 <p
-                      className="text-primary cursor-pointer"
-                      onClick={() => setShowAddress(!showAddress)}
-                    >
-                      Add/Update Address
-                    </p>
+                  className="text-primary cursor-pointer"
+                  onClick={() => setShowAddress(!showAddress)}
+                >
+                  Add/Update Address
+                </p>
               </div>
-              {
-                showAddress && (
-                  <div>
-              <div className="py-5">
-                <div className="flex justify-between w-full gap-5">
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    name="name"
-                    value={formField.name}
-                    onChange={onChangeInput}
-                    className="outline-none border border-gray-500 w-full py-1 px-3"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Country"
-                    name="country"
-                    value={formField.country}
-                    onChange={onChangeInput}
-                    className="outline-none border border-gray-500 w-full py-1 px-3"
-                  />
-                </div>
-                <h1 className="my-4">Address Line</h1>
-                <input
-                  type="text"
-                  placeholder="House number and street name"
-                  name="address_line"
-                  value={formField.address_line}
-                  onChange={onChangeInput}
-                  className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
-                />
-                <h1 className="my-4">Town/City</h1>
-                <input
-                  type="text"
-                  placeholder="City"
-                  name="city"
-                  value={formField.city}
-                  onChange={onChangeInput}
-                  className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
-                />
-                <h1 className="my-4">State/Country</h1>
-                <input
-                  type="text"
-                  placeholder="State"
-                  name="state"
-                  value={formField.state}
-                  onChange={onChangeInput}
-                  className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
-                />
-                <h1 className="my-4">Postcode/ZIP</h1>
-                <input
-                  type="text"
-                  placeholder="ZIP code"
-                  name="pincode"
-                  value={formField.pincode}
-                  onChange={onChangeInput}
-                  className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
-                />
-              </div>
-            <button type="submit" className="w-full py-2 bg-primary text-white">
-              Save
-            </button>
-
+              {showAddress && (
+                <div>
+                  <div className="py-5">
+                    <div className="flex justify-between w-full gap-5">
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        name="name"
+                        value={formField.name}
+                        onChange={onChangeInput}
+                        className="outline-none border border-gray-500 w-full py-1 px-3"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Country"
+                        name="country"
+                        value={formField.country}
+                        onChange={onChangeInput}
+                        className="outline-none border border-gray-500 w-full py-1 px-3"
+                      />
+                    </div>
+                    <h1 className="my-4">Address Line</h1>
+                    <input
+                      type="text"
+                      placeholder="House number and street name"
+                      name="address_line"
+                      value={formField.address_line}
+                      onChange={onChangeInput}
+                      className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
+                    />
+                    <h1 className="my-4">Town/City</h1>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      name="city"
+                      value={formField.city}
+                      onChange={onChangeInput}
+                      className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
+                    />
+                    <h1 className="my-4">State/Country</h1>
+                    <input
+                      type="text"
+                      placeholder="State"
+                      name="state"
+                      value={formField.state}
+                      onChange={onChangeInput}
+                      className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
+                    />
+                    <h1 className="my-4">Postcode/ZIP</h1>
+                    <input
+                      type="text"
+                      placeholder="ZIP code"
+                      name="pincode"
+                      value={formField.pincode}
+                      onChange={onChangeInput}
+                      className="outline-none border border-gray-500 w-full py-1 px-3 mb-5"
+                    />
                   </div>
-                )
-              }
+                  <button
+                    type="submit"
+                    className="w-full py-2 bg-primary text-white"
+                  >
+                    Save
+                  </button>
+                </div>
+              )}
             </div>
           </form>
-           <div className="bg-[#f1faff] hover:bg-[#eee9e9] w-full py-2 border border-gray-300 text-gray-600 flex justify-center mt-6">
-                {address.map((adrr)=>(
-                  <div key={adrr._id}>
-                    <p>{adrr?.address_line},{adrr.city},{adrr.state},{adrr.country}</p>
-                  </div>
-                ))}
+          <div className="bg-[#f1faff] hover:bg-[#eee9e9] w-full py-2 border border-gray-300 text-gray-600 flex justify-center mt-6">
+            {address.map((adrr) => (
+              <div key={adrr._id}>
+                <p>
+                  {adrr?.address_line},{adrr.city},{adrr.state},{adrr.country}
+                </p>
               </div>
+            ))}
+          </div>
         </div>
         <div className="w-full lg:w-[30%]">
           <div className="shadow-md rounded-md p-5 bg-white">
@@ -240,15 +242,15 @@ const handleOrder = async () => {
             </p>
             <hr className="text-gray-300" />
             <div className="no-scroll overflow-y-auto h-40">
-            {cartData?.map((item) => (
-              <p
-                className="flex items-center justify-between mt-2"
-                key={item._id}
-              >
-                <span className="text-[14px]">{item?.productTitle}</span>
-                <span className="text-[14px]">${item?.subTotal}</span>
-              </p>
-            ))}
+              {cartData?.map((item) => (
+                <p
+                  className="flex items-center justify-between mt-2"
+                  key={item._id}
+                >
+                  <span className="text-[14px]">{item?.productTitle}</span>
+                  <span className="text-[14px]">${item?.subTotal}</span>
+                </p>
+              ))}
             </div>
 
             <div className="flex items-center justify-between mt-7 py-1">
@@ -266,23 +268,28 @@ const handleOrder = async () => {
               </span>
             </div>
             <button
-              className="mt-2 w-full py-2 flex items-center justify-center gap-1 border border-[#2C4184] rounded-md text-[#2C4184] font-extrabold"
-              onClick={() => navigate("/checkout")}
+              className="mt-2 w-full py-2 flex items-center justify-center gap-2 border border-[#00A859] rounded-md text-[#00A859] font-bold"
+              onClick={() =>
+                alertBox("EasyPaisa integration coming soon", "success")
+              }
             >
-              <SiRazorpay className="" />
-              Razorpay
+              <FaMobileAlt />
+              EasyPaisa
             </button>
+
             <button
-              className="mt-2 w-full py-2 flex items-center justify-center gap-1 border border-[#2C4184] cursor-pointer rounded-md text-[#2C4184] font-extrabold"
-              onClick={() => navigate("/checkout")}
+              className="mt-2 w-full py-2 flex items-center justify-center gap-2 border border-[#8DC63F] rounded-md text-[#f00707]  font-bold space-0"
+              onClick={() =>
+                alertBox("JazzCash integration coming soon", "success")
+              }
             >
-              <BsPaypal/>
-              <span className="text-[#2C4184]">Pay</span> <span className="text-[#1E9ED8]">Pay</span>
-              
+              <FaMobileAlt />
+              Jazz<span className="text-[#f3b006]">Cash</span>
             </button>
+
             <button
               className="mt-2 w-full py-2 flex items-center justify-center gap-1 bg-primary rounded-md text-white"
-              onClick={handleOrder}
+              onClick={()=>{handleOrder(), setPaymentMethod("COD")}}
             >
               CASH ON DELIVERY
             </button>

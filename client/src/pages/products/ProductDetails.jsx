@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductZoom from "../../components/productZoom/ProductZoom";
 import { useParams } from "react-router-dom";
-import { products } from "../../assets/assets";
 import { TiStar } from "react-icons/ti";
 import { GoStar } from "react-icons/go";
 import { FaRegHeart } from "react-icons/fa";
@@ -19,17 +18,6 @@ function ProductDetails() {
   const [sizes, setSizes] = useState('')
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchProductData = async () => {
-    const productId = parseInt(id);
-    products.map((item) => {
-      if (item.id === productId) {
-        setProductData(item);
-
-        return null;
-      }
-    });
-  };
-
   useEffect(() => {
     setIsLoading(true);
     fetchData(API_PATH.PRODUCTS.GET_PRODUCT_BY_ID(id)).then((res) => {
@@ -41,6 +29,9 @@ function ProductDetails() {
       }
     });
   }, [id]);
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
 
   return productData ? (
     <section className="pt-5 transition-opacity ease-in duration-500 opacity-100 mx-10 sm:mx-2">
