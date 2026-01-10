@@ -2,6 +2,9 @@ import { count, error } from "console";
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
 import UserModel from "../models/user.model.js";
+import { stripe } from "../config/strip.js";
+import dotenv from 'dotenv'
+dotenv.config();
 
 export const createOrderController = async (req, res) => {
   try {
@@ -60,6 +63,43 @@ export const createOrderController = async (req, res) => {
     });
   }
 };
+
+export const createStripCheckoutSession = async (req, res) => {
+  try {
+    const { product } = req.body; 
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: product.map((item) => ({
+        price_data: {
+          currency: "pkr",
+          product_data: {
+            name: item.productTitle,
+            images: [item.image],
+          },
+          unit_amount: item.price * 100,
+        },
+        quantity: item.quantity,
+      })),
+      mode: "payment",
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: `${process.env.CLIENT_URL}checkout`,
+    });
+
+    return res.status(201).json({
+      url: session.url,
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+      error: true,
+      success: false,
+    });
+  }
+};
+
 
 export const getOrderDetailsController = async (req, res) => {
   try {

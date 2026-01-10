@@ -14,7 +14,7 @@ function Checkout() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("COD")
+  const [paymentMethod, setPaymentMethod] = useState("COD");
   const [formField, setFormField] = useState({
     name: "",
     address_line: "",
@@ -105,7 +105,9 @@ function Checkout() {
         totalAmt,
       };
 
-      const res = await postData(API_PATH.ORDER.ADD_ORDER, payLoad);
+      const res = await postData(API_PATH.ORDER.ADD_STRIPE, {
+  product: cartData,
+});
 
       if (res?.success) {
         alertBox(res.message, "success");
@@ -119,6 +121,31 @@ function Checkout() {
       alertBox("Something went wrong", "error");
     }
   };
+
+  const handleStripGateway = async () => {
+  try {
+    if (!address || address.length === 0) {
+      alertBox("Please add delivery address", "error");
+      return;
+    }
+
+    if (!cartData || cartData.length === 0) {
+      alertBox("Your cart is empty", "error");
+      return;
+    }
+
+    const res = await postData(API_PATH.ORDER.ADD_STRIPE, {
+      product: cartData,
+    });
+
+    if (res?.success) {
+      window.location.href = res.url;
+    }
+  } catch (error) {
+    alertBox("Something went wrong", "error");
+  }
+};
+
 
   useEffect(() => {
     if (address) {
@@ -269,12 +296,12 @@ function Checkout() {
             </div>
             <button
               className="mt-2 w-full py-2 flex items-center justify-center gap-2 border border-[#00A859] rounded-md text-[#00A859] font-bold"
-              onClick={() =>
-                alertBox("EasyPaisa integration coming soon", "success")
-              }
+              onClick={() => {
+                handleStripGateway(), setPaymentMethod("STRIPE");
+              }}
             >
               <FaMobileAlt />
-              EasyPaisa
+              STRIPE
             </button>
 
             <button
@@ -289,7 +316,9 @@ function Checkout() {
 
             <button
               className="mt-2 w-full py-2 flex items-center justify-center gap-1 bg-primary rounded-md text-white"
-              onClick={()=>{handleOrder(), setPaymentMethod("COD")}}
+              onClick={() => {
+                handleOrder(), setPaymentMethod("COD");
+              }}
             >
               CASH ON DELIVERY
             </button>

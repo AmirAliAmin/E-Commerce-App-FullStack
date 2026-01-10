@@ -74,6 +74,7 @@ export const API_PATH = {
   },
   ORDER:{
     ADD_ORDER:"/api/order/create",
+    ADD_STRIPE:"/api/order/stripe_gateway_method",
     GET_ORDER:"/api/order/get",
     GET_ALL_ORDER:"/api/order/all"
   }
