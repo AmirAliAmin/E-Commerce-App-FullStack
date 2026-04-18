@@ -42,8 +42,10 @@ app.use("/api/order",orderRouter);
 
 
 
-connectDB().then(()=>{
-    app.listen(PORT,()=>{
+connectDB();
+
+app.listen(PORT, () => {
         console.log("Server is running at", PORT)
-    })
 })
+
+export default app;
