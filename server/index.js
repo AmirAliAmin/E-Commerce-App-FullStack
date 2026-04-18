@@ -44,10 +44,9 @@ app.use("/api/order",orderRouter);
 
 connectDB();
 
-if (!process.env.VERCEL) {
-    app.listen(PORT, () => {
-        console.log("Server is running at", PORT)
-    })
-}
+app.listen(PORT, () => {
+    console.log("Server is running at", PORT)
+})
+
 
 export default app;
