@@ -21,5 +21,19 @@ userRouter.post('/refresh-token', refreshToken);
 userRouter.get('/userdetail',auth,userDetails);
 userRouter.get('/getalluser',auth,getAllUser);
 
+// const users = [
+//   { id: 1, name: "Amir" },
+//   { id: 2, name: "Ali" }
+// ];
+// userRouter.get("/users",(req,res)=>{
+//     res.json(users)
+// })
+// userRouter.post("/add-user",(req,res)=>{
+//     const {id,name} = req.body;
+//     const newUser = {id,name}
+//     users.push(newUser);
+//     res.json(newUser)
+// })
+
 
 export default userRouter;
